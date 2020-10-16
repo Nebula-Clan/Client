@@ -1,41 +1,37 @@
 <template>
-  <div class="login-page">
-    <v-container
-      style="height: 100%">
+  <div class="login-page d-flex align-center">
       <v-row
-        style="height: 100%"
         align="center"
         justify="center">
-        <v-col cols="1"></v-col>
         <v-col
-          class="mt-n8"
-          cols="6">
-          <AdvertiseCarousels/>
-        </v-col>
-        <v-col
-          class="mt-n8"
-          cols="4">
+          class="d-flex justify-center"
+          cols="12">
           <SignIn/>
+          <img
+            class="elevation-20 intro-img"
+            src="../static/images/unnamed.jpg"
+            alt="">
         </v-col>
-        <v-col cols="1"></v-col>
       </v-row>
-    </v-container>
   </div>
 </template>
 
 <script>
 import SignIn from '~/components/login/SignIn'
-
+import AdvertiseCarousels from '~/components/login/AdvertiseCarousels'
 export default {
-  components: { SignIn },
+  components: { SignIn, AdvertiseCarousels },
   data: () => ({})
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login-page {
   background: url("../static/images/login-background.jpg") no-repeat;
   background-size: cover;
   height: 100%;
+  .intro-img {
+    border-radius: 0 10px 10px 0;
+  }
 }
 </style>
