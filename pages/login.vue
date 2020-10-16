@@ -1,15 +1,23 @@
 <template>
   <div class="login-page">
-    <v-container>
-      <v-row class="mt-10" align="center" justify="center">
+    <v-container
+      style="height: 100%">
+      <v-row
+        style="height: 100%"
+        align="center"
+        justify="center">
+        <v-col cols="1"></v-col>
         <v-col
+          class="mt-n8"
           cols="6">
           <AdvertiseCarousels/>
         </v-col>
         <v-col
-          cols="6">
+          class="mt-n8"
+          cols="4">
           <SignIn/>
         </v-col>
+        <v-col cols="1"></v-col>
       </v-row>
     </v-container>
   </div>
