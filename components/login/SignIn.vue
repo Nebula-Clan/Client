@@ -5,20 +5,25 @@
     outlined>
     <div class="text-h4 text-center">Login</div>
     <v-divider class="my-6"></v-divider>
-    <v-form>
+    <v-form v-model="formValid">
       <v-text-field
         color="blue lighten-2"
         label="Username"
+        :rules="fieldRules"
+        v-model="username"
         append-icon="mdi-account"/>
       <v-text-field
         color="blue lighten-2"
         label="Password"
+        :rules="fieldRules"
+        v-model="password"
         :append-icon="passwordVisible? 'mdi-eye': 'mdi-eye-off'"
         @click:append="passwordVisible = !passwordVisible"
         :type="passwordVisible ? 'text': 'password'"/>
       <v-btn
         class="mt-5"
         color="green darken-2"
+        :disabled="!formValid"
         block>
         Sign In
       </v-btn>
@@ -38,7 +43,7 @@
         <i class="fab fa-facebook-f mr-3"/> Sign in with Facebook
       </v-btn>
       <v-divider class="my-6"></v-divider>
-      <nuxt-link class="white--text text-decoration-none" to="/signup">Or sign up now!</nuxt-link>
+      <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
   </v-card>
 </template>
@@ -48,7 +53,13 @@ export default {
   name: 'SignIn',
   data: () => {
     return {
-      passwordVisible: false
+      formValid: false,
+      passwordVisible: false,
+      username: '',
+      password: '',
+      fieldRules: [
+        u => !!u || 'This field is required'
+      ],
     }
   }
 }
