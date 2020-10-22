@@ -1,14 +1,14 @@
 <template>
   <div
-    class="signup">
+    class="signup d-flex align-center">
     <v-row
       align="center"
       justify="center">
       <v-col
         class="d-flex justify-center"
         cols="12">
-        <SignUpForm />
-        <intro />
+        <SignUpForm/>
+        <intro/>
       </v-col>
     </v-row>
   </div>
@@ -17,8 +17,9 @@
 <script>
 import SignUpForm from '~/components/signup/signup-form'
 import Intro from '@/components/login/Intro'
+
 export default {
-name: "signup",
+  name: 'signup',
   components: {
     Intro,
     SignUpForm
@@ -27,8 +28,9 @@ name: "signup",
 </script>
 
 <style scoped>
-  .signup {
-    background: url("../static/images/login-background.jpg") no-repeat;
-    background-size: cover;
-  }
+.signup {
+  background: url("../static/images/login-background.jpg") no-repeat;
+  background-size: cover;
+  height: 100%;
+}
 </style>
