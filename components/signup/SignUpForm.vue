@@ -5,21 +5,21 @@
     outlined>
     <div class="text-h4 text-center">Signup now!</div>
     <v-divider class="my-6"></v-divider>
-    <v-form v-model="valid">
+    <v-form v-model="valid" @submit.prevent="registerUser(userInfo)">
       <v-text-field
         color="blue lighten-2"
         label="Username"
         :rules="usernameRules"
-        v-model="username"
+        v-model="userInfo.username"
         append-icon="mdi-account"/>
       <v-text-field
         color="blue lighten-2"
         :rules="emailRules"
-        v-model="email"
+        v-model="userInfo.email"
         label="E-mail"
         append-icon="mdi-account"/>
       <v-text-field
-        v-model="firstname"
+        v-model="userInfo.firstname"
         :rules="nameRules"
         color="blue lighten-2"
         label="Firstname"
@@ -27,14 +27,14 @@
       <v-text-field
         color="blue lighten-2"
         :rules="nameRules"
-        v-model="lastname"
+        v-model="userInfo.lastname"
         label="Lastname"
         append-icon="mdi-account"/>
       <v-text-field
         color="blue lighten-2"
         label="Password"
         :rules="passwordRules"
-        v-model="password"
+        v-model="userInfo.password"
         :append-icon="showPassword? 'mdi-eye': 'mdi-eye-off'"
         @click:append="showPassword = !showPassword"
         :type="showPassword ? 'text': 'password'"/>
@@ -42,7 +42,7 @@
         color="blue lighten-2"
         label="Confirm password"
         :rules="pswConfirmRules"
-        v-model="confirmPassword"
+        v-model="userInfo.confirmPassword"
         :append-icon="showConfirmPassword? 'mdi-eye': 'mdi-eye-off'"
         @click:append="showConfirmPassword = !showConfirmPassword"
         :type="showConfirmPassword ? 'text': 'password'"/>
@@ -50,6 +50,7 @@
         :disabled="!valid"
         class="mt-5"
         color="green darken-2"
+        type="submit"
         block>
         Sign Up
       </v-btn>
@@ -75,8 +76,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: "signup-form",
+  name: 'signup-form',
   data: function () {
     return {
       valid: false,
@@ -84,12 +87,14 @@ export default {
       showPassword: false,
       showConfirmPassword: false,
 
-      username: '',
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      confirmPassword: '',
+      userInfo: {
+        username: '',
+        email: '',
+        firstname: '',
+        lastname: '',
+        password: '',
+        confirmPassword: '',
+      },
 
       usernameRules: [
         u => !!u || 'Username is required',
@@ -108,16 +113,19 @@ export default {
         p => p.length >= 8 || 'Password must be at least 8 characters or more',
       ],
       pswConfirmRules: [
-        p => p === this.password || 'Password\'s not match'
+        p => p === this.userInfo.password || 'Password\'s not match'
       ]
     }
   },
+  methods: {
+    ...mapActions('modules/authentication', ['registerUser']),
+  }
 }
 </script>
 
 <style scoped>
-  .border-lay {
-    border-radius: 10px 0 0 10px;
-    border: none;
-  }
+.border-lay {
+  border-radius: 10px 0 0 10px;
+  border: none;
+}
 </style>
