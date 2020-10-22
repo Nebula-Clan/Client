@@ -6,7 +6,7 @@
         <v-col
           class="d-flex justify-center"
           cols="12">
-          <SignIn/>
+          <SignInForm/>
           <Intro/>
         </v-col>
       </v-row>
@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import SignIn from '~/components/login/SignIn'
+import SignInForm from '@/components/login/SignInForm'
 import Intro from '@/components/login/Intro'
 export default {
-  components: { SignIn, Intro },
+  components: { SignInForm, Intro },
   data: () => ({})
 }
 </script>

@@ -5,7 +5,7 @@
     outlined>
     <div class="text-h4 text-center">Login</div>
     <v-divider class="my-6"></v-divider>
-    <v-form v-model="formValid">
+    <v-form v-model="formValid" @submit.prevent="login({username, password})">
       <v-text-field
         color="blue lighten-2"
         label="Username"
@@ -24,6 +24,7 @@
         class="mt-5"
         color="green darken-2"
         :disabled="!formValid"
+        type="submit"
         block>
         Sign In
       </v-btn>
@@ -49,6 +50,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'SignIn',
   data: () => {
@@ -61,13 +64,16 @@ export default {
         u => !!u || 'This field is required'
       ],
     }
+  },
+  methods: {
+    ...mapActions('modules/authentication', ['login']),
   }
 }
 </script>
 
 <style scoped>
-  .border-lay {
-    border-radius: 10px 0 0 10px;
-    border: none;
-  }
+.border-lay {
+  border-radius: 10px 0 0 10px;
+  border: none;
+}
 </style>

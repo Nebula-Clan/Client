@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SignUpForm from '~/components/signup/signup-form'
+import SignUpForm from '@/components/signup/SignUpForm'
 import Intro from '@/components/login/Intro'
 
 export default {
