@@ -3,12 +3,15 @@
     <v-card-subtitle>
       Explore Categories
     </v-card-subtitle>
+    <v-divider></v-divider>
     <v-list dense>
       <v-list-item-group>
-        <nuxt-link class="text-decoration-none" to="/feed/">
-          <v-list-item
-            v-for="(item, i) in categories"
-            :key="i">
+        <nuxt-link
+          v-for="(item, i) in categories"
+          :key="i"
+          class="text-decoration-none"
+          to="/feed/">
+          <v-list-item>
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>

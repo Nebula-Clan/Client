@@ -20,6 +20,8 @@
       md="3"
       lg="2">
       <User />
+      <br>
+      <Communities />
     </v-col>
   </v-row>
 </template>
@@ -27,11 +29,13 @@
 <script>
 import User from '~/components/homepage/user.component'
 import Categories from '~/components/homepage/categories.component'
+import Communities from '~/components/homepage/communities.component'
 export default {
   name: 'feed',
   components: {
     User,
-    Categories
+    Categories,
+    Communities
   }
 }
 </script>

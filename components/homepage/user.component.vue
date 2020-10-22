@@ -20,6 +20,9 @@
     <v-card-subtitle class="text-center">
       {{username}}
     </v-card-subtitle>
+    <v-card-text class="text-center">
+      <v-icon>mdi-format-quote-open</v-icon>{{bio}}<v-icon>mdi-format-quote-close</v-icon>
+    </v-card-text>
     <v-divider></v-divider>
     <v-row class="text-center pa-2 justify-space-around">
       <div>
@@ -49,6 +52,7 @@ export default {
       username: 'amiresm',
       firstname: 'Amir',
       lastname: 'Esmaeili',
+      bio: 'A sad middle eastern',
       followers: 100,
       followings: 343,
       posts: 1000
