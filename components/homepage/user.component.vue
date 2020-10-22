@@ -1,5 +1,5 @@
 <template>
-  <v-card >
+  <v-card class="elevation-10">
     <div class="profile mb-10">
       <v-img
             class="white--text align-end custom-rounded"
@@ -27,17 +27,11 @@
         <br>
         <span>Followings</span>
       </div>
-      <v-divider
-        vertical
-      ></v-divider>
       <div>
         <b>{{posts}}</b>
         <br>
         <span>Posts</span>
       </div>
-      <v-divider
-        vertical
-      ></v-divider>
       <div>
         <b>{{followers}}</b>
         <br>
