@@ -12,7 +12,7 @@
       sm="6"
       md="6"
       lg="8">
-      <p>Main</p>
+      <Write />
     </v-col>
     <v-col
       cols="12"
@@ -30,12 +30,14 @@
 import User from '~/components/homepage/user.component'
 import Categories from '~/components/homepage/categories.component'
 import Communities from '~/components/homepage/communities.component'
+import Write from '~/components/homepage/write.component'
 export default {
   name: 'feed',
   components: {
     User,
     Categories,
-    Communities
+    Communities,
+    Write
   }
 }
 </script>
