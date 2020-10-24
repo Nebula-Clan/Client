@@ -94,6 +94,11 @@ export default {
           to: '/'
         },
         {
+          icon: 'mdi-apps',
+          title: 'Feed',
+          to: '/feed'
+        },
+        {
           icon: 'mdi-chart-bubble',
           title: 'Inspire',
           to: '/inspire'
@@ -102,6 +107,16 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Sign In',
           to: '/login'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Sign Up',
+          to: '/signup'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Create Post',
+          to: '/new-post'
         }
       ],
       miniVariant: false,
