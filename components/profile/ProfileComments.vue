@@ -30,9 +30,17 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-btn icon class="ml-5">
+                    <v-btn icon class="ml-5" @click="overlay = !overlay">
                         <v-icon>mdi-flag</v-icon>
                     </v-btn>
+
+                    <v-overlay
+                    :z-index="zIndex"
+                    :value="overlay"
+                    opacity="0.8"
+                    >
+                        <ProfileReport @cancel="overlay = !overlay" />
+                    </v-overlay>
     
                     <v-btn icon class="ml-auto" :color="likedComment" @click="likeComment">
                         <v-icon>mdi-heart</v-icon>
@@ -62,7 +70,9 @@ export default {
     data: () => {
         return {
             like: false,
-            dislike: false
+            dislike: false,
+            overlay: false,
+            zIndex: 1
         }
     },
     computed: {
