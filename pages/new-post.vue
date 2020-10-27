@@ -1,29 +1,7 @@
 <template>
-  <v-row class="px-10 py-5">
-    <v-col
-      cols="12"
-      sm="3"
-      md="3"
-      lg="2">
-      <Categories/>
-    </v-col>
-    <v-col
-      cols="12"
-      sm="6"
-      md="6"
-      lg="8">
+  <v-container class="px-5 py-8">
       <CreatePost/>
-    </v-col>
-    <v-col
-      cols="12"
-      sm="3"
-      md="3"
-      lg="2">
-      <User/>
-      <br>
-      <Communities/>
-    </v-col>
-  </v-row>
+  </v-container>
 </template>
 
 <script>
