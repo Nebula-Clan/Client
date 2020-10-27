@@ -15,26 +15,34 @@
 
 <script>
 export default {
+  mounted () {
+    // setTimeout(() => {
+    //   this.content = 'I was changed!'
+    // }, 3000)
+  },
   data () {
     return {
-      content: '<p>I am Example</p>',
+      content: '',
       editorOption: {
-        // Some Quill options...
         theme: 'snow',
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block']
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'size': ['small', false, 'large', 'huge'] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            ['link', 'image', 'video'],
           ]
         }
       }
     }
-  },
-  mounted () {
-    // console.log('App inited, the Quill instance object is:', this.$refs.editor.quill)
-    setTimeout(() => {
-      this.content = 'I was changed!'
-    }, 3000)
   },
   methods: {
     onEditorBlur (editor) {
@@ -46,20 +54,18 @@ export default {
     onEditorReady (editor) {
       console.log('editor ready!', editor)
     }
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .container {
-  color: black;
+  color: white;
   margin: 0 auto;
-  padding: 50px 0;
 
   .quill-editor {
-    min-height: 200px;
-    max-height: 400px;
     overflow-y: auto;
   }
+
 }
 </style>
