@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import User from '~/components/homepage/user.component'
-import Categories from '~/components/homepage/categories.component'
-import Communities from '~/components/homepage/communities.component'
-import Write from '~/components/homepage/write.component'
+import User from '@/components/homepage/User'
+import Categories from '@/components/homepage/Categories'
+import Communities from '@/components/homepage/Communities'
+import Write from '@/components/homepage/Write'
 export default {
   name: 'feed',
   components: {
