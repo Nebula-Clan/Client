@@ -15,7 +15,7 @@
                                     Posts
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    10k
+                                    {{ getNumberOfPosts }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
@@ -23,7 +23,7 @@
                                     Following
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    10k
+                                    {{ getNumberOfFollowing }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
@@ -31,7 +31,7 @@
                                     Followers
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    10k
+                                    {{ getNumberOfFollowers }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
@@ -39,7 +39,7 @@
                                     Likes
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    10k
+                                    {{ getNumberOfLikes }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
@@ -47,7 +47,7 @@
                                     Comments
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    10k
+                                    {{ getNumberOfComments }}
                                 </p>
                             </v-col>
                         </v-row>
@@ -59,8 +59,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-    
+    computed: {
+        ...mapGetters('modules/profile/profileInfo',
+         ['getNumberOfPosts', 'getNumberOfFollowing', 'getNumberOfFollowers', 'getNumberOfLikes', 'getNumberOfComments']),
+    }
 }
 </script>
 

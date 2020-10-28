@@ -9,7 +9,7 @@
         <v-col cols="12" class="pb-0 ml-5">
             <v-row>
                 <div class="text-h6">
-                    Jhon Lisha
+                    {{ getNickname }}
                 </div>
                 <v-btn depressed class="ml-auto mr-15" :color="followAndUnfollowColor" @click="changeStatusOfFollow" :loading="followLoading">
                     {{ followStatus }}
@@ -18,18 +18,20 @@
         </v-col>
         <v-col cols="12" class="pt-0 ml-2 pb-0">
             <div class="text-caption text--secondary">
-                @bigjhon
+                {{ '@' + getUsername }}
             </div>
         </v-col>
         <v-col cols="12" class="ml-2">
             <div class="text-caption">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum, dolore.
+                {{ getDescription }}
             </div>
         </v-col>
     </v-row>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     data: () => {
         return {
@@ -81,7 +83,8 @@ export default {
             } else {
                 return 'blue darken-1'
             }
-        }
+        },
+        ...mapGetters('modules/profile/profileInfo', ['getNickname', 'getUsername', 'getDescription']),
     },
     methods: {
         changeStatusOfFollow() {

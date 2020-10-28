@@ -11,7 +11,7 @@
                     <v-tab @click="switchToComments">Comments</v-tab>
                     <v-tab @click="switchToLikes">Likes</v-tab>
                 </v-tabs>
-                <v-container class="ml-0 py-0" v-for="i in n" :key="i">
+                <v-container class="ml-0 py-0" v-for="object in getComponentObjects" :key="object">
                     <component :is="comp" v-bind="componentArgs"> </component>
                 </v-container>
             </v-col>
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import ProfileBanner from './ProfileBanner'
 import ProfileDescription from './ProfileDescription'
 import ProfilePosts from './ProfilePosts'
@@ -38,6 +40,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters('modules/profile/profilePosts', ['getPosts']),
         componentArgs() {
             if (this.comp == ProfilePosts) {
                 return {
@@ -47,6 +50,11 @@ export default {
                 return {
                     liked: false
                 }
+            }
+        },
+        getComponentObjects() {
+            if (this.comp == ProfilePosts) {
+                return this.getPosts
             }
         }
     },
