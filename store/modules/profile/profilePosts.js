@@ -2,7 +2,7 @@ import axious from 'axios'
 import { Post } from './classes/post'
 
 const state = () => ({
-    posts: []
+    posts: [new Post(), ]
 })
   
 const getters = {

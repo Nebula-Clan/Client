@@ -72,7 +72,7 @@
 <script>
 export default {
     props: {
-        liked: {
+        comment: {
             type: Boolean,
             required: true
         }

@@ -11,8 +11,8 @@
                     <v-tab @click="switchToComments">Comments</v-tab>
                     <v-tab @click="switchToLikes">Likes</v-tab>
                 </v-tabs>
-                <v-container class="ml-0 py-0" v-for="object in getComponentObjects" :key="object">
-                    <component :is="comp" v-bind="componentArgs"> </component>
+                <v-container class="ml-0 py-0" v-for="(object, index) in getComponentObjects" :key="index">
+                    <component :is="comp" v-bind="componentArgs(index)"> </component>
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
@@ -36,26 +36,24 @@ export default {
         return {
             n:10,
             model: 0,
-            comp: ProfilePosts
+            comp: ProfilePosts,
+            componentObjects: []
         }
     },
     computed: {
         ...mapGetters('modules/profile/profilePosts', ['getPosts']),
-        componentArgs() {
-            if (this.comp == ProfilePosts) {
-                return {
-                    liked: false
-                }
-            } else if (this.comp == ProfileComments) {
-                return {
-                    liked: false
-                }
-            }
-        },
+        ...mapGetters('modules/profile/profileComments', ['getComments']),
+        ...mapGetters('modules/profile/profileLikes', ['getLikes']),
         getComponentObjects() {
             if (this.comp == ProfilePosts) {
-                return this.getPosts
+                this.componentObjects = this.getPosts
+            } else if (this.comp == ProfileComments) {
+                this.componentObjects = this.getComments
+            } else {
+                this.componentObjects = this.getLikes
             }
+
+            return this.componentObjects
         }
     },
     methods: {
@@ -67,6 +65,20 @@ export default {
         },
         switchToLikes() {
             this.comp = ProfileLikes
+        },
+        componentArgs(index) {
+            if (this.comp == ProfilePosts) {
+                return {
+                    post: this.getComponentObjectById(index)
+                }
+            } else if (this.comp == ProfileComments) {
+                return {
+                    liked: false
+                }
+            }
+        },
+        getComponentObjectById(id) {
+            return this.componentObjects[id]
         }
     }
 }

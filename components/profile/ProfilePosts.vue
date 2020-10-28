@@ -4,16 +4,16 @@
             <v-card max-width="740">
                 <v-list-item three-line>
                      <v-list-item-avatar tile size="80" color="grey">
-                            <v-img src="/images/Back3.jpg"></v-img>
+                            <v-img :src="post.getPostImageURL()"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
                         <div class="overline mb-3">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus sint reprehenderit sapiente quisquam ad. Iusto officiis vitae assumenda soluta vel?
+                            {{ post.getPostTitle() }}
                         </div>
                         <v-list-item-subtitle>
                             <v-row class="ml-1">
-                                <p v-for="hashtag in hashtags" :key="hashtag" class="mx-1 blue--text text--lighten-1">
+                                <p v-for="hashtag in post.getPostHashtags()" :key="hashtag" class="mx-1 blue--text text--lighten-1">
                                     {{ hashtag }}
                                 </p>
                             </v-row>
@@ -67,8 +67,8 @@ import ProfileReport from './ProfileReport'
 
 export default {
     props: {
-        liked: {
-            type: Boolean,
+        post: {
+            type: Object,
             required: true
         }
     },
@@ -77,18 +77,7 @@ export default {
             like: false,
             dislike: false,
             overlay: false,
-            zIndex: 1,
-            hashtags: [
-                "#idk",
-                "#idc",
-                "#hallo",
-                "#test",
-                "#foo",
-                "#bar",
-                "#barbar",
-                "#loca",
-                '#toca'
-            ]
+            zIndex: 1
         }
     },
     computed: {
