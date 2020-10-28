@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-10">
+  <v-card class="elevation-2">
     <div class="profile mb-10">
       <v-img
             class="white--text align-end custom-rounded"

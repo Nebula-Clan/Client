@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-10">
+  <v-card class="elevation-2">
     <v-card-subtitle>
       Explore Communities
     </v-card-subtitle>
