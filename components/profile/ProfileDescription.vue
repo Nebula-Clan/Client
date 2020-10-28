@@ -11,8 +11,8 @@
                 <div class="text-h6">
                     Jhon Lisha
                 </div>
-                <v-btn depressed color="blue darken-1 ml-auto mr-15">
-                    Follow+
+                <v-btn depressed class="ml-auto mr-15" :color="followAndUnfollowColor" @click="changeStatusOfFollow" :loading="followLoading">
+                    {{ followStatus }}
                 </v-btn>
             </v-row>
         </v-col>
@@ -33,7 +33,9 @@
 export default {
     data: () => {
         return {
-            avatarClass: "avatar-lg"
+            avatarClass: "avatar-lg",
+            follow: false,
+            followLoading: false
         }
     },
     computed: {
@@ -54,7 +56,6 @@ export default {
             } else if (this.$vuetify.breakpoint.xs) {
                 return 100
             }
-            
         },
         marginSize() {
             if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
@@ -66,6 +67,29 @@ export default {
             } else if (this.$vuetify.breakpoint.xs) {
                 return 'ml-2'
             }
+        },
+        followStatus() {
+            if (this.follow) {
+                return 'Unfollow'
+            } else {
+                return 'Follow+'
+            }
+        },
+        followAndUnfollowColor() {
+            if (this.follow) {
+                return 'blue darken-3'
+            } else {
+                return 'blue darken-1'
+            }
+        }
+    },
+    methods: {
+        changeStatusOfFollow() {
+            this.followLoading = true
+            setTimeout(() => {
+                this.follow = !this.follow
+                this.followLoading = false
+            }, 2000)
         }
     }
 }
