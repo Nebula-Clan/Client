@@ -30,11 +30,11 @@
                         </template>
                         <v-list elevation="24">
                             <v-list-item>
-                                <v-list-item-title @click="overlay = !overlay">Report</v-list-item-title>
+                                <v-list-item-title style="cursor: pointer" @click="overlay = !overlay">Report</v-list-item-title >
                                 <v-icon>mdi-flag</v-icon>
                             </v-list-item>
                             <v-list-item>
-                                <v-list-item-title>Share</v-list-item-title>
+                                <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
                                 <v-icon>mdi-share-variant</v-icon>
                             </v-list-item>
                         </v-list>
@@ -49,11 +49,11 @@
                     </v-overlay>
 
                     <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
-                        <v-icon>mdi-heart</v-icon>
+                        <v-icon style="cursor: pointer">mdi-heart</v-icon>
                     </v-btn>
 
                     <v-btn icon class="mr-5 ml-4">
-                        <v-icon>mdi-comment</v-icon>
+                        <v-icon style="cursor: pointer">mdi-comment</v-icon>
                     </v-btn>
                 </v-card-actions>
             </v-card>

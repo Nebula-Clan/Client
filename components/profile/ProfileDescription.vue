@@ -27,12 +27,6 @@
             </div>
         </v-col>
     </v-row>
-    <!-- style="position:absolute;z-index:3;margin-top:-100px;" -->
-    <!-- <v-col cols="12" lg="2" sm="2" xs="2" class="ml-auto pl-10">
-                                <v-btn depressed color="blue darken-1">
-                                    Follow+
-                                </v-btn>
-                            </v-col> -->
 </template>
 
 <script>
@@ -51,7 +45,7 @@ export default {
             }
         },
         avatarSize() {
-            if (this.$vuetify.breakpoint.lg) {
+            if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
                 return 180
             } else if (this.$vuetify.breakpoint.md) {
                 return 150
@@ -63,7 +57,7 @@ export default {
             
         },
         marginSize() {
-            if (this.$vuetify.breakpoint.lg) {
+            if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
                 return 'ml-16'
             } else if (this.$vuetify.breakpoint.md) {
                 return 'ml-12'

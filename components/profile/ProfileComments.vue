@@ -30,9 +30,23 @@
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
-                    <v-btn icon class="ml-5" @click="overlay = !overlay">
-                        <v-icon>mdi-flag</v-icon>
-                    </v-btn>
+                    <v-menu>
+                        <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                        </template>
+                        <v-list elevation="24">
+                            <v-list-item>
+                                <v-list-item-title style="cursor: pointer" @click="overlay = !overlay">Report</v-list-item-title >
+                                <v-icon style="cursor: pointer">mdi-flag</v-icon>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
+                                <v-icon style="cursor: pointer">mdi-share-variant</v-icon>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
 
                     <v-overlay
                     :z-index="zIndex"
@@ -45,13 +59,9 @@
                     <v-btn icon class="ml-auto" :color="likedComment" @click="likeComment">
                         <v-icon>mdi-heart</v-icon>
                     </v-btn>
-    
-                    <v-btn icon class="ml-4">
-                        <v-icon>mdi-comment</v-icon>
-                    </v-btn>
 
                     <v-btn icon class="mr-5 ml-4">
-                        <v-icon>mdi-share-variant</v-icon>
+                        <v-icon>mdi-comment</v-icon>
                     </v-btn>
                 </v-card-actions>
             </v-card>

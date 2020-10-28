@@ -16,6 +16,7 @@
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
+                <ProfileStatusChart :height="200" />
             </v-col>
         </v-row>
     </v-container>
