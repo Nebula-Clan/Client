@@ -14,31 +14,7 @@
     </v-textarea>
     <v-divider></v-divider>
     <v-row class="px-4">
-      <v-col cols="5">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-image</v-icon>
-            </v-btn>
-          </template>
-          <span>Add image</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-sticker-emoji</v-icon>
-            </v-btn>
-          </template>
-          <span>Add emoji</span>
-        </v-tooltip>
-      </v-col>
-      <v-col cols="5">
+      <v-col cols="6">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -73,7 +49,7 @@
           <span>Create a poll</span>
         </v-tooltip>
       </v-col>
-      <v-col class="text-right" cols="2">
+      <v-col class="text-right" cols="6">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
