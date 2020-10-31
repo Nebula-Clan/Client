@@ -52,7 +52,6 @@ export default {
             } else {
                 this.componentObjects = this.getLikes
             }
-
             return this.componentObjects
         }
     },
@@ -73,7 +72,11 @@ export default {
                 }
             } else if (this.comp == ProfileComments) {
                 return {
-                    liked: false
+                    comment: this.getComponentObjectById(index)
+                }
+            } else {
+                return {
+                    likedObj: this.getComponentObjectById(index)
                 }
             }
         },

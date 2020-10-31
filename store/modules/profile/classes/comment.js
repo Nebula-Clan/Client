@@ -27,6 +27,7 @@ class Comment {
     }
 
     getCommentBody() {
+        return 'ksdjflskdfjlksjflksjflksjflksjflksjflksjflks'
         return this.body
     }
 
@@ -40,6 +41,15 @@ class Comment {
 
     getCommentOwnerUsername() {
         return this.commentOwnerUsername
+    }
+
+    getLiked() {
+        this.liked = false
+        return this.liked
+    }
+
+    isReply() {
+        return false
     }
 }
 

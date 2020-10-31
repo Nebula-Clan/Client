@@ -2,7 +2,7 @@ import axious from 'axios'
 import { Comment } from './classes/Comment'
 
 const state = () => ({
-    comments: []
+    comments: [new Comment(), ]
 })
   
 const getters = {

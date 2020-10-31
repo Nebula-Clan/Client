@@ -42,14 +42,16 @@ export default {
     },
     computed: {
         avatar() {
-            if (this.$vuetify.breakpoint.lg) {
+            if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
                 return 'avatar-lg'
             } else if (this.$vuetify.breakpoint.md) {
                 return 'avatar-md'
+            } else {
+                return 'avatar-sm'
             }
         },
         avatarSize() {
-            if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
+            if (this.$vuetify.breakpoint.xl || this.$vuetify.breakpoint.lg) {
                 return 180
             } else if (this.$vuetify.breakpoint.md) {
                 return 150
@@ -60,9 +62,9 @@ export default {
             }
         },
         marginSize() {
-            if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
+            if (this.$vuetify.breakpoint.xl) {
                 return 'ml-16'
-            } else if (this.$vuetify.breakpoint.md) {
+            } else if (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.lg) {
                 return 'ml-12'
             } else if (this.$vuetify.breakpoint.sm) {
                 return 'ml-8'

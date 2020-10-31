@@ -2,7 +2,7 @@ import axious from 'axios'
 import { Like } from './classes/Like'
 
 const state = () => ({
-    likes: []
+    likes: [new Like(), ]
 })
   
 const getters = {

@@ -23,6 +23,7 @@ class Like {
     }
 
     getLikeOwnerUsername() {
+        return 'kjf'
         return this.likeOwnerUsername
     }
 }

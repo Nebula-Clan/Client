@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-2">
-        <v-row>
-            <v-card max-width="740">
+        <v-row ref="VCardParent">
+            <v-card :min-width="vCardWidth">
                 <v-list-item three-line>
                      <v-list-item-avatar tile size="80" color="grey">
                             <v-img :src="post.getPostImageURL()"></v-img>
@@ -77,7 +77,8 @@ export default {
             like: false,
             dislike: false,
             overlay: false,
-            zIndex: 1
+            zIndex: 1,
+            vCardWidth: '0'
         }
     },
     computed: {
@@ -88,6 +89,9 @@ export default {
                 return ''
             }
         }
+    },
+    mounted() {
+        this.vCardWidth =  this.$refs.VCardParent.clientWidth
     },
     methods: {
         likePost() {

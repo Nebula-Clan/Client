@@ -1,12 +1,12 @@
 <template>
     <v-container fluid class="py-2">
-        <v-row>
-            <v-card elevation="24">
+        <v-row ref="VCardParent">
+            <v-card elevation="24" :min-width="vCardWidth">
                 <v-container>
                     <v-card-title>
-                        jhon replyed to Lelouch in cominuty fucked up
+                        {{ commentTitle }}
                     </v-card-title>
-                    <v-row>
+                    <v-row v-if="isReply">
                         <v-card class="comment mr-7 ml-2" elevation="3">
                             <v-list-item three-line>
                                 <v-list-item-avatar size="80">
@@ -26,7 +26,7 @@
                     </v-row>
                 </v-container>
                 <v-card-text class="overline text--primary pl-7"> 
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum temporibus labore commodi libero ipsa reprehenderit aliquam laboriosam fugiat exercitationem? Temporibus, dolores delectus. Facilis, fugit sint. Assumenda unde aliquid dolores impedit ex voluptas atque modi, sit harum! Vel voluptatum aliquid possimus.
+                    {{ comment.getCommentBody() }}
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -73,7 +73,7 @@
 export default {
     props: {
         comment: {
-            type: Boolean,
+            type: Object,
             required: true
         }
     },
@@ -82,17 +82,30 @@ export default {
             like: false,
             dislike: false,
             overlay: false,
-            zIndex: 1
+            zIndex: 1,
+            vCardWidth: '0'
         }
     },
     computed: {
         likedComment() {
-            if (!this.dislike && (this.liked || this.like)) {
+            if (!this.dislike && (this.comment.liked || this.like)) {
                 return 'pink'
             } else {
                 return ''
             }
+        },
+        isReply() {
+            if (this.comment.isReply()) {
+                return true
+            }
+            return false
+        },
+        commentTitle() {
+            return 'fuck'
         }
+    },
+    mounted() {
+        this.vCardWidth =  this.$refs.VCardParent.clientWidth
     },
     methods: {
         likeComment() {
