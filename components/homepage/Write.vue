@@ -29,6 +29,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              to="/new-post"
               v-bind="attrs"
               v-on="on"
               icon>
