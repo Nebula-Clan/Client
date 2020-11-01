@@ -1,4 +1,4 @@
-import axious from 'axios'
+import axios from 'axios'
 
 const state = () => ({
     info: {
@@ -43,11 +43,37 @@ const getters = {
 }
   
 const mutations = {
-
+    // info: {
+    //     nickname: 'test',
+    //     username: 'testU',
+    //     description: 'testiiiii',
+    //     numberOfPosts: 0,
+    //     numberOfComments: 0,
+    //     numberOfLikes: 2,
+    //     numberOfFollowers: 0,
+    //     numberOfFollowing: 0,
+    //     profileImageUrl: '',
+    //     profileBannerUrl: ''
+    // }
+    parseReq(state, data) {
+        state.info.nickname = data.first_name
+        state.info.username = data.username
+        state.info.description = data.biology
+        state.info.profileImageUrl = data.profile_picture
+    }
 }
   
 const actions = {
-
+    async getProfileInfo ({ commit }, username) {
+        let user = new FormData()
+        user.append('username', username)
+        try {
+            let { data } = await this.$axios.post('api/profile/public',  user)
+            commit('parseReq', data)
+        } catch (e) {
+          console.log(e)
+        }
+      }
 }
 
 

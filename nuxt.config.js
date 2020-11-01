@@ -48,7 +48,15 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://huddle.pythonanywhere.com/'
+  },
+
+  headers: {
+    common: {
+      'Content-Type': 'multipart/form-data'
+    }
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {

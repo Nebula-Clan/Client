@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import ProfileBanner from './ProfileBanner'
 import ProfileDescription from './ProfileDescription'
@@ -55,7 +55,11 @@ export default {
             return this.componentObjects
         }
     },
+    mounted() {
+        this.getProfileInfo('reza23')
+    },
     methods: {
+        ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
         switchToPosts() {
             this.comp = ProfilePosts
         },
