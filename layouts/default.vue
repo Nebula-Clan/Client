@@ -107,6 +107,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Create Post',
           to: '/new-post'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Profile',
+          to: '/profile/had0007'
         }
       ],
       miniVariant: false,

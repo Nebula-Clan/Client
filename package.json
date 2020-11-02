@@ -15,7 +15,11 @@
     "@nuxtjs/vuetify": "^1.11.2",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
-    "vue-quill-editor": "^3.0.6"
+    "vue-quill-editor": "^3.0.6",
+    "animejs": "^3.2.1",
+    "chart.js": "^2.9.4",
+    "velocity-animate": "^2.0.6",
+    "vue-chartjs": "^3.5.1"
   },
   "devDependencies": {}
 }

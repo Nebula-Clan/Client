@@ -54,7 +54,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost:8000/api'
+    baseURL: 'http://huddle.pythonanywhere.com'
   },
 
   // Auth module configuration
@@ -63,12 +63,12 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/auth/login',
+            url: '/api/auth/login',
             method: 'post',
             propertyName: 'access_token'
           },
           user: {
-            url: '/auth/user',
+            url: '/api/auth/user',
             method: 'get',
             propertyName: 'user'
           }
@@ -76,8 +76,6 @@ export default {
       },
     }
   },
-
-  router: {},
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
