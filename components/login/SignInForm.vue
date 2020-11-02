@@ -43,6 +43,13 @@
         block>
         <i class="fab fa-facebook-f mr-3"/> Sign in with Facebook
       </v-btn>
+      <v-btn
+        class="mt-3 pa-5"
+        color="#4b5a5f"
+        @click="loginGithub"
+        block>
+        <i class="fab fa-github mr-3"/> Sign in with Github
+      </v-btn>
       <v-divider class="my-6"></v-divider>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
@@ -76,6 +83,9 @@ export default {
       }).catch((e) => {
         console.error(e)
       })
+    },
+    loginGithub(){
+      this.$auth.loginWith('github');
     }
   }
 }
