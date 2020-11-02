@@ -5,8 +5,7 @@ const state = {}
 const getters = {}
 
 const actions = {
-  async createPost ({ commit }, post) {
-    // prepare data
+  createPost ({ commit }, post) {
     let data = new FormData()
     data.append('title', post.title)
     data.append('description', post.description)
@@ -14,12 +13,8 @@ const actions = {
     data.append('category', post.category)
     data.append('content', post.content)
     data.append('header_image', post.headerImage)
-    try {
-      const response = await this.$axios.post('/posts/create_post', data)
-      console.log(response)
-    } catch (e) {
-      console.log(e)
-    }
+
+    return this.$axios.post('/api/posts/create_post', data)
   }
 }
 

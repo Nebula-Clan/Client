@@ -5,7 +5,7 @@
     outlined>
     <div class="text-h4 text-center">Signup now!</div>
     <v-divider class="my-6"></v-divider>
-    <v-form v-model="valid" @submit.prevent="registerUser(userInfo)">
+    <v-form v-model="valid" @submit.prevent="onSubmit">
       <v-text-field
         color="blue lighten-2"
         label="Username"
@@ -119,6 +119,14 @@ export default {
   },
   methods: {
     ...mapActions('modules/authentication', ['registerUser']),
+    onSubmit () {
+      this.registerUser(this.userInfo).then((response) => {
+        console.log(response)
+        this.$auth.redirect('login')
+      }).catch((e) => {
+        console.error(e)
+      })
+    }
   }
 }
 </script>

@@ -129,7 +129,7 @@
               <v-btn
                 color="blue darken-1"
                 text
-                @click="createPost(post)">
+                @click="onSubmit()">
                 Create
               </v-btn>
             </v-card-actions>
@@ -162,6 +162,13 @@ export default {
   },
   methods: {
     ...mapActions('modules/post', ['createPost']),
+    onSubmit () {
+      this.createPost(this.post).then((response) => {
+        console.log(response)
+      }).catch((e) => {
+        console.error(e)
+      })
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@
     outlined>
     <div class="text-h4 text-center">Login</div>
     <v-divider class="my-6"></v-divider>
-    <v-form v-model="formValid" @submit.prevent="login({username, password})">
+    <v-form v-model="formValid" @submit.prevent="onSubmit">
       <v-text-field
         color="blue lighten-2"
         label="Username"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
 
 export default {
   name: 'SignIn',
@@ -67,6 +67,16 @@ export default {
   },
   methods: {
     ...mapActions('modules/authentication', ['login']),
+    onSubmit () {
+      this.login({
+        username: this.username,
+        password: this.password
+      }).then((response) => {
+        console.log(response)
+      }).catch((e) => {
+        console.error(e)
+      })
+    }
   }
 }
 </script>
