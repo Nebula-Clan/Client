@@ -62,6 +62,5 @@ export default {
   .quill-editor {
     overflow-y: auto;
   }
-
 }
 </style>

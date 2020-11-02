@@ -142,6 +142,7 @@
 
 <script>
 import Editor from '@/components/post/Editor'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'CreatePost',
@@ -159,6 +160,9 @@ export default {
   components: {
     Editor
   },
+  methods: {
+    ...mapActions('modules/post', ['createPost']),
+  }
 }
 </script>
 
