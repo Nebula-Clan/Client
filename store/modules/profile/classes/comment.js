@@ -1,5 +1,3 @@
-
-
 class Comment {
 
     setCommentID(commentID) {

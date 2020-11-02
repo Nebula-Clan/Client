@@ -1,5 +1,3 @@
-
-
 class Post {
 
     setPostID(postID) {

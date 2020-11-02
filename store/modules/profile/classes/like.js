@@ -1,5 +1,3 @@
-
-
 class Like {
 
     setLikeID(likeID) {
