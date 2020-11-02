@@ -101,7 +101,7 @@ export default {
             return false
         },
         commentTitle() {
-            return 'fuck'
+            return 'Some Comment'
         }
     },
     mounted() {

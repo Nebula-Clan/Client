@@ -54,7 +54,7 @@ export default {
   },
   mounted() {
     const data = new FormData()
-    data.append('user_id', '5')
+    data.append('user_id', '9')
     this.$axios.post('/api/posts/get_user_posts', data)
       .then((res) => {
           this.posts = res.data.all_user_posts,

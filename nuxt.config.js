@@ -74,6 +74,12 @@ export default {
           }
         },
       },
+    },
+    redirect: {
+      login: '/feed',
+      logout: '/feed',
+      callback: '/feed',
+      home: '/feed'
     }
   },
 

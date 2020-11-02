@@ -2,6 +2,7 @@
   <section class="container">
     <client-only>
       <quill-editor
+        @change="$emit('updateEditorContent',content);"
         ref="editor"
         v-model="content"
         :options="editorOption"
@@ -15,11 +16,6 @@
 
 <script>
 export default {
-  mounted () {
-    // setTimeout(() => {
-    //   this.content = 'I was changed!'
-    // }, 3000)
-  },
   data () {
     return {
       content: '',
@@ -66,6 +62,5 @@ export default {
   .quill-editor {
     overflow-y: auto;
   }
-
 }
 </style>
