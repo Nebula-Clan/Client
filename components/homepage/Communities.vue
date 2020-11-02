@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-10">
+  <v-card class="elevation-2">
     <v-card-subtitle>
       Explore Communities
     </v-card-subtitle>
@@ -29,12 +29,7 @@ export default {
   name: 'communities.component',
   data: () => {
     return {
-      suggestions: [
-        {name: 'BBT', link: '#', members: '12k'},
-        {name: 'Quentin Tarantino', link: '#', members: '43k'},
-        {name: 'Vue coders', link: '#', members: '532'},
-        {name: 'Among us and them', link: '#', members: '2M'}
-      ]
+      suggestions: []
     }
   }
 }

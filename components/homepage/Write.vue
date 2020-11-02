@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="8">
+  <v-card elevation="2">
     <v-card-title>
       <v-icon class="pr-3">mdi-pencil</v-icon>
       Create a post
@@ -29,6 +29,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              to="/new-post"
               v-bind="attrs"
               v-on="on"
               icon>
