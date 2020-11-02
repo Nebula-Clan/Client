@@ -33,6 +33,13 @@
     <div>
       <v-btn
         class="mt-3 pa-5"
+        color="black"
+        @click="loginGithub"
+        block>
+        <i class="fab fa-github mr-3"/> Sign in with Github
+      </v-btn>
+      <v-btn
+        class="mt-3 pa-5"
         color="red darken-1"
         block>
         <i class="fab fa-google mr-3"/> Sign in with Google
@@ -42,13 +49,6 @@
         color="blue darken-1"
         block>
         <i class="fab fa-facebook-f mr-3"/> Sign in with Facebook
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="#4b5a5f"
-        @click="loginGithub"
-        block>
-        <i class="fab fa-github mr-3"/> Sign in with Github
       </v-btn>
       <v-divider class="my-6"></v-divider>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
