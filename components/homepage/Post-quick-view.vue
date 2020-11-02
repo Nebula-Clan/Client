@@ -1,9 +1,10 @@
 <template>
   <v-card class="my-2 pa-3" elevation="2">
+
     <v-row>
       <v-col class="ml-5">
-        <nuxt-link to="#" class="text-decoration-none white--text">
-          <h2>{{post.title}}</h2>
+        <nuxt-link class="text-decoration-none white--text" to="#">
+          <h2>{{ post.title }}</h2>
         </nuxt-link>
         <div class="mr-2">
           <v-icon size="15">
@@ -12,18 +13,37 @@
           <span style="font-size: smaller">{{ dateDuration }}</span>
         </div>
       </v-col>
+
+      <v-col
+        class="text-right"
+        cols="2">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              icon>
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <span>More</span>
+        </v-tooltip>
+      </v-col>
     </v-row>
+
     <v-row>
       <v-col class="mx-5 header-image">
-        <img src="https://fujifilm-x.com/wp-content/uploads/2019/08/x-t30_sample-images02.jpg"
-             alt="image">
+        <img alt="image"
+             src="https://fujifilm-x.com/wp-content/uploads/2019/08/x-t30_sample-images02.jpg">
       </v-col>
     </v-row>
+
     <v-row>
       <v-col class="mx-5">
-        <p>{{post.description}}</p>
+        <p>{{ post.description }}</p>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col class="d-flex mx-5">
         <div>
@@ -41,22 +61,9 @@
         </div>
       </v-col>
     </v-row>
-    <hr style=" width: 70%; text-align: center; margin: 10px auto auto;">
+
     <v-row>
-      <v-col>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-          <span>More</span>
-        </v-tooltip>
-      </v-col>
-      <v-col class="text-right">
+      <v-col class="text-right mx-5">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -68,6 +75,7 @@
           </template>
           <span>Like</span>
         </v-tooltip>
+
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -104,19 +112,19 @@ export default {
       }
     }
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     dateDuration: {
       get: function () {
-          const unixTime = new Date(this.post.date_created).getTime()
-          const now = new Date().getTime()
-          if (now - unixTime < 36e+5)
-            return Math.floor((now - unixTime) / 60000) + ' m'
-          else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24)
-            return Math.floor((now - unixTime) / 36e+5) + ' h'
-          else
-            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+        const unixTime = new Date(this.post.date_created).getTime()
+        const now = new Date().getTime()
+        if (now - unixTime < 36e+5) {
+          return Math.floor((now - unixTime) / 60000) + ' m'
+        } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
+          return Math.floor((now - unixTime) / 36e+5) + ' h'
+        } else {
+          return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+        }
       }
     }
   }
@@ -124,12 +132,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .header-image {
-    text-align: center;
-    img {
-      width: 100%;
-      height: 250px;
-      border-radius: 5px;
-    }
+.header-image {
+  text-align: center;
+
+  img {
+    width: 100%;
+    height: 250px;
+    border-radius: 5px;
   }
+}
 </style>
