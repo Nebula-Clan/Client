@@ -3,7 +3,7 @@
     <v-card-subtitle>
       Explore Communities
     </v-card-subtitle>
-    <v-divider></v-divider>
+    <v-divider class="primary"></v-divider>
     <v-list dense>
           <v-list-item-group>
           <nuxt-link

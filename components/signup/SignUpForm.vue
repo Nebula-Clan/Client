@@ -7,13 +7,13 @@
     <v-divider class="my-6"></v-divider>
     <v-form v-model="valid" @submit.prevent="onSubmit">
       <v-text-field
-        color="blue lighten-2"
         label="Username"
+        outlined
         :rules="usernameRules"
         v-model="userInfo.username"
         append-icon="mdi-account"/>
       <v-text-field
-        color="blue lighten-2"
+        outlined
         :rules="emailRules"
         v-model="userInfo.email"
         label="E-mail"
@@ -21,17 +21,17 @@
       <v-text-field
         v-model="userInfo.firstname"
         :rules="nameRules"
-        color="blue lighten-2"
+        outlined
         label="Firstname"
         append-icon="mdi-account"/>
       <v-text-field
-        color="blue lighten-2"
+        outlined
         :rules="nameRules"
         v-model="userInfo.lastname"
         label="Lastname"
         append-icon="mdi-account"/>
       <v-text-field
-        color="blue lighten-2"
+        outlined
         label="Password"
         :rules="passwordRules"
         v-model="userInfo.password"
@@ -39,7 +39,7 @@
         @click:append="showPassword = !showPassword"
         :type="showPassword ? 'text': 'password'"/>
       <v-text-field
-        color="blue lighten-2"
+        outlined
         label="Confirm password"
         :rules="pswConfirmRules"
         v-model="userInfo.confirmPassword"
@@ -49,7 +49,7 @@
       <v-btn
         :disabled="!valid"
         class="mt-5"
-        color="green darken-2"
+        color="primary"
         type="submit"
         block>
         Sign Up

@@ -7,22 +7,22 @@
     <v-divider class="my-6"></v-divider>
     <v-form v-model="formValid" @submit.prevent="onSubmit">
       <v-text-field
-        color="blue lighten-2"
         label="Username"
         :rules="fieldRules"
         v-model="username"
+        outlined
         append-icon="mdi-account"/>
       <v-text-field
-        color="blue lighten-2"
         label="Password"
         :rules="fieldRules"
         v-model="password"
+        outlined
         :append-icon="passwordVisible? 'mdi-eye': 'mdi-eye-off'"
         @click:append="passwordVisible = !passwordVisible"
         :type="passwordVisible ? 'text': 'password'"/>
       <v-btn
         class="mt-5"
-        color="green darken-2"
+        color="primary"
         :disabled="!formValid"
         type="submit"
         block>

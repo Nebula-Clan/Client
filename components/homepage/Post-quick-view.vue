@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-2 pa-3" elevation="2">
+  <v-card class="my-2 pa-1" elevation="2">
 
     <v-row>
       <v-col class="ml-5">
@@ -44,26 +44,27 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col class="d-flex mx-5">
-        <div>
-          <v-avatar
-            class="profile-pic"
-            size="50">
-            <img
-              alt="John"
-              src="https://cdn.vuetifyjs.com/images/john.jpg">
-          </v-avatar>
-        </div>
-        <div class="d-flex flex-column ml-3">
-          <span><b>{{ author.username }}</b></span>
-          <span style="font-size: smaller">{{ author.first_name }} {{ author.last_name }}</span>
-        </div>
+    <v-row class="mx-2">
+      <v-col>
+        <nuxt-link class="text-decoration-none white--text d-flex"
+                   :to="'/profile/'+author.username">
+          <div>
+            <v-avatar
+              class="profile-pic"
+              size="40">
+              <img
+                alt="John"
+                src="https://cdn.vuetifyjs.com/images/john.jpg">
+            </v-avatar>
+          </div>
+          <div class="d-flex flex-column ml-3">
+            <span><b>{{ author.username }}</b></span>
+            <span style="font-size: smaller">{{ author.first_name }} {{ author.last_name }}</span>
+          </div>
+        </nuxt-link>
       </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col class="text-right mx-5">
+      <v-col
+        class="text-right d-flex justify-end align-center">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -89,6 +90,9 @@
         </v-tooltip>
       </v-col>
     </v-row>
+
+    <v-row>
+    </v-row>
   </v-card>
 </template>
 
@@ -98,18 +102,6 @@ export default {
   props: ['post', 'author'],
   data: () => {
     return {
-      // author: this.post.author,
-      // postDetail: this.post.post
-      // author: {
-      //   username: 'amiresm',
-      //   firstname: 'Amir',
-      //   lastname: 'Esmaeili'
-      // },
-      // post: {
-      //   title: 'An Interesting title',
-      //   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio sit amet nulla porta pharetra. Cras sed mollis purus. Aliquam sit amet urna id felis convallis porta eu vitae urna.',
-      //   date_created: '2020-10-31T12:16:36Z'
-      // }
     }
   },
   methods: {},
@@ -136,7 +128,7 @@ export default {
   text-align: center;
 
   img {
-    width: 100%;
+    width: 90%;
     height: 250px;
     border-radius: 5px;
   }
