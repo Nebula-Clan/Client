@@ -10,7 +10,6 @@
         @ready="onEditorReady($event)"
       />
     </client-only>
-    <v-btn @click="showContent()">Click</v-btn>
   </section>
 </template>
 
@@ -54,9 +53,6 @@ export default {
     },
     onEditorReady (editor) {
       console.log('editor ready!', editor)
-    },
-    showContent() {
-      console.log(this.content)
     }
   },
 }

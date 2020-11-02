@@ -34,7 +34,7 @@
     <v-row>
       <v-col class="mx-5 header-image">
         <img alt="image"
-             src="https://fujifilm-x.com/wp-content/uploads/2019/08/x-t30_sample-images02.jpg">
+             :src="'http://huddle.pythonanywhere.com/' + post.header_image">
       </v-col>
     </v-row>
 
@@ -57,7 +57,7 @@
         </div>
         <div class="d-flex flex-column ml-3">
           <span><b>{{ author.username }}</b></span>
-          <span style="font-size: smaller">{{ author.firstname }} {{ author.lastname }}</span>
+          <span style="font-size: smaller">{{ author.first_name }} {{ author.last_name }}</span>
         </div>
       </v-col>
     </v-row>
@@ -95,21 +95,21 @@
 <script>
 export default {
   name: 'Post-quick-view',
-  // props: ['post'],
+  props: ['post', 'author'],
   data: () => {
     return {
       // author: this.post.author,
       // postDetail: this.post.post
-      author: {
-        username: 'amiresm',
-        firstname: 'Amir',
-        lastname: 'Esmaeili'
-      },
-      post: {
-        title: 'An Interesting title',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio sit amet nulla porta pharetra. Cras sed mollis purus. Aliquam sit amet urna id felis convallis porta eu vitae urna.',
-        date_created: '2020-10-31T12:16:36Z'
-      }
+      // author: {
+      //   username: 'amiresm',
+      //   firstname: 'Amir',
+      //   lastname: 'Esmaeili'
+      // },
+      // post: {
+      //   title: 'An Interesting title',
+      //   description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio sit amet nulla porta pharetra. Cras sed mollis purus. Aliquam sit amet urna id felis convallis porta eu vitae urna.',
+      //   date_created: '2020-10-31T12:16:36Z'
+      // }
     }
   },
   methods: {},

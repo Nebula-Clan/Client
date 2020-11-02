@@ -14,9 +14,8 @@
       sm="6">
       <Write/>
       <br>
-      <PostQuickView/>
-      <PostQuickView/>
-      <PostQuickView/>
+      <PostQuickView
+        v-for="(post, i) in posts" :key="i" :post="post" :author="author"/>
 
     </v-col>
     <v-col
@@ -46,6 +45,21 @@ export default {
     Communities,
     Write,
     PostQuickView
+  },
+  data() {
+    return {
+      posts: null,
+      author: null
+    }
+  },
+  mounted() {
+    const data = new FormData()
+    data.append('user_id', '5')
+    this.$axios.post('posts/get_user_posts', data)
+      .then((res) => {
+          this.posts = res.data.all_user_posts,
+          this.author = res.data.author
+        }).catch()
   }
 }
 </script>
