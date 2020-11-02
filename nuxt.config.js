@@ -49,7 +49,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://huddle.pythonanywhere.com/'
+    baseURL: 'http://huddle.pythonanywhere.com'
   },
 
   headers: {

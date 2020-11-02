@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-img src="/images/Back2.jpg" max-height="450">
+            <v-img :src="getProfileBannerImageURL" max-height="450">
 
             </v-img> 
         </v-row>
@@ -64,7 +64,11 @@ import { mapGetters } from 'vuex'
 export default {
     computed: {
         ...mapGetters('modules/profile/profileInfo',
-         ['getNumberOfPosts', 'getNumberOfFollowing', 'getNumberOfFollowers', 'getNumberOfLikes', 'getNumberOfComments']),
+         ['getNumberOfPosts', 'getNumberOfFollowing', 'getNumberOfFollowers', 'getNumberOfLikes', 'getNumberOfComments', 'getProfileBannerImage']),
+        getProfileBannerImageURL() {
+            console.log(this.$axios.defaults.baseURL + this.getProfileBannerImage)
+            return this.$axios.defaults.baseURL + this.getProfileBannerImage
+        }
     }
 }
 </script>

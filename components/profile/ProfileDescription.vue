@@ -2,7 +2,7 @@
     <v-row :class="[marginSize, avatar]" max-width="250">
         <v-col cols="12" >
             <v-avatar :size="avatarSize" class="avatar-border">
-                <v-img src="/images/LL1.jpg" alt="John">
+                <v-img :src="getProfileImageURL" alt="John">
                 </v-img>
             </v-avatar>
         </v-col>
@@ -41,6 +41,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters('modules/profile/profileInfo', ['getNickname', 'getUsername', 'getDescription', 'getProfileImage', 'getProfileBannerImage']),
         avatar() {
             if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
                 return 'avatar-lg'
@@ -86,7 +87,13 @@ export default {
                 return 'blue darken-1'
             }
         },
-        ...mapGetters('modules/profile/profileInfo', ['getNickname', 'getUsername', 'getDescription']),
+        getProfileImageURL() {
+            console.log(this.$axios.defaults.baseURL + this.getProfileImage)
+            return this.$axios.defaults.baseURL + this.getProfileImage
+        },
+        getProfileBannerImageURL() {
+            return this.$axios.defaults.baseURL + this.getProfileBannerImage()
+        }
     },
     methods: {
         changeStatusOfFollow() {

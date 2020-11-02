@@ -55,8 +55,9 @@ export default {
             return this.componentObjects
         }
     },
-    mounted() {
-        this.getProfileInfo('reza23')
+    created() {
+        this.getProfileInfo(this.$route.params.username)
+        console.log(this.$route.params.username)
     },
     methods: {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),

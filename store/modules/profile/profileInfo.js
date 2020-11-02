@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const state = () => ({
     info: {
+        id: 0,
         nickname: 'test',
         username: 'testU',
         description: 'testiiiii',
@@ -39,6 +40,12 @@ const getters = {
     },
     getNumberOfFollowing: (state) => {
         return state.info.numberOfFollowing
+    },
+    getProfileImage: (state) => {
+        return state.info.profileImageUrl
+    },
+    getProfileBannerImage: (state) => {
+        return state.info.profileBannerUrl
     }
 }
   
@@ -56,10 +63,16 @@ const mutations = {
     //     profileBannerUrl: ''
     // }
     parseReq(state, data) {
-        state.info.nickname = data.first_name
+        state.info.nickname = data.nickname
         state.info.username = data.username
         state.info.description = data.biology
         state.info.profileImageUrl = data.profile_picture
+        state.info.profileBannerUrl = data.banner_picture
+        state.info.numberOfLikes = data.likes_count
+        state.info.numberOfComments = data.comments_count
+        state.info.numberOfFollowers = data.follower
+        state.info.numberOfPosts = data.posts_count
+        state.info.id = data.id
     }
 }
   
@@ -69,6 +82,7 @@ const actions = {
         user.append('username', username)
         try {
             let { data } = await this.$axios.post('api/profile/public',  user)
+            console.log(data)
             commit('parseReq', data)
         } catch (e) {
           console.log(e)
