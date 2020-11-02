@@ -84,8 +84,8 @@ export default {
         redirect_uri: 'http://localhost:3000/',
         token_key: 'access_token',
         state: 'UNIQUE_AND_NON_GUESSABLE',
-        client_id: '8dd24fe58e421a5270a4',
-        client_secret: '03aaf888bf2a4a51a313c2591aa3aa40c55fbe85'
+        client_id: '07b6343a3dbb699b935a',
+        client_secret: '2eececb6cb35fb47ba5bc2bb085c4d22fb666def '
       },
     }
   },
