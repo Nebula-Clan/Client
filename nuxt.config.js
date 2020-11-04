@@ -74,19 +74,19 @@ export default {
           }
         },
       },
-    },
-    github: {
-      _scheme: 'oauth2',
-      scope: ['openid', 'profile', 'email'],
-      access_type: undefined,
-      access_token_endpoint: undefined,
-      response_type: 'token',
-      token_type: 'Bearer',
-      redirect_uri: 'http://localhost:3000/',
-      token_key: 'access_token',
-      state: 'UNIQUE_AND_NON_GUESSABLE',
-      client_id: '8dd24fe58e421a5270a4',
-      client_secret: '03aaf888bf2a4a51a313c2591aa3aa40c55fbe85'
+      github: {
+        _scheme: 'oauth2',
+        scope: ['openid', 'profile', 'email'],
+        access_type: undefined,
+        access_token_endpoint: undefined,
+        response_type: 'token',
+        token_type: 'Bearer',
+        redirect_uri: 'http://localhost:3000/feed',
+        token_key: 'access_token',
+        state: 'UNIQUE_AND_NON_GUESSABLE',
+        client_id: 'f411dade05bf26eadb71',
+        client_secret: 'ad06bb50f00202d3f0a70d6d1a2880d4770fa048'
+      }
     },
     redirect: {
       login: '/feed',
@@ -95,7 +95,6 @@ export default {
       home: '/feed'
     }
   },
-
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -116,6 +115,5 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-  }
+  build: {}
 }
