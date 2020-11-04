@@ -5,78 +5,20 @@
       New Post
     </v-card-title>
     <Editor @updateEditorContent="post.content=$event"/>
-    <v-divider></v-divider>
+    <v-divider class="primary"></v-divider>
     <v-row class="px-4">
-      <v-col cols="5">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-image</v-icon>
-            </v-btn>
-          </template>
-          <span>Add image</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-sticker-emoji</v-icon>
-            </v-btn>
-          </template>
-          <span>Add emoji</span>
-        </v-tooltip>
-      </v-col>
-      <v-col cols="5">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-help-circle</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a question</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-newspaper</v-icon>
-            </v-btn>
-          </template>
-          <span>Create an article</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-poll</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a poll</span>
-        </v-tooltip>
-      </v-col>
-      <v-col class="text-right" cols="2">
+      <v-col>
         <v-dialog
           v-model="dialog"
           persistent
           max-width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              outlined
+              color="primary"
               v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-send</v-icon>
+              v-on="on">
+              publish
             </v-btn>
           </template>
           <v-card>
@@ -86,47 +28,53 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      filled
-                      v-model="post.title"
-                      label="Title*"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-textarea
-                      filled
-                      v-model="post.description"
-                      name="input-7-4"
-                      label="Description*"
-                      value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-                    ></v-textarea>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-file-input
-                      filled
-                      accept="image/png, image/jpeg, image/bmp"
-                      v-model="post.headerImage"
-                      show-size
-                      prepend-icon="mdi-camera"
-                      label="Select post cover"
-                      truncate-length="30"
-                    ></v-file-input>
-                  </v-col>
+                  <v-form class="publish-form" v-model="formValid" @submit.prevent="publish">
+                    <v-col cols="12">
+                      <v-text-field
+                        outlined
+                        v-model="post.title"
+                        :rules="titleRules"
+                        counter
+                        label="Title">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        outlined
+                        v-model="post.description"
+                        :rules="descRules"
+                        counter
+                        auto-grow
+                        label="Description"
+                      ></v-textarea>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-file-input
+                        outlined
+                        accept="image/png, image/jpeg, image/bmp"
+                        v-model="post.headerImage"
+                        show-size
+                        prepend-icon="mdi-camera"
+                        label="Select post cover"
+                        truncate-length="30"
+                      ></v-file-input>
+                    </v-col>
+                  </v-form>
                 </v-row>
               </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="blue darken-1"
+                outlined
+                color="error"
                 text
                 @click="dialog = false">
                 Close
               </v-btn>
               <v-btn
-                color="blue darken-1"
+                outlined
+                color="primary"
                 text
                 @click="onSubmit()">
                 Create
@@ -147,6 +95,7 @@ export default {
   name: 'CreatePost',
   data: () => ({
     dialog: false,
+    formValid: false,
     post: {
       title: '',
       description: '',
@@ -154,14 +103,22 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: undefined,
-    }
+    },
+    titleRules: [
+      t => !!t || 'Title is required',
+      t => t.length <= 50 || 'Max length is 50 characters'
+    ],
+    descRules: [
+      t => !!t || 'Description is required',
+      t => t.length <= 750 || 'Max length is 750 characters'
+    ]
   }),
   components: {
     Editor
   },
   methods: {
     ...mapActions('modules/post', ['createPost']),
-    onSubmit () {
+    publish () {
       this.createPost(this.post).then((response) => {
         console.log(response)
       }).catch((e) => {
@@ -173,5 +130,8 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
+  .publish-form {
+    width: 100%;
+  }
 </style>

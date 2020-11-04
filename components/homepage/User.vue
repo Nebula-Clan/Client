@@ -23,7 +23,7 @@
     <v-card-text class="text-center">
       <v-icon>mdi-format-quote-open</v-icon>{{bio}}<v-icon>mdi-format-quote-close</v-icon>
     </v-card-text>
-    <v-divider></v-divider>
+    <v-divider class="primary"></v-divider>
     <v-row class="text-center pa-2 justify-space-around">
       <div>
         <b>{{followings}}</b>
