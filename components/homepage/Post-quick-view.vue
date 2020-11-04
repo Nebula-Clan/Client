@@ -44,6 +44,22 @@
       </v-col>
     </v-row>
 
+    <v-row>
+      <v-col class="d-flex justify-center">
+        <v-chip
+          nuxt
+          :key="i"
+          v-for="(tag, i) in this.hashtags"
+          :to="'/search/hashtag/' + tag.replace('#', '')"
+          outlined
+          class="mx-1"
+          :color="chipsColors[i]"
+          >
+          {{tag}}
+        </v-chip>
+      </v-col>
+    </v-row>
+
     <v-row class="mx-2">
       <v-col>
         <nuxt-link class="text-decoration-none white--text d-flex"
@@ -102,6 +118,10 @@ export default {
   props: ['post', 'author'],
   data: () => {
     return {
+      hashtags: ['#Django','#VueJs', '#Database'],
+      chipsColors: [
+        'blue', 'red', 'green', 'purple', 'orange'
+      ]
     }
   },
   methods: {},

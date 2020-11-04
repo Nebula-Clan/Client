@@ -68,6 +68,7 @@
                       </v-text-field>
                       <div>
                         <v-chip
+                          outlined
                           class="mx-1"
                           :key="i"
                           :color="chipsColors[i]"
@@ -134,7 +135,6 @@ export default {
     ],
     hashtagRules: [
       t => t.replace(/ /g, '').split(',').length <= 5 || 'Max hashtag is 5',
-      t => /(.*,)*(.*)/.test(t.replace(/ /g, '')) || "Use a valid format"
     ],
     chipsColors: [
       'blue', 'red', 'green', 'purple', 'orange'
@@ -153,8 +153,8 @@ export default {
       })
     },
     addHashtags() {
-      const hashtag = this.hashtags.replace(/ /g, '')
-      const hashtags = hashtag.split(',')
+      const hashtagStr = this.hashtags.replace(/ /g, '')
+      const hashtags = hashtagStr.split(',').map(h => '#'+h)
       if (hashtags.length <= 5) {
         this.post.hashtags = hashtags
       }
