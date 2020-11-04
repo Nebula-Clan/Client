@@ -59,6 +59,23 @@
                         truncate-length="30"
                       ></v-file-input>
                     </v-col>
+                    <v-col cols="12">
+                      <v-text-field outlined
+                                    v-model="hashtags"
+                                    label="Up to 5 hashtags"
+                                    :rules="hashtagRules"
+                                    @change="addHashtags">
+                      </v-text-field>
+                      <div>
+                        <v-chip
+                          class="mx-1"
+                          :key="i"
+                          :color="chipsColors[i]"
+                          v-for="(tag, i) in this.post.hashtags">
+                          {{tag}}
+                        </v-chip>
+                      </div>
+                    </v-col>
                   </v-form>
                 </v-row>
               </v-container>
@@ -74,6 +91,7 @@
               </v-btn>
               <v-btn
                 outlined
+                :disabled="!formValid"
                 color="primary"
                 text
                 @click="onSubmit()">
@@ -96,6 +114,7 @@ export default {
   data: () => ({
     dialog: false,
     formValid: false,
+    hashtags: '',
     post: {
       title: '',
       description: '',
@@ -103,6 +122,7 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: undefined,
+      hashtags: []
     },
     titleRules: [
       t => !!t || 'Title is required',
@@ -111,6 +131,13 @@ export default {
     descRules: [
       t => !!t || 'Description is required',
       t => t.length <= 750 || 'Max length is 750 characters'
+    ],
+    hashtagRules: [
+      t => t.replace(/ /g, '').split(',').length <= 5 || 'Max hashtag is 5',
+      t => /(.*,)*(.*)/.test(t.replace(/ /g, '')) || "Use a valid format"
+    ],
+    chipsColors: [
+      'blue', 'red', 'green', 'purple', 'orange'
     ]
   }),
   components: {
@@ -124,6 +151,13 @@ export default {
       }).catch((e) => {
         console.error(e)
       })
+    },
+    addHashtags() {
+      const hashtag = this.hashtags.replace(/ /g, '')
+      const hashtags = hashtag.split(',')
+      if (hashtags.length <= 5) {
+        this.post.hashtags = hashtags
+      }
     }
   }
 }
