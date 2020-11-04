@@ -81,11 +81,11 @@ export default {
         access_token_endpoint: undefined,
         response_type: 'token',
         token_type: 'Bearer',
-        redirect_uri: 'http://localhost:3000/',
+        redirect_uri: 'http://localhost:3000/feed',
         token_key: 'access_token',
         state: 'UNIQUE_AND_NON_GUESSABLE',
-        client_id: '07b6343a3dbb699b935a',
-        client_secret: '2eececb6cb35fb47ba5bc2bb085c4d22fb666def '
+        client_id: 'f411dade05bf26eadb71',
+        client_secret: 'ad06bb50f00202d3f0a70d6d1a2880d4770fa048'
       },
     }
   },
