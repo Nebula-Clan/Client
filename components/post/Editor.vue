@@ -2,6 +2,7 @@
   <section class="container">
     <client-only>
       <quill-editor
+        style="min-height: 300px"
         @change="$emit('updateEditorContent',content);"
         ref="editor"
         v-model="content"
@@ -20,7 +21,7 @@ export default {
     return {
       content: '',
       editorOption: {
-        theme: 'snow',
+        theme: 'bubble',
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
@@ -42,13 +43,10 @@ export default {
   },
   methods: {
     onEditorBlur (editor) {
-      console.log('editor blur!', editor)
     },
     onEditorFocus (editor) {
-      console.log('editor focus!', editor)
     },
     onEditorReady (editor) {
-      console.log('editor ready!', editor)
     }
   },
 }
