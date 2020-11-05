@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-7 border-lay"
+    class="pa-7"
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Signup now!</div>
@@ -117,6 +117,7 @@ export default {
         p => p.length >= 8 || 'Password must be at least 8 characters or more',
       ],
       pswConfirmRules: [
+        p => !!p || 'Please confirm password',
         p => p === this.userInfo.password || 'Password\'s not match'
       ],
 
@@ -130,7 +131,7 @@ export default {
     ...mapActions('modules/authentication', ['registerUser']),
     onSubmit() {
       this.registerUser(this.userInfo).then((response) => {
-        this.$auth.redirect('home')
+        this.$auth.redirect('login')
       }).catch((error) => {
         if (error.response) {
           this.errorHandling.hasError = true
@@ -143,8 +144,4 @@ export default {
 </script>
 
 <style scoped>
-.border-lay {
-  border-radius: 10px 0 0 10px;
-  border: none;
-}
 </style>

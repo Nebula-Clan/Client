@@ -89,12 +89,15 @@ export default {
       }
     },
     redirect: {
-      login: '/feed',
-      logout: '/feed',
-      callback: '/feed',
       home: '/feed',
+      login: '/login'
     }
   },
+
+  router: {
+    base: '/'
+  },
+
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

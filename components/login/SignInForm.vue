@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-7 border-lay"
+    class="pa-7"
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Login</div>
@@ -105,7 +105,7 @@ export default {
         username: this.username,
         password: this.password
       }).then((response) => {
-        console.log(response)
+        this.$auth.redirect('home')
       }).catch((error) => {
         if (error.response) {
           if (error.response.status === 403) {
@@ -129,8 +129,4 @@ export default {
 </script>
 
 <style scoped>
-.border-lay {
-  border-radius: 10px 0 0 10px;
-  border: none;
-}
 </style>
