@@ -1,0 +1,73 @@
+<template>
+  <v-row class="px-10 py-5">
+    <v-col
+      cols="12"
+      lg="2"
+      md="3"
+      sm="3">
+      <Categories/>
+    </v-col>
+    <v-col
+      cols="12"
+      lg="8"
+      md="6"
+      sm="6">
+      <PostView :post="post" :author="author" :content="content"/>
+    </v-col>
+    <v-col
+      cols="12"
+      lg="2"
+      md="3"
+      sm="3">
+      <User/>
+      <br>
+      <Communities/>
+    </v-col>
+  </v-row>
+</template>
+
+<script>
+import User from "@/components/homepage/User";
+import Categories from "@/components/homepage/Categories";
+import Communities from "@/components/homepage/Communities";
+import Write from "@/components/homepage/Write";
+import PostQuickView from "@/components/homepage/Post-quick-view";
+import PostView from "@/components/post/PostView";
+
+export default {
+  name: "_post_id",
+  components: {
+    PostView,
+    User,
+    Categories,
+    Communities,
+    Write,
+    PostQuickView
+  },
+  data: () => ({
+    post: '',
+    author: '',
+    content: ''
+  }),
+  mounted() {
+    const data = new FormData()
+    data.append('post_id', '7')
+    this.$axios.post('/api/posts/get_post', data)
+      .then((res) => {
+        this.post = res.data.post;
+        this.author = res.data.author
+      }).catch()
+    const data2 = new FormData()
+    data2.append('content_id', '7')
+    this.$axios.post('/api/posts/get_content', data2)
+      .then((res) => {
+        this.content = res.data.content.content_text;
+        console.log(this.content)
+      }).catch()
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
