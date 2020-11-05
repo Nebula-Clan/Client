@@ -56,6 +56,7 @@
       </v-btn>
     </v-form>
     <v-divider class="my-6"></v-divider>
+    <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
   </v-card>
 </template>
 
