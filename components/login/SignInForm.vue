@@ -37,6 +37,23 @@
       <v-divider class="my-6"></v-divider>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
+    <v-snackbar
+      v-model="errorHandling.hasError"
+      color="red darken-4"
+      :timeout="4000">
+
+      {{ errorHandling.msg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="errorHandling.hasError = false">
+          Dismiss
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -83,14 +100,19 @@ export default {
   },
   methods: {
     ...mapActions('modules/authentication', ['login']),
-    onSubmit () {
+    onSubmit() {
       this.login({
         username: this.username,
         password: this.password
       }).then((response) => {
         console.log(response)
-      }).catch((e) => {
-        console.error(e)
+      }).catch((error) => {
+        if (error.response) {
+          if (error.response.status === 403) {
+            this.errorHandling.hasError = true
+            this.errorHandling.msg = "Incorrect username or password."
+          }
+        }
       })
     },
     loginGithub() {

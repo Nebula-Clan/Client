@@ -57,6 +57,25 @@
     </v-form>
     <v-divider class="my-6"></v-divider>
     <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
+
+    <v-snackbar
+      v-model="errorHandling.hasError"
+      color="red darken-4"
+      :timeout="4000">
+
+      {{ errorHandling.msg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="errorHandling.hasError = false">
+          Dismiss
+        </v-btn>
+      </template>
+    </v-snackbar>
+
   </v-card>
 </template>
 
@@ -99,17 +118,24 @@ export default {
       ],
       pswConfirmRules: [
         p => p === this.userInfo.password || 'Password\'s not match'
-      ]
+      ],
+
+      errorHandling: {
+        hasError: false,
+        msg: '',
+      }
     }
   },
   methods: {
     ...mapActions('modules/authentication', ['registerUser']),
-    onSubmit () {
+    onSubmit() {
       this.registerUser(this.userInfo).then((response) => {
-        console.log(response)
-        this.$auth.redirect('login')
-      }).catch((e) => {
-        console.error(e)
+        this.$auth.redirect('home')
+      }).catch((error) => {
+        if (error.response) {
+          this.errorHandling.hasError = true
+          this.errorHandling.msg = error.response.data.message
+        }
       })
     }
   }
