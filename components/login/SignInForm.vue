@@ -31,25 +31,9 @@
     </v-form>
     <v-divider class="my-6"></v-divider>
     <div>
-      <v-btn
-        class="mt-3 pa-5"
-        color="black"
-        @click="loginGithub"
-        block>
-        <i class="fab fa-github mr-3"/> Sign in with Github
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="red darken-1"
-        block>
-        <i class="fab fa-google mr-3"/> Sign in with Google
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="blue darken-1"
-        block>
-        <i class="fab fa-facebook-f mr-3"/> Sign in with Facebook
-      </v-btn>
+      <SocialButton :uiData="socialAccounts.github" :on-click="loginGithub"/>
+      <SocialButton :uiData="socialAccounts.google" :on-click="loginGoogle"/>
+      <SocialButton :uiData="socialAccounts.facebook" :on-click="loginFacebook"/>
       <v-divider class="my-6"></v-divider>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
@@ -57,10 +41,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
+import SocialButton from "@/components/buttons/SocialButton";
 
 export default {
   name: 'SignIn',
+  components: { SocialButton },
   data: () => {
     return {
       formValid: false,
@@ -70,6 +56,29 @@ export default {
       fieldRules: [
         u => !!u || 'This field is required'
       ],
+
+      socialAccounts: {
+        github: {
+          text: 'Sign in with Github',
+          icon: 'fab fa-github',
+          color: 'black'
+        },
+        google: {
+          text: 'Sign in with Google',
+          icon: 'fab fa-google',
+          color: 'red darken-1'
+        },
+        facebook: {
+          text: 'Sign in with Facebook',
+          icon: 'fab fa-facebook-f ',
+          color: 'blue darken-1'
+        }
+      },
+
+      errorHandling: {
+        hasError: false,
+        msg: '',
+      }
     }
   },
   methods: {
@@ -84,8 +93,14 @@ export default {
         console.error(e)
       })
     },
-    loginGithub(){
+    loginGithub() {
       this.$auth.loginWith('github');
+    },
+    loginGoogle() {
+
+    },
+    loginFacebook() {
+
     }
   }
 }

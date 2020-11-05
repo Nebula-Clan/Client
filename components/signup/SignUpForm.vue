@@ -56,27 +56,11 @@
       </v-btn>
     </v-form>
     <v-divider class="my-6"></v-divider>
-    <div>
-      <v-btn
-        class="mt-3 pa-5"
-        color="red darken-1"
-        block>
-        <i class="fab fa-google mr-3"/> Sign up with Google
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="blue darken-1"
-        block>
-        <i class="fab fa-facebook-f mr-3"/> Sign up with Facebook
-      </v-btn>
-      <v-divider class="my-6"></v-divider>
-      <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
-    </div>
   </v-card>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'signup-form',

@@ -92,7 +92,7 @@ export default {
       login: '/feed',
       logout: '/feed',
       callback: '/feed',
-      home: '/feed'
+      home: '/feed',
     }
   },
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
