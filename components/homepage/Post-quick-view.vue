@@ -50,7 +50,7 @@
           nuxt
           :key="i"
           v-for="(tag, i) in this.hashtags"
-          :to="'/search/hashtag/' + tag.replace('#', '')"
+          :to="'/search/hashtag?keyword=' + tag.replace('#', '') + '&sort=latest'"
           outlined
           class="mx-1"
           :color="chipsColors[i]"
