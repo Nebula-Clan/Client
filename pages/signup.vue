@@ -4,12 +4,13 @@
     <v-row
       align="center"
       justify="center">
+      <v-col cols="4"/>
       <v-col
-        class="d-flex justify-center"
-        cols="12">
+        class="justify-center"
+        cols="4">
         <SignUpForm/>
-        <intro/>
       </v-col>
+      <v-col cols="4"/>
     </v-row>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-7 border-lay"
+    class="pa-7"
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Signup now!</div>
@@ -56,27 +56,31 @@
       </v-btn>
     </v-form>
     <v-divider class="my-6"></v-divider>
-    <div>
-      <v-btn
-        class="mt-3 pa-5"
-        color="red darken-1"
-        block>
-        <i class="fab fa-google mr-3"/> Sign up with Google
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="blue darken-1"
-        block>
-        <i class="fab fa-facebook-f mr-3"/> Sign up with Facebook
-      </v-btn>
-      <v-divider class="my-6"></v-divider>
-      <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
-    </div>
+    <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
+
+    <v-snackbar
+      v-model="errorHandling.hasError"
+      color="red darken-4"
+      :timeout="4000">
+
+      {{ errorHandling.msg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="errorHandling.hasError = false">
+          Dismiss
+        </v-btn>
+      </template>
+    </v-snackbar>
+
   </v-card>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'signup-form',
@@ -113,18 +117,26 @@ export default {
         p => p.length >= 8 || 'Password must be at least 8 characters or more',
       ],
       pswConfirmRules: [
+        p => !!p || 'Please confirm password',
         p => p === this.userInfo.password || 'Password\'s not match'
-      ]
+      ],
+
+      errorHandling: {
+        hasError: false,
+        msg: '',
+      }
     }
   },
   methods: {
     ...mapActions('modules/authentication', ['registerUser']),
-    onSubmit () {
+    onSubmit() {
       this.registerUser(this.userInfo).then((response) => {
-        console.log(response)
         this.$auth.redirect('login')
-      }).catch((e) => {
-        console.error(e)
+      }).catch((error) => {
+        if (error.response) {
+          this.errorHandling.hasError = true
+          this.errorHandling.msg = error.response.data.message
+        }
       })
     }
   }
@@ -132,8 +144,4 @@ export default {
 </script>
 
 <style scoped>
-.border-lay {
-  border-radius: 10px 0 0 10px;
-  border: none;
-}
 </style>
