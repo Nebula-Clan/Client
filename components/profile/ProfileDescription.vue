@@ -63,10 +63,13 @@ export default {
             }
         },
         marginSize() {
+            console.log(this.$vuetify.name)
             if (this.$vuetify.breakpoint.xl) {
                 return 'ml-16'
-            } else if (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.lg) {
-                return 'ml-12'
+            } else if (this.$vuetify.breakpoint.lg) {
+                return 'ml-8'
+            } else if(this.$vuetify.breakpoint.md) {
+                return 'ml-10'
             } else if (this.$vuetify.breakpoint.sm) {
                 return 'ml-8'
             } else if (this.$vuetify.breakpoint.xs) {

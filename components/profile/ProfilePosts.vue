@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card :min-width="vCardWidth">
+            <v-card :min-width="postWidth">
                 <v-list-item three-line>
                      <v-list-item-avatar tile size="80" color="grey">
                             <v-img :src="post.getPostImageURL()"></v-img>
@@ -78,7 +78,8 @@ export default {
             dislike: false,
             overlay: false,
             zIndex: 1,
-            vCardWidth: '0'
+            isMounted: false,
+            hack: 0
         }
     },
     computed: {
@@ -88,10 +89,23 @@ export default {
             } else {
                 return ''
             }
+        },
+        postWidth() {
+            this.hack
+            if (!this.isMounted) {
+                return;
+            }
+            return this.$refs.VCardParent.clientWidth
         }
     },
     mounted() {
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
+        this.isMounted = true
+        window.addEventListener('resize', this.hackWidth, { passive: true })
+        this.hackWidth()
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.hackWidth, { passive: true })
     },
     methods: {
         likePost() {
@@ -102,6 +116,9 @@ export default {
                 this.like = false
                 this.dislike = true
             }
+        },
+        hackWidth() {
+            this.hack++
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="vCardWidth">
+            <v-card elevation="24" :min-width="postWidth">
                 <v-container>
                     <v-card-title>
                         {{ likedObj.getLikeOwnerUsername() }} <v-icon class="mx-1" color="red lighten-1">mdi-heart</v-icon> post ahmad in community zed
@@ -56,11 +56,39 @@ export default {
                 "#barbar",
                 "#loca",
                 '#toca'
-            ]
+            ],
+            isMounted: false,
+            hack: 0
+        }
+    },
+    computed: {
+        postWidth() {
+            this.hack
+            if (!this.isMounted) {
+                return;
+            }
+            return this.$refs.VCardParent.clientWidth
         }
     },
     mounted() {
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
+        this.isMounted = true
+        window.addEventListener('resize', this.hackWidth, { passive: true })
+        this.hackWidth()
+    },
+    methods: {
+        likeComment() {
+            if (!this.like) {
+                this.like = true
+                this.dislike = false
+            } else {
+                this.like = false
+                this.dislike = true
+            }
+        },
+        hackWidth() {
+            this.hack++
+        }
     }
 }
 </script>
