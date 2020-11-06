@@ -61,7 +61,9 @@ export default {
     },
     methods: {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
+        ...mapActions('modules/profile/profilePosts', ['getProfilePosts']),
         switchToPosts() {
+            this.getProfilePosts(4)
             this.comp = ProfilePosts
         },
         switchToComments() {

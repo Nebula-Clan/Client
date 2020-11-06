@@ -1,35 +1,43 @@
+const { default: post } = require("../../post")
+
 class Post {
 
-    setPostID(postID) {
-        this.id = postID
+    set postID(postID) {
+        this._id = postID
     }
 
-    setPostTitle(PostTitle) {
-        this.title = PostTitle
+    set postTitle(PostTitle) {
+        this._title = PostTitle
     }
 
-    setPostHashtags(hashtags) {
-        this.hashtags = hashtags
+    set postHashtags(hashtags) {
+        this._hashtags = hashtags
     }
 
-    setPostImageURL(postImgUrl) {
-        this.imageURL = postImgUrl
+    set postImageURL(postImgUrl) {
+        this._imageURL = postImgUrl
     }
 
-    getPostID() {
-        return this.id
+    get postID() {
+        return this._id
     }
 
-    getPostTitle() {
-        return this.title
+    get postTitle() {
+        return this._title
     }
 
-    getPostHashtags() {
-        return this.hashtags
+    get postHashtags() {
+        return this._hashtags
     }
 
-    getPostImageURL() {
-        return this.imageURL
+    get postImageURL() {
+        return this._imageURL
+    }
+
+    parsePostFromJson(json) {
+        this.postID = json.id
+        this.postTitle = json.title
+        this.postImageURL = json.header_image
     }
 }
 

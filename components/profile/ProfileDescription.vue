@@ -11,7 +11,7 @@
                 <div class="text-h6">
                     {{ getNickname }}
                 </div>
-                <v-btn depressed class="ml-auto mr-15" :color="followAndUnfollowColor" @click="changeStatusOfFollow" :loading="followLoading">
+                <v-btn depressed class="ml-auto mr-10" :color="followAndUnfollowColor" @click="changeStatusOfFollow" :loading="followLoading">
                     {{ followStatus }}
                 </v-btn>
             </v-row>
@@ -63,7 +63,6 @@ export default {
             }
         },
         marginSize() {
-            console.log(this.$vuetify.name)
             if (this.$vuetify.breakpoint.xl) {
                 return 'ml-16'
             } else if (this.$vuetify.breakpoint.lg) {

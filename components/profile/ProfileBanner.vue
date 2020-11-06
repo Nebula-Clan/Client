@@ -10,7 +10,7 @@
                 <div style="background-color:#12232E">
                     <v-container class="pa-0">
                         <v-row justify="center" align="center">
-                            <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
+                            <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
                                 <p class="text-center mb-0 text--secondary">
                                     Posts
                                 </p>
@@ -18,7 +18,7 @@
                                     {{ getNumberOfPosts }}
                                 </p>
                             </v-col>
-                            <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
+                            <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
                                 <p class="text-center mb-0 text--secondary">
                                     Following
                                 </p>
@@ -26,7 +26,7 @@
                                     {{ getNumberOfFollowing }}
                                 </p>
                             </v-col>
-                            <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
+                            <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
                                 <p class="text-center mb-0 text--secondary">
                                     Followers
                                 </p>
@@ -34,7 +34,7 @@
                                     {{ getNumberOfFollowers }}
                                 </p>
                             </v-col>
-                            <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
+                            <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
                                 <p class="text-center mb-0 text--secondary">
                                     Likes
                                 </p>
@@ -42,7 +42,7 @@
                                     {{ getNumberOfLikes }}
                                 </p>
                             </v-col>
-                            <v-col cols="2" lg="2" sm="2" xs="2" class="pa-2">
+                            <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
                                 <p class="text-center mb-0 text--secondary">
                                     Comments
                                 </p>
@@ -68,6 +68,19 @@ export default {
         getProfileBannerImageURL() {
             console.log(this.$axios.defaults.baseURL + this.getProfileBannerImage)
             return this.$axios.defaults.baseURL + this.getProfileBannerImage
+        },
+        getPaddingAndMargin() {
+            if (this.$vuetify.breakpoint.xl) {
+                return 'pa-2 mx-10'
+            } else if (this.$vuetify.breakpoint.lg) {
+                return 'pa-2 mx-8'
+            } else if(this.$vuetify.breakpoint.md) {
+                return 'pa-2 mx-1'
+            } else if (this.$vuetify.breakpoint.sm) {
+                return 'pa-2 mx-0'
+            } else if (this.$vuetify.breakpoint.xs) {
+                return 'pa-2 mx-0'
+            }
         }
     }
 }

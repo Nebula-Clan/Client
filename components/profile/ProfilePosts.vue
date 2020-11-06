@@ -4,16 +4,16 @@
             <v-card :min-width="postWidth">
                 <v-list-item three-line>
                      <v-list-item-avatar tile size="80" color="grey">
-                            <v-img :src="post.getPostImageURL()"></v-img>
+                            <v-img :src="getPostImage"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
                         <div class="overline mb-3">
-                            {{ post.getPostTitle() }}
+                            {{ post.postTitle }}
                         </div>
                         <v-list-item-subtitle>
                             <v-row class="ml-1">
-                                <p v-for="hashtag in post.getPostHashtags()" :key="hashtag" class="mx-1 blue--text text--lighten-1">
+                                <p v-for="hashtag in post.postHashtags" :key="hashtag" class="mx-1 blue--text text--lighten-1">
                                     {{ hashtag }}
                                 </p>
                             </v-row>
@@ -96,6 +96,9 @@ export default {
                 return;
             }
             return this.$refs.VCardParent.clientWidth
+        },
+        getPostImage() {
+            return this.$axios.defaults.baseURL + this.post.postImageURL
         }
     },
     mounted() {
