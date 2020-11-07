@@ -57,16 +57,19 @@ export default {
     },
     created() {
         this.getProfileInfo(this.$route.params.username)
+        this.getProfilePosts('had0007')
         console.log(this.$route.params.username)
     },
     methods: {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
         ...mapActions('modules/profile/profilePosts', ['getProfilePosts']),
+        ...mapActions('modules/profile/profileComments', ['getProfileComments']),
         switchToPosts() {
-            this.getProfilePosts(4)
+            this.getProfilePosts('had0007')
             this.comp = ProfilePosts
         },
         switchToComments() {
+            this.getProfileComments('had0007')
             this.comp = ProfileComments
         },
         switchToLikes() {

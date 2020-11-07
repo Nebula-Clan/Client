@@ -81,7 +81,7 @@ const actions = {
         let user = new FormData()
         user.append('username', username)
         try {
-            let { data } = await this.$axios.post('api/profile/public',  user)
+            let { data } = await this.$axios.get('api/profile/public?username=' + username)
             console.log(data)
             commit('parseReq', data)
         } catch (e) {

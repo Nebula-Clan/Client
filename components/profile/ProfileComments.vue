@@ -2,31 +2,11 @@
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
             <v-card elevation="24" :min-width="postWidth">
-                <v-container>
-                    <v-card-title>
-                        {{ commentTitle }}
-                    </v-card-title>
-                    <v-row v-if="isReply">
-                        <v-card class="comment mr-7 ml-2" elevation="3">
-                            <v-list-item three-line>
-                                <v-list-item-avatar size="80">
-                                    <v-img src="/images/LL1.jpg">
-                                    </v-img>
-                                </v-list-item-avatar>
-                                <v-list-item-content>
-                                    <div class="overline" style="color:#64FFDA">
-                                        Lelouch:
-                                    </div>
-                                    <div class="overline text--secondary">
-                                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus sint reprehenderit sapiente quisquam ad. Iusto officiis vitae assumenda soluta vel?
-                                    </div>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-card>
-                    </v-row>
-                </v-container>
+                <v-card-title>
+                    shit
+                </v-card-title>
                 <v-card-text class="overline text--primary pl-7"> 
-                    {{ comment.getCommentBody() }}
+                    {{ comment.getCommentBody }}
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>

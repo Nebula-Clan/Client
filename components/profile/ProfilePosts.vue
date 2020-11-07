@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="py-2">
+     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
             <v-card :min-width="postWidth">
                 <v-list-item three-line>
@@ -30,8 +30,12 @@
                         </template>
                         <v-list elevation="24">
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="overlay = !overlay">Report</v-list-item-title >
+                                <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
                                 <v-icon>mdi-flag</v-icon>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title style="cursor: pointer" @click="likesOverlay = !likesOverlay">ListOfLikes</v-list-item-title >
+                                <v-icon>mdi-heart</v-icon>
                             </v-list-item>
                             <v-list-item>
                                 <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
@@ -42,17 +46,25 @@
 
                     <v-overlay
                     :z-index="zIndex"
-                    :value="overlay"
+                    :value="reportOverlay"
                     opacity="0.8"
                     >
-                        <ProfileReport @cancel="overlay = !overlay" />
+                        <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                    </v-overlay>
+
+                    <v-overlay
+                    :z-index="zIndex"
+                    :value="likesOverlay"
+                    opacity="0.8"
+                    >
+                        <ProfileListOfPostLikes @cancel="likesOverlay = !likesOverlay" />
                     </v-overlay>
 
                     <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
                         <v-icon style="cursor: pointer">mdi-heart</v-icon>
                     </v-btn>
 
-                    <v-btn icon class="mr-5 ml-4">
+                    <v-btn icon class="mr-2 ml-4">
                         <v-icon style="cursor: pointer">mdi-comment</v-icon>
                     </v-btn>
                 </v-card-actions>
@@ -64,6 +76,7 @@
 
 <script>
 import ProfileReport from './ProfileReport'
+import ProfileListOfPostLikes from './ProfileListOfPostLikes'
 
 export default {
     props: {
@@ -76,7 +89,8 @@ export default {
         return {
             like: false,
             dislike: false,
-            overlay: false,
+            reportOverlay: false,
+            likesOverlay: false,
             zIndex: 1,
             isMounted: false,
             hack: 0

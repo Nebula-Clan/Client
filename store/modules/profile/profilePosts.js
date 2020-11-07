@@ -24,9 +24,8 @@ const mutations = {
 }
   
 const actions = {
-    getProfilePosts({ commit }, user_id) {
-        let data = {'user_id' : user_id}
-        this.$axios.post('api/posts/get_user_posts', data)
+    getProfilePosts({ commit }, username) {
+        this.$axios.get('api/posts/get_user_posts?username=' + username)
         .then(function ({ data }) {
             commit('parsePostAndAppend', data.all_user_posts)
         })

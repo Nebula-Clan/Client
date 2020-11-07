@@ -18,6 +18,10 @@ class Post {
         this._imageURL = postImgUrl
     }
 
+    set postDescription(description) {
+        this._descirption = description
+    }
+
     get postID() {
         return this._id
     }
@@ -34,10 +38,15 @@ class Post {
         return this._imageURL
     }
 
+    get postDescription() {
+        return this._descirption
+    }
+
     parsePostFromJson(json) {
         this.postID = json.id
         this.postTitle = json.title
         this.postImageURL = json.header_image
+        this.postDescription = json.description
     }
 }
 

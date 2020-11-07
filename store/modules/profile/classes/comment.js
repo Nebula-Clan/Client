@@ -1,51 +1,55 @@
 class Comment {
 
-    setCommentID(commentID) {
-        this.id = commentID
+    set commentID(commentID) {
+        thi._id = commentID
     }
 
-    setCommentBody(commentBody) {
-        this.body = commentBody
+    set commentBody(commentBody) {
+        thi._body = commentBody
     }
 
-    setCommentHashtags(hashtags) {
-        this.hashtags = hashtags
+    set commentHashtags(hashtags) {
+        thi._hashtags = hashtags
     }
 
-    setTypeOfComment(commentType) {
-        this.commentType = commentType
+    set typeOfComment(commentType) {
+        thi._commentType = commentType
     }
 
-    setCommentOwnerUsername(username) {
-        this.commentOwnerUsername = username
+    set commentOwnerUsername(username) {
+        thi._commentOwnerUsername = username
     }
 
-    getCommentID() {
-        return this.id
+    parseCommentFromJson(json) {
+        
     }
 
-    getCommentBody() {
-        return this.body
+    get commentID() {
+        return thi._id
     }
 
-    getCommentHashtags() {
-        return this.hashtags
+    get commentBody() {
+        return thi._body
     }
 
-    getCommentType() {
-        return this.commentType
+    get commentHashtags() {
+        return thi._hashtags
     }
 
-    getCommentOwnerUsername() {
-        return this.commentOwnerUsername
+    get commentType() {
+        return thi._commentType
     }
 
-    getLiked() {
-        this.liked = false
-        return this.liked
+    get commentOwnerUsername() {
+        return thi._commentOwnerUsername
     }
 
-    isReply() {
+    get liked() {
+        thi._liked = false
+        return thi._liked
+    }
+
+    get isReply() {
         return false
     }
 }
