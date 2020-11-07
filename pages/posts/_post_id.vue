@@ -13,6 +13,12 @@
       md="6"
       sm="6">
       <PostView :post="post" :author="author" :content="content"/>
+      <!--      <div id="app">-->
+      <!--        <FastCommentsVue v-bind:config="{tenantId: 'demo'}"/>-->
+      <!--      </div>-->
+      <div style="height: 400px">
+        <PostComment/>
+      </div>
     </v-col>
     <v-col
       cols="12"
@@ -33,10 +39,12 @@ import Communities from "@/components/homepage/Communities";
 import Write from "@/components/homepage/Write";
 import PostQuickView from "@/components/homepage/Post-quick-view";
 import PostView from "@/components/post/PostView";
+import PostComment from "@/components/comment/PostComment";
 
 export default {
   name: "_post_id",
   components: {
+    PostComment,
     PostView,
     User,
     Categories,
@@ -52,14 +60,14 @@ export default {
   mounted() {
     const data = new FormData()
     data.append('post_id', '7')
-    this.$axios.post('/api/posts/get_post', data)
+    this.$axios.get('/api/posts/get_post', data)
       .then((res) => {
         this.post = res.data.post;
         this.author = res.data.author
       }).catch()
     const data2 = new FormData()
     data2.append('content_id', '7')
-    this.$axios.post('/api/posts/get_content', data2)
+    this.$axios.get('/api/posts/get_content', data2)
       .then((res) => {
         this.content = res.data.content.content_text;
         console.log(this.content)
