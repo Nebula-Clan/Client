@@ -16,7 +16,7 @@
       <!--      <div id="app">-->
       <!--        <FastCommentsVue v-bind:config="{tenantId: 'demo'}"/>-->
       <!--      </div>-->
-      <div style="height: 400px">
+      <div>
         <PostComment/>
       </div>
     </v-col>

@@ -34,6 +34,218 @@
             </div>
           </div>
         </div>
+        <div class="comments">
+          <div class="comment">
+            <a class="avatar">
+              <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+            </a>
+            <div class="content">
+              <a class="author">Jenny Hess</a>
+              <div class="metadata">
+                <span class="date">Just now</span>
+              </div>
+              <div class="text">
+                Elliot you are always so right :)
+              </div>
+              <div class="actions">
+                <a class="reply">Reply</a>
+              </div>
+            </div>
+          </div>
+          <div class="comments">
+            <div class="comment">
+              <a class="avatar">
+                <img src="https://semantic-ui.com//images/avatar/small/elliot.jpg">
+              </a>
+              <div class="content">
+                <a class="author">Elliot Fu</a>
+                <div class="metadata">
+                  <span class="date">Yesterday at 12:30AM</span>
+                </div>
+                <div class="text">
+                  <p>This has been very useful for my research. Thanks as well!</p>
+                </div>
+                <div class="actions">
+                  <a class="reply">Reply</a>
+                </div>
+              </div>
+              <div class="comments">
+                <div class="comment">
+                  <a class="avatar">
+                    <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                  </a>
+                  <div class="content">
+                    <a class="author">Jenny Hess</a>
+                    <div class="metadata">
+                      <span class="date">Just now</span>
+                    </div>
+                    <div class="text">
+                      Elliot you are always so right :)
+                    </div>
+                    <div class="actions">
+                      <a class="reply">Reply</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="comments">
+                  <div class="comment">
+                    <a class="avatar">
+                      <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                    </a>
+                    <div class="content">
+                      <a class="author">Jenny Hess</a>
+                      <div class="metadata">
+                        <span class="date">Just now</span>
+                      </div>
+                      <div class="text">
+                        Elliot you are always so right :)
+                      </div>
+                      <div class="actions">
+                        <a class="reply">Reply</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment">
+                    <a class="avatar">
+                      <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                    </a>
+                    <div class="content">
+                      <a class="author">Jenny Hess</a>
+                      <div class="metadata">
+                        <span class="date">Just now</span>
+                      </div>
+                      <div class="text">
+                        Elliot you are always so right :)
+                      </div>
+                      <div class="actions">
+                        <a class="reply">Reply</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment">
+                    <a class="avatar">
+                      <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                    </a>
+                    <div class="content">
+                      <a class="author">Jenny Hess</a>
+                      <div class="metadata">
+                        <span class="date">Just now</span>
+                      </div>
+                      <div class="text">
+                        Elliot you are always so right :)
+                      </div>
+                      <div class="actions">
+                        <a class="reply">Reply</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="comment">
+                  <a class="avatar">
+                    <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                  </a>
+                  <div class="content">
+                    <a class="author">Jenny Hess</a>
+                    <div class="metadata">
+                      <span class="date">Just now</span>
+                    </div>
+                    <div class="text">
+                      Elliot you are always so right :)
+                    </div>
+                    <div class="actions">
+                      <a class="reply">Reply</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="comment">
+                  <a class="avatar">
+                    <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+                  </a>
+                  <div class="content">
+                    <a class="author">Jenny Hess</a>
+                    <div class="metadata">
+                      <span class="date">Just now</span>
+                    </div>
+                    <div class="text">
+                      Elliot you are always so right :)
+                    </div>
+                    <div class="actions">
+                      <a class="reply">Reply</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <a class="avatar">
+              <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+            </a>
+            <div class="content">
+              <a class="author">Jenny Hess</a>
+              <div class="metadata">
+                <span class="date">Just now</span>
+              </div>
+              <div class="text">
+                Elliot you are always so right :)
+              </div>
+              <div class="actions">
+                <a class="reply">Reply</a>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <a class="avatar">
+              <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+            </a>
+            <div class="content">
+              <a class="author">Jenny Hess</a>
+              <div class="metadata">
+                <span class="date">Just now</span>
+              </div>
+              <div class="text">
+                Elliot you are always so right :)
+              </div>
+              <div class="actions">
+                <a class="reply">Reply</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <a class="avatar">
+            <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Jenny Hess</a>
+            <div class="metadata">
+              <span class="date">Just now</span>
+            </div>
+            <div class="text">
+              Elliot you are always so right :)
+            </div>
+            <div class="actions">
+              <a class="reply">Reply</a>
+            </div>
+          </div>
+        </div>
+        <div class="comment">
+          <a class="avatar">
+            <img src="https://semantic-ui.com//images/avatar/small/jenny.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Jenny Hess</a>
+            <div class="metadata">
+              <span class="date">Just now</span>
+            </div>
+            <div class="text">
+              Elliot you are always so right :)
+            </div>
+            <div class="actions">
+              <a class="reply">Reply</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -82,7 +294,8 @@ export default {
     Nested Comments
 ---------------------*/
 .ui.comments .comment .comments {
-  margin: 0em 0em 0.5em 0.5em;
+  margin: 0em 0em 0.5em 1em;
+  border-left: white solid 1px;
   padding: 1em 0em 1em 1em;
 }
 
