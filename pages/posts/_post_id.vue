@@ -17,7 +17,7 @@
       <!--        <FastCommentsVue v-bind:config="{tenantId: 'demo'}"/>-->
       <!--      </div>-->
       <div>
-        <PostComment/>
+        <CommentDemo/>
       </div>
     </v-col>
     <v-col
@@ -39,17 +39,17 @@ import Communities from "@/components/homepage/Communities";
 import Write from "@/components/homepage/Write";
 import PostQuickView from "@/components/homepage/Post-quick-view";
 import PostView from "@/components/post/PostView";
-import PostComment from "@/components/comment/PostComment";
+import CommentDemo from "@/components/comment/CommentDemo";
 
 export default {
   name: "_post_id",
   components: {
-    PostComment,
     PostView,
     User,
     Categories,
     Communities,
     Write,
+    CommentDemo,
     PostQuickView
   },
   data: () => ({
