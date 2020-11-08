@@ -3,7 +3,7 @@
     <v-row>
       <img class="header-image" :src="headerImage">
     </v-row>
-    <v-row class="logo">
+    <v-row class="logo elevation-2">
       <v-col class="d-flex align-center">
         <div class="d-flex align-center ml-10">
           <div class="mr-2">

@@ -14,11 +14,13 @@
 <script>
 import Intro from "@/components/community/Intro";
 import People from "@/components/community/People";
+import PostQuickView from '@/components/homepage/Post-quick-view'
 export default {
-  name: "_community",
+  name: "communityName",
   components: {
     People,
-    Intro
+    Intro,
+    PostQuickView
   },
   data() {
     return {

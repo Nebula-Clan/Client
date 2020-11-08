@@ -54,7 +54,7 @@
               size="40">
               <img
                 alt="John"
-                src="https://cdn.vuetifyjs.com/images/john.jpg">
+                :src="'http://huddle.pythonanywhere.com/'+author.profile_picture">
             </v-avatar>
           </div>
           <div class="d-flex flex-column ml-3">

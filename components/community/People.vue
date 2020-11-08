@@ -4,7 +4,7 @@
       People
     </v-card-title>
     <v-card-text>
-      <v-list rounded>
+      <v-list rounded dense>
         <v-subheader>
           <v-icon>mdi-account-multiple</v-icon>
           <span class="ml-1">150</span>
@@ -24,17 +24,55 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <v-btn
-        color="primary"
-        outlined
-        small>View more</v-btn>
+      <v-dialog
+        v-model="dialog"
+        persistent
+        max-width="600px">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            outlined
+            color="primary"
+            v-bind="attrs"
+            small
+            v-on="on">
+            See all
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title>
+            <span class="headline">People in this community</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <h1>Hello</h1>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              outlined
+              color="error"
+              text
+              @click="dialog = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 export default {
-  name: "People"
+  name: "People",
+  data() {
+    return {
+      dialog: false
+    }
+  }
 }
 </script>
 

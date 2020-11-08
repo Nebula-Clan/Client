@@ -53,11 +53,9 @@ export default {
     }
   },
   mounted() {
-    const data = new FormData()
-    data.append('user_id', '9')
-    this.$axios.post('/api/posts/get_user_posts', data)
+    this.$axios.get('/api/posts/get_user_posts?'+'username='+'had0007')
       .then((res) => {
-          this.posts = res.data.all_user_posts,
+          this.posts = res.data.all_user_posts
           this.author = res.data.author
         }).catch()
   }
