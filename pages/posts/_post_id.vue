@@ -16,8 +16,11 @@
       <!--      <div id="app">-->
       <!--        <FastCommentsVue v-bind:config="{tenantId: 'demo'}"/>-->
       <!--      </div>-->
+      <!--      <div>-->
+      <!--        <CommentDemo/>-->
+      <!--      </div>      -->
       <div>
-        <CommentDemo/>
+        <NestedComments/>
       </div>
     </v-col>
     <v-col
@@ -40,10 +43,12 @@ import Write from "@/components/homepage/Write";
 import PostQuickView from "@/components/homepage/Post-quick-view";
 import PostView from "@/components/post/PostView";
 import CommentDemo from "@/components/comment/CommentDemo";
+import NestedComments from "@/components/comment/NestedComments";
 
 export default {
   name: "_post_id",
   components: {
+    NestedComments,
     PostView,
     User,
     Categories,
@@ -58,20 +63,20 @@ export default {
     content: ''
   }),
   mounted() {
-    const data = new FormData()
-    data.append('post_id', '7')
-    this.$axios.get('/api/posts/get_post', data)
-      .then((res) => {
-        this.post = res.data.post;
-        this.author = res.data.author
-      }).catch()
-    const data2 = new FormData()
-    data2.append('content_id', '7')
-    this.$axios.get('/api/posts/get_content', data2)
-      .then((res) => {
-        this.content = res.data.content.content_text;
-        console.log(this.content)
-      }).catch()
+    // const data = new FormData()
+    // data.append('post_id', '7')
+    // this.$axios.get('/api/posts/get_post', data)
+    //   .then((res) => {
+    //     this.post = res.data.post;
+    //     this.author = res.data.author
+    //   }).catch()
+    // const data2 = new FormData()
+    // data2.append('content_id', '7')
+    // this.$axios.get('/api/posts/get_content', data2)
+    //   .then((res) => {
+    //     this.content = res.data.content.content_text;
+    //     console.log(this.content)
+    //   }).catch()
   }
 }
 </script>

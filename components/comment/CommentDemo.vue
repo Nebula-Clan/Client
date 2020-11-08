@@ -58,6 +58,10 @@
                   @click="expand2 = !expand2">
                   {{ expand2 ? "Hide Replays" : "Show replies" }}
                 </a>
+                <v-btn
+                  icon>
+                  <v-icon small>mdi-heart</v-icon>
+                </v-btn>
               </div>
             </div>
             <v-expand-transition>
@@ -566,7 +570,7 @@ export default {
 /*--------------
      Comment
 ---------------*/
-.ui.comments .comment {
+.comment {
   position: relative;
   background: none;
   margin: 0.5em 0em 0em;
@@ -576,7 +580,7 @@ export default {
   line-height: 1.2;
 }
 
-.ui.comments .comment:first-child {
+.comment:first-child {
   margin-top: 0em;
   padding-top: 0em;
 }
@@ -584,19 +588,19 @@ export default {
 /*--------------------
     Nested Comments
 ---------------------*/
-.ui.comments .comment .comments {
+.comment .comments {
   margin: 0em 0em 0.5em 1em;
   border-left: white solid 1px;
   padding: 1em 0em 1em 1em;
 }
 
-.ui.comments .comment .comments:before {
+.comment .comments:before {
   position: absolute;
   top: 0px;
   left: 0px;
 }
 
-.ui.comments .comment .comments .comment {
+.comment .comments .comment {
   border: none;
   border-top: none;
   background: none;
@@ -605,7 +609,7 @@ export default {
 /*--------------
      Avatar
 ---------------*/
-.ui.comments .comment .avatar {
+.comment .avatar {
   display: block;
   width: 2.5em;
   height: auto;
@@ -613,8 +617,8 @@ export default {
   margin: 0.2em 0em 0em;
 }
 
-.ui.comments .comment img.avatar,
-.ui.comments .comment .avatar img {
+.comment img.avatar,
+.comment .avatar img {
   display: block;
   margin: 0em auto;
   width: 100%;
@@ -625,55 +629,55 @@ export default {
 /*--------------
      Content
 ---------------*/
-.ui.comments .comment > .content {
+.comment > .content {
   display: block;
 }
 
 /* If there is an avatar move content over */
-.ui.comments .comment > .avatar ~ .content {
+.comment > .avatar ~ .content {
   margin-left: 3.5em;
 }
 
 /*--------------
      Author
 ---------------*/
-.ui.comments .comment .author {
+.comment .author {
   font-size: 1em;
   color: white;
   font-weight: bold;
 }
 
-.ui.comments .comment a.author {
+.comment a.author {
   cursor: pointer;
 }
 
-.ui.comments .comment a.author:hover {
+.comment a.author:hover {
   color: #1e70bf;
 }
 
 /*--------------
      Metadata
 ---------------*/
-.ui.comments .comment .metadata {
+ .comment .metadata {
   display: inline-block;
   margin-left: 0.5em;
   color: red;
   font-size: 0.875em;
 }
 
-.ui.comments .comment .metadata > * {
+.comment .metadata > * {
   display: inline-block;
   margin: 0em 0.5em 0em 0em;
 }
 
-.ui.comments .comment .metadata > :last-child {
+.comment .metadata > :last-child {
   margin-right: 0em;
 }
 
 /*--------------------
      Comment Text
 ---------------------*/
-.ui.comments .comment .text {
+.comment .text {
   margin: 0.25em 0em 0.5em;
   font-size: 1em;
   word-wrap: break-word;
@@ -684,23 +688,23 @@ export default {
 /*--------------------
      User Actions
 ---------------------*/
-.ui.comments .comment .actions {
+.comment .actions {
   font-size: 0.875em;
 }
 
-.ui.comments .comment .actions a {
+.comment .actions a {
   cursor: pointer;
   display: inline-block;
   margin: 0em 0.75em 0em 0em;
   color: purple;
 }
 
-.ui.comments .comment .actions a:last-child {
+.comment .actions a:last-child {
   margin-right: 0em;
 }
 
-.ui.comments .comment .actions a.active,
-.ui.comments .comment .actions a:hover {
+.comment .actions a.active,
+.comment .actions a:hover {
   color: white;
 }
 
@@ -711,12 +715,12 @@ export default {
   margin-top: 1em;
 }
 
-.ui.comments .comment .reply.form {
+.comment .reply.form {
   width: 100%;
   margin-top: 1em;
 }
 
-.ui.comments .reply.form textarea {
+.reply.form textarea {
   font-size: 1em;
   height: 12em;
 }
@@ -725,8 +729,8 @@ export default {
             State
 *******************************/
 .ui.collapsed.comments,
-.ui.comments .collapsed.comments,
-.ui.comments .collapsed.comment {
+.collapsed.comments,
+.collapsed.comment {
   display: none;
 }
 
