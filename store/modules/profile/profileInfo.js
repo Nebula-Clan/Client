@@ -83,6 +83,7 @@ const actions = {
         try {
             let { data } = await this.$axios.get('api/profile/public?username=' + username)
             console.log(data)
+            commit('reqSend')
             commit('parseReq', data)
         } catch (e) {
           console.log(e)

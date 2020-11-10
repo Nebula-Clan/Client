@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Post } from './classes/post'
 
 const state = () => ({
+    isReqSended: false,
     posts: []
 })
   
@@ -20,13 +21,20 @@ const mutations = {
             console.log(post)
             state.posts.push(post)
         });
+    },
+    sendedReq(state) {
+        state.isReqSended = true
     }
 }
   
 const actions = {
-    getProfilePosts({ commit }, username) {
+    getProfilePosts({ commit, state }, username) {
+        if (state.isReqSended) {
+            return
+        }
         this.$axios.get('api/posts/get_user_posts?username=' + username)
         .then(function ({ data }) {
+            commit('sendedReq')
             commit('parsePostAndAppend', data.all_user_posts)
         })
         .catch(function (error) {

@@ -13,10 +13,9 @@ const getters = {
 
 const mutations = {
     parseJsonReqAndAppend(state, commentJsonArray) {
-        console.log(commentJsonArray)
         commentJsonArray.forEach(commendJson => {
             let comment = new Comment()
-            comment.parseCommentFromJson(commendJson)
+            comment.parseCommentFromJson(commendJson.user_comment)
             state.comments.push(comment)
         })
     }
@@ -24,11 +23,10 @@ const mutations = {
 
 const actions = {
     getProfileComments({ commit }, username) {
-        let data = {'username' : username}
-        this.$axios.post('api/comments/profile/get', data)
+        this.$axios.get('api/comments/profile/get?username=' + username)
         .then(function ({ data }) {
-            console.log(data)
-            commit('parseJsonReqAndAppend', data.post_replies.post)
+            console.log(data.post_replies)
+            commit('parseJsonReqAndAppend', data.post_replies)
         })
         .catch(function (error) {
             console.log(error)

@@ -1,52 +1,57 @@
 class Comment {
 
     set commentID(commentID) {
-        thi._id = commentID
+        this._id = commentID
     }
 
     set commentBody(commentBody) {
-        thi._body = commentBody
+        this._body = commentBody
     }
 
     set commentHashtags(hashtags) {
-        thi._hashtags = hashtags
+        this._hashtags = hashtags
     }
 
     set typeOfComment(commentType) {
-        thi._commentType = commentType
+        this._commentType = commentType
     }
 
     set commentOwnerUsername(username) {
-        thi._commentOwnerUsername = username
+        this._commentOwnerUsername = username
+    }
+
+    set liked(isLiked) {
+        this._liked = isLiked
     }
 
     parseCommentFromJson(json) {
-        
+        this.commentID = json.id
+        this.commentBody = json.content
+        this.liked = json.is_liked
     }
 
     get commentID() {
-        return thi._id
+        return this._id
     }
 
     get commentBody() {
-        return thi._body
+        return this._body
     }
 
     get commentHashtags() {
-        return thi._hashtags
+        return this._hashtags
     }
 
     get commentType() {
-        return thi._commentType
+        return this._commentType
     }
 
     get commentOwnerUsername() {
-        return thi._commentOwnerUsername
+        return this._commentOwnerUsername
     }
 
     get liked() {
-        thi._liked = false
-        return thi._liked
+        return this._liked
     }
 
     get isReply() {

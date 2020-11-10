@@ -6,7 +6,7 @@
                     shit
                 </v-card-title>
                 <v-card-text class="overline text--primary pl-7"> 
-                    {{ comment.getCommentBody }}
+                    {{ comment.commentBody }}
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -70,7 +70,7 @@ export default {
     },
     computed: {
         likedComment() {
-            if (!this.dislike && (this.comment.liked || this.like)) {
+            if (this.comment.liked || !this.dislike && (this.comment.liked || this.like)) {
                 return 'pink'
             } else {
                 return ''
