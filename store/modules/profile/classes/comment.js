@@ -12,12 +12,16 @@ class Comment {
         this._hashtags = hashtags
     }
 
-    set typeOfComment(commentType) {
-        this._commentType = commentType
+    set commentTypeOfReply(replyType) {
+        this._replyType = replyType
     }
 
     set commentOwnerUsername(username) {
         this._commentOwnerUsername = username
+    }
+
+    set commentReply(reply) {
+        this._reply = reply
     }
 
     set liked(isLiked) {
@@ -28,6 +32,7 @@ class Comment {
         this.commentID = json.id
         this.commentBody = json.content
         this.liked = json.is_liked
+        this.commentOwnerUsername = json.author.first_name
     }
 
     get commentID() {
@@ -42,8 +47,8 @@ class Comment {
         return this._hashtags
     }
 
-    get commentType() {
-        return this._commentType
+    get commentTypeOfReply() {
+        return this._replyType
     }
 
     get commentOwnerUsername() {
@@ -52,6 +57,10 @@ class Comment {
 
     get liked() {
         return this._liked
+    }
+
+    get commentReply() {
+        return this._reply
     }
 
     get isReply() {

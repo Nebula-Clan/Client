@@ -1,25 +1,8 @@
 <template>
      <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card :min-width="postWidth">
-                <v-list-item three-line>
-                     <v-list-item-avatar tile size="80" color="grey">
-                            <v-img :src="getPostImage"></v-img>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                        <div class="overline mb-3">
-                            {{ post.postTitle }}
-                        </div>
-                        <v-list-item-subtitle>
-                            <v-row class="ml-1">
-                                <p v-for="hashtag in post.postHashtags" :key="hashtag" class="mx-1 blue--text text--lighten-1">
-                                    {{ hashtag }}
-                                </p>
-                            </v-row>
-                        </v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
+            <v-card :min-width="postWidth" :id="postID">
+                <PostComp :post="post" />
                 <v-divider></v-divider>
                 <v-card-actions>
                     <v-menu>
@@ -77,6 +60,7 @@
 <script>
 import ProfileReport from './ProfileReport'
 import ProfileListOfPostLikes from './ProfileListOfPostLikes'
+import PostComp from './PostComp'
 
 export default {
     props: {
@@ -113,6 +97,12 @@ export default {
         },
         getPostImage() {
             return this.$axios.defaults.baseURL + this.post.postImageURL
+        },
+        postID() {
+            if (this.post.postID) {
+                return this.post.postID
+            }
+            return 1
         }
     },
     mounted() {

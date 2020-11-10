@@ -1,20 +1,13 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="postWidth">
+            <v-card elevation="24" :min-width="postWidth" :id="commentID">
                 <v-card-title>
-                    shit
-                </v-card-title>
-                <v-card-text class="overline text--primary pl-7"> 
-                    {{ comment.commentBody }}
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
                     <v-menu>
                         <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
+                            <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
+                                <v-icon>mdi-dots-vertical</v-icon>
+                            </v-btn>
                         </template>
                         <v-list elevation="24">
                             <v-list-item>
@@ -35,6 +28,16 @@
                     >
                         <ProfileReport @cancel="overlay = !overlay" />
                     </v-overlay>
+                </v-card-title>
+                <v-container>
+                    <component :is="comp" v-bind="componentArgument()" :isReply="!like" class="comment"></component>
+                </v-container>
+                <!-- <CommentComp :comment="comment" :isReply="like" /> -->
+                <v-card-text>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nihil voluptatem eos corrupti placeat! Optio possimus quam vitae minus et, repellat consequuntur aperiam consequatur dolor magnam illo quisquam unde accusantium excepturi officia fugiat corporis explicabo animi, dolorum reiciendis ab libero vel? Animi explicabo quidem, totam in, repellendus accusantium laboriosam sed facilis ducimus fuga omnis error nisi eveniet, corrupti dolorem rerum.
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
     
                     <v-btn icon class="ml-auto" :color="likedComment" @click="likeComment">
                         <v-icon>mdi-heart</v-icon>
@@ -50,6 +53,9 @@
 </template>
 
 <script>
+import CommentComp from './CommentComp'
+import PostComp from './PostComp'
+
 export default {
     props: {
         comment: {
@@ -65,7 +71,9 @@ export default {
             zIndex: 1,
             vCardWidth: '0',
             isMounted: false,
-            hack: 0
+            hack: 0,
+            comp: CommentComp,
+            reply: ''
         }
     },
     computed: {
@@ -83,7 +91,11 @@ export default {
             return false
         },
         commentTitle() {
-            return 'Some Comment'
+            if (this.comp == CommentComp) {
+                return `${this.comment.commentOwnerUsername} has commented on comment ${this.reply.commentOwnerUsername}`
+            } else {
+                return `${this.comment.commentOwnerUsername} has commented on Post ${this.reply.postAuthor}`
+            }
         },
         postWidth() {
             this.hack
@@ -91,7 +103,16 @@ export default {
                 return;
             }
             return this.$refs.VCardParent.clientWidth
+        },
+        commentID() {
+            if (this.comment.commentID) {
+                return this.comment.commentID
+            }
+            return 1
         }
+    },
+    created() {
+        this.setComponentObject()
     },
     mounted() {
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
@@ -111,6 +132,25 @@ export default {
         },
         hackWidth() {
             this.hack++
+        },
+        setComponentObject() {
+            if (this.comment.commentTypeOfReply === 'Post') {
+                this.comp = PostComp
+            } else {
+                this.comp = CommentComp
+            }
+        },
+        componentArgument() {
+            this.reply = this.comment.commentReply
+            if (this.comment.commentTypeOfReply === 'Post') {
+                return {
+                    post: this.reply
+                }
+            } else {
+                return {
+                    comment: this.reply
+                }
+            }
         }
     }
 }
@@ -119,7 +159,8 @@ export default {
 <style scoped>
 
 .comment {
-    border: 2px white solid;
+    border: 1px white solid;
+    border-radius: 5px;
 }
 
 </style>

@@ -22,6 +22,10 @@ class Post {
         this._descirption = description
     }
 
+    set postAuthor(author) {
+        this._author = author 
+    }
+
     get postID() {
         return this._id
     }
@@ -31,7 +35,8 @@ class Post {
     }
 
     get postHashtags() {
-        return this._hashtags
+        return ['pe1', 'no_more', 'yeeeeeees', 'i_know', 'idk', ':D']
+        // return this._hashtags
     }
 
     get postImageURL() {
@@ -42,11 +47,16 @@ class Post {
         return this._descirption
     }
 
+    get postAuthor() {
+        return this._author
+    }
+
     parsePostFromJson(json) {
         this.postID = json.id
         this.postTitle = json.title
         this.postImageURL = json.header_image
         this.postDescription = json.description
+        this.postAuthor = json.author.first_name
     }
 }
 
