@@ -116,7 +116,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'Complete PostView',
-          to: '/posts/7/'
+          to: '/posts/1/'
         }
       ],
       miniVariant: false,

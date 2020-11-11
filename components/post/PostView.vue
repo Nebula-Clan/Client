@@ -4,9 +4,9 @@
     <v-row>
       <v-col class="ml-5">
         <nuxt-link class="text-decoration-none white--text" to="#">
-          <h2>{{ post.title }}</h2>
+          <div class="text-h2">{{ post.title }}</div>
         </nuxt-link>
-        <div class="mr-2">
+        <div class="mr-2 my-2">
           <v-icon size="15">
             mdi-clock
           </v-icon>
@@ -28,19 +28,6 @@
           </template>
           <span>More</span>
         </v-tooltip>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col class="mx-5 header-image">
-        <img alt="image"
-             :src="'http://huddle.pythonanywhere.com/' + post.header_image">
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col class="mx-5">
-        <p>{{ post.description }}</p>
       </v-col>
     </v-row>
 
