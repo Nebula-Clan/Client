@@ -1,23 +1,36 @@
 <template>
-    <v-list-item three-line @click="oneClick" class="cursor">
-        <v-list-item-avatar v-if="isReply" size="80">
-            <v-img src="/images/LL1.jpg"></v-img>
-        </v-list-item-avatar>
-        <v-list-item-content>
-            <div class="overline mb-0" v-if="isReply">
-                {{ comment.commentOwnerNickname + ':' }}
-            </div>
-            <v-list-item-subtitle :class="getExpandClass">
-                <!-- {{ comment.commentBody }} -->
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quis iusto rerum labore officia, eos similique aliquid facere, asperiores maxime molestias dicta harum beatae assumenda distinctio veniam eius? Aliquam libero dolor dolores mollitia sit, nisi est quisquam iste impedit repudiandae voluptas soluta assumenda ad unde, adipisci labore vero dolorem voluptatem fugiat consequatur quidem ex inventore ipsum. Autem reprehenderit ullam dolores.
-            </v-list-item-subtitle>
-        </v-list-item-content>
-    </v-list-item>
+    <v-container @click="oneClick" class="cursor py-1">
+        <v-list-item three-line>
+            <v-list-item-avatar v-if="isReply" size="80">
+                <v-img src="/images/LL1.jpg"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-content class="align-list-item">
+                <div class="overline mb-0" v-if="isReply">
+                    {{ comment.commentOwnerNickname + ':' }}
+                </div>
+                <v-list-item-subtitle class="comment-expand">
+                    <v-clamp autoresize :max-lines="lines" @clampchange="isClamped">
+                        {{ comment.commentBody }}
+                    </v-clamp>
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+        <v-row justify="center" align="center" v-if="hasButtonForClamp">
+            <p class="text-subtitle-2 blue--text text--darken-1 mb-0 more-cursor" @click="changeExpand">
+                {{ seeString }} <v-icon color="blue darken-1" size="21">{{ arrow }}</v-icon>
+            </p>
+        </v-row>
+    </v-container>
 </template>
 
 
 <script>
+import VClamp from 'vue-clamp'
+
 export default {
+    components: {
+        VClamp
+    },
     props: {
         isReply: {
             type: Boolean,
@@ -32,7 +45,13 @@ export default {
         return {
             expanded: false,
             delay: 350,
-            clicks: 0
+            clicks: 0,
+            isClamp: false,
+            lines: 2,
+            seeString: 'More',
+            arrow: 'mdi-arrow-down-drop-circle-outline',
+            hasButtonForClamp: false,
+            isTrigger: false
         }
     },
     computed: {
@@ -49,7 +68,16 @@ export default {
     },
     methods: {
         changeExpand() {
-            this.expanded = !this.expanded
+            this.isTrigger = true
+            if (this.lines == 2) {
+                this.seeString = 'Less'
+                this.arrow = 'mdi-arrow-up-drop-circle-outline'
+                this.lines = 99999999
+            } else {
+                this.seeString = 'More'
+                this.arrow = 'mdi-arrow-down-drop-circle-outline'
+                this.lines = 2
+            }
         },
         changeRoute() {
             console.log(this.$router)
@@ -66,7 +94,6 @@ export default {
           if(this.clicks === 1) {
             let self = this
             this.timer = setTimeout(function() {
-              self.changeExpand()
               self.clicks = 0
             }, this.delay);
           } else{
@@ -74,7 +101,15 @@ export default {
              this.changeRoute()
              this.clicks = 0;
           }         
-        }   
+        },
+        isClamped(event) {
+            if (event) {
+                this.hasButtonForClamp = true
+            } else if (!this.isTrigger) {
+                this.hasButtonForClamp = false
+            }
+            this.isClamp = event
+        }  
     }
 }
 </script>
@@ -82,13 +117,26 @@ export default {
 
 <style scoped>
 
+.align-list-item {
+    align-self: auto;
+}
+
 .comment-author {
     text-transform: none !important;
 }
 
-.cursor {
+.comment-cursor {
     cursor: context-menu;
 }
+
+.more-cursor {
+    cursor: pointer;
+}
+
+.comment-expand {
+    -webkit-line-clamp: initial;
+}
+
 .expand {
     animation-name: open;
     animation-duration: 0.1s;

@@ -1,5 +1,5 @@
 <template>
-    <v-container @click="oneClick" class="post-cursor">
+    <v-container @click="oneClick" class="post-cursor py-3">
         <v-list-item three-line>
             <v-list-item-avatar tile size="80" color="grey">
                 <v-img :src="getPostImage"></v-img>
@@ -10,9 +10,9 @@
                 </div>
                 <v-list-item-subtitle class="expand-post">
                     <v-clamp autoresize :max-lines="lines" @clampchange="isClamped">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, aut.
+                        {{ post.postDescription }}
                     </v-clamp>
-                    <div v-if="!isClamp">
+                    <div v-if="!isClamp" class="mt-2">
                         <v-chip
                         nuxt
                         :key="i"
@@ -29,7 +29,7 @@
             </v-list-item-content>
         </v-list-item>
     <v-row justify="center" align="center" v-if="hasButtonForClamp">
-        <p class="text-subtitle-2 blue--text text--darken-1 mb-0" @click="changeExpand">
+        <p class="text-subtitle-2 blue--text text--darken-1 mb-0 more-cursor" @click="changeExpand">
             {{ seeString }} <v-icon color="blue darken-1" size="21">{{ arrow }}</v-icon>
         </p>
     </v-row>
@@ -84,11 +84,7 @@ export default {
         changeRoute() {
             console.log(this.$router)
             this.$router.push({
-                path: `/profile/${ this.comment.commentOwnerUsername }`,
-                query: {
-                    'show': 'comments'
-                },
-                hash: `#${ this.comment.commentID }`
+                path: `/posts/${ this.post.postID }`
             })
         },
         oneClick: function(event){
@@ -119,8 +115,13 @@ export default {
 <style scoped>
 
 .post-cursor {
+    cursor: context-menu;
+}
+
+.more-cursor {
     cursor: pointer;
 }
+
 .post-title {
     font-size: 3rem;
     text-transform: none !important;

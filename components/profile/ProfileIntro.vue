@@ -6,7 +6,7 @@
                 <ProfileDescription/>
             </v-col>
             <v-col cols="12" lg="6" sm="12">
-                <v-tabs style="border-radius:2px" class="mb-4" v-model="selectedTab">
+                <v-tabs style="border-radius:2px" class="tab-stick mb-4" v-model="selectedTab">
                     <v-tab @click="switchToPosts" :key="1" >Posts</v-tab>
                     <v-tab @click="switchToComments" :key="2" >Comments</v-tab>
                     <v-tab @click="switchToLikes" :key="3" >Likes</v-tab>
@@ -132,4 +132,11 @@ export default {
 
 <style scoped>
 
+
+.tab-stick {
+    top: 0px;
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 5;
+}
 </style>
