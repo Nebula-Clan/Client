@@ -28,6 +28,13 @@ export default {
       logo: 'https://seeklogo.com/images/V/vuetify-logo-3BCF73C928-seeklogo.com.png',
       name: 'Vuetify'
     }
+  },
+  mounted() {
+
+  },
+  methods: {
+    getInfo() {
+    }
   }
 }
 </script>
