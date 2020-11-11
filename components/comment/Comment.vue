@@ -101,20 +101,7 @@ export default {
 }
 </script>
 
-<style scoped>
-
-.ui.comments {
-  margin: 1.5em 0em;
-  max-width: 650px;
-}
-
-.ui.comments:first-child {
-  margin-top: 0em;
-}
-
-.ui.comments:last-child {
-  margin-bottom: 0em;
-}
+<style scoped lang="scss">
 
 /*--------------
      Comment
@@ -137,19 +124,7 @@ export default {
 /*--------------------
     Nested Comments
 ---------------------*/
-.comment .comments {
-  margin: 0em 0em 0.5em 1em;
-  border-left: white solid 1px;
-  padding: 1em 0em 1em 1em;
-}
-
-.comment .comments:before {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-
-.comment .comments .comment {
+.comment {
   border: none;
   border-top: none;
   background: none;
@@ -192,7 +167,7 @@ export default {
 ---------------*/
 .comment .author {
   font-size: 1em;
-  color: white;
+  color: $color-comment-username;
   font-weight: bold;
 }
 
@@ -201,7 +176,7 @@ export default {
 }
 
 .comment a.author:hover {
-  color: #1e70bf;
+  color: $color-comment-hover;
 }
 
 /*--------------
@@ -210,7 +185,7 @@ export default {
 .comment .metadata {
   display: inline-block;
   margin-left: 0.5em;
-  color: red;
+  color: $color-comment-metadata;
   font-size: 0.875em;
 }
 
@@ -230,7 +205,7 @@ export default {
   margin: 0.25em 0em 0.5em;
   font-size: 1em;
   word-wrap: break-word;
-  color: gray;
+  color: $color-comment-content;
   line-height: 1.3;
 }
 
@@ -245,7 +220,7 @@ export default {
   cursor: pointer;
   display: inline-block;
   margin: 0em 0.75em 0em 0em;
-  color: purple;
+  color: $color-comment-actions;
 }
 
 .comment .actions a:last-child {
@@ -254,50 +229,9 @@ export default {
 
 .comment .actions a.active,
 .comment .actions a:hover {
-  color: white;
+  color: $color-comment-actions-hover;
 }
 
-/*--------------------
-      Reply Form
----------------------*/
-.ui.comments > .reply.form {
-  margin-top: 1em;
-}
-
-.comment .reply.form {
-  width: 100%;
-  margin-top: 1em;
-}
-
-.reply.form textarea {
-  font-size: 1em;
-  height: 12em;
-}
-
-/*******************************
-            State
-*******************************/
-.ui.collapsed.comments,
-.collapsed.comments,
-.collapsed.comment {
-  display: none;
-}
-
-/*******************************
-           Variations
-*******************************/
-/*--------------------
-        Threaded
----------------------*/
-.ui.threaded.comments .comment .comments {
-  margin: -1.5em 0 -1em 1.25em;
-  padding: 3em 0em 2em 2.25em;
-  box-shadow: -1px 0px 0px rgba(34, 36, 38, 0.15);
-}
-
-/*--------------------
-        Minimal
----------------------*/
 .ui.minimal.comments .comment .actions {
   opacity: 0;
   position: absolute;
@@ -311,41 +245,5 @@ export default {
 .ui.minimal.comments .comment > .content:hover > .actions {
   opacity: 1;
 }
-
-/*-------------------
-        Sizes
---------------------*/
-.ui.mini.comments {
-  font-size: 0.78571429rem;
-}
-
-.ui.tiny.comments {
-  font-size: 0.85714286rem;
-}
-
-.ui.small.comments {
-  font-size: 0.92857143rem;
-}
-
-.ui.comments {
-  font-size: 1rem;
-}
-
-.ui.large.comments {
-  font-size: 1.14285714rem;
-}
-
-.ui.big.comments {
-  font-size: 1.28571429rem;
-}
-
-.ui.huge.comments {
-  font-size: 1.42857143rem;
-}
-
-.ui.massive.comments {
-  font-size: 1.71428571rem;
-}
-
 
 </style>
