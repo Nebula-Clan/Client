@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-img :src="getProfileBannerImageURL" max-height="450" alt="shit">
+            <v-img :src="getProfileBannerImageURL" :eager="true" max-height="450" alt="shit">
 
             </v-img> 
         </v-row>

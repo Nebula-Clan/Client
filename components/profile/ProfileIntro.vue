@@ -12,7 +12,7 @@
                     <v-tab @click="switchToLikes" :key="3" >Likes</v-tab>
                 </v-tabs>
                 <v-container class="ml-0 py-0" v-for="(object, index) in getComponentObjects" :key="index">
-                    <component :is="comp" v-bind="componentArgs(index)"> </component>
+                    <component :is="comp" v-bind="componentArgs(index)" @hook:mounted="countChild"> </component>
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
@@ -39,7 +39,9 @@ export default {
             username: '',
             selectedTab: 0,
             comp: ProfilePosts,
-            componentObjects: []
+            componentObjects: [],
+            numberOfChildRendred: 0,
+            hash: ''
         }
     },
     computed: {
@@ -64,10 +66,7 @@ export default {
         let query = this.$route.query.show
         this.switchToProperTab(query)
         console.log(this.$route.params.username)
-    },
-    mounted() {
-        // let hash = this.$route.hash
-        // setTimeout(() => {this.setHash(hash)}, 1)
+        this.hash = this.$route.hash
     },
     methods: {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
@@ -118,9 +117,13 @@ export default {
         },
         setHash(hash) {
             if (hash) {
-                setTimeout(() => {
-                    location.href = hash
-                },1)
+                location.href = hash
+            }
+        },
+        countChild() {
+            this.numberOfChildRendred++
+            if (this.numberOfChildRendred == this.componentObjects.length) {
+                this.setHash(this.hash)
             }
         }
     }

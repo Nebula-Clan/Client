@@ -30,7 +30,7 @@
                     </v-overlay>
                 </v-card-title>
                 <v-container>
-                    <component :is="comp" v-bind="componentArgument()" :isReply="!like" class="comment"></component>
+                    <component :is="comp" v-bind="componentArgument()" :isReply="true" class="comment"></component>
                 </v-container>
                 <!-- <CommentComp :comment="comment" :isReply="like" /> -->
                 <v-card-text>

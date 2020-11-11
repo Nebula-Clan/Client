@@ -77,17 +77,16 @@ const mutations = {
 }
   
 const actions = {
-    async getProfileInfo ({ commit }, username) {
-        let user = new FormData()
-        user.append('username', username)
-        try {
-            let { data } = await this.$axios.get('api/profile/public?username=' + username)
-            console.log(data)
+    getProfileInfo ({ commit }, username) {
+        return this.$axios.get('api/profile/public?username=' + username)
+        .then(({ data }) => {
             commit('reqSend')
             commit('parseReq', data)
-        } catch (e) {
-          console.log(e)
-        }
+            console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
       }
 }
 
