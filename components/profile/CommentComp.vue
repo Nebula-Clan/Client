@@ -10,13 +10,14 @@
                 </div>
                 <v-list-item-subtitle class="comment-expand">
                     <v-clamp autoresize :max-lines="lines" @clampchange="isClamped">
-                        {{ comment.commentBody }}
+                        <!-- {{ comment.commentBody }} -->
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus architecto aliquam molestiae sit ab, vero provident quo quis consectetur. Veniam libero deserunt, recusandae eligendi accusantium laboriosam nobis mollitia ut sit tempora, totam optio, id ad quibusdam exercitationem? Vero, perspiciatis. Quia expedita totam quis harum officia quod, autem quibusdam perspiciatis facilis, temporibus quisquam eum numquam cupiditate sed. Harum officiis magnam iste?
                     </v-clamp>
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
-        <v-row justify="center" align="center" v-if="hasButtonForClamp">
-            <p class="text-subtitle-2 blue--text text--darken-1 mb-0 more-cursor" @click="changeExpand">
+        <v-row justify="end" align="end" v-if="hasButtonForClamp">
+            <p class="text-subtitle-2 blue--text text--darken-1 mb-2 mr-2 more-cursor" @click="changeExpand">
                 {{ seeString }} <v-icon color="blue darken-1" size="21">{{ arrow }}</v-icon>
             </p>
         </v-row>

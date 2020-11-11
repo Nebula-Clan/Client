@@ -11,7 +11,7 @@
                     <v-tab @click="switchToComments" :key="2" >Comments</v-tab>
                     <v-tab @click="switchToLikes" :key="3" >Likes</v-tab>
                 </v-tabs>
-                <v-container class="ml-0 py-0" v-for="(object, index) in getComponentObjects" :key="index">
+                <v-container class="ml-0 pa-0" v-for="(object, index) in getComponentObjects" :key="index">
                     <component :is="comp" v-bind="componentArgs(index)" @hook:mounted="countChild"> </component>
                 </v-container>
             </v-col>
