@@ -1,16 +1,16 @@
 <template>
   <div class="comment">
     <a class="avatar">
-      <img :src="comment.avatar" :alt="comment.author">
+      <img :src="$axios.defaults.baseURL + comment.author.profile_picture" :alt="comment.author.username">
     </a>
     <div class="content">
       <!-- Content  -->
-      <a class="author">{{ comment.author }}</a>
+      <a class="author">{{ comment.author.username }}</a>
       <div class="metadata">
         <span class="date">{{ dateDuration }}</span>
       </div>
       <div class="text">
-        {{ comment.textComment }}
+        {{ comment.content }}
         Elliot you are always so right :)
       </div>
       <!-- Actions  -->
@@ -36,7 +36,7 @@
       <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
         <v-textarea
           filled
-          label="Replay"
+          :label="`Replay ${comment.author.username}`"
           auto-grow
           :value="replayText"
         ></v-textarea>
@@ -69,18 +69,6 @@ export default {
   name: "Comment",
   components: {Comments: () => import('@/components/comment/Comments')},
   data: () => ({
-    // author: "Amin",
-    // avatar: "https://semantic-ui.com//images/avatar/small/jenny.jpg",
-    // date: new Date(),
-    // textComment: "Elliot you are always so right :)",
-    // likes: 5,
-    //
-    // isReplyTextAreaExpanded: false,
-    // replayText: "The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through.",
-    //
-    // isRepliesExpanded: false,
-    // replies: []
-
     author: "",
     avatar: "",
     date: new Date(),
@@ -88,7 +76,7 @@ export default {
     likes: 0,
 
     isReplyTextAreaExpanded: false,
-    replayText: "The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through.",
+    replayText: "",
 
     isRepliesExpanded: false,
   }),
@@ -96,7 +84,7 @@ export default {
   computed: {
     dateDuration: {
       get: function () {
-        const unixTime = new Date(this.comment.date).getTime()
+        const unixTime = new Date(this.comment.create_date).getTime()
         const now = new Date().getTime()
         if (now - unixTime < 180000) {
           return 'Just now'
