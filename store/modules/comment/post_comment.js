@@ -13,7 +13,7 @@ const getters = {}
 
 const actions = {
   getComments({commit}, data) {
-    return this.$axios.$get('/api/comments/post/get', {
+    return this.$axios.get('/api/comments/post/get', {
         params: {
           "post_id": data.postId,
           "start_index": DEFAULT_OPTIONS.START_INDEX,

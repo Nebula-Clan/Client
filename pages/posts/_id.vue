@@ -64,8 +64,8 @@ export default {
   methods: {
     ...mapActions('modules/comment/post_comment', ['getComments']),
     fetchComments() {
-      this.getComments({postId: this.$route.params.id}).then((res) => {
-        this.comments = res.comments
+      this.getComments({postId: this.$route.params.id}).then(({data}) => {
+        this.comments = data.comments
       }).catch((error) => {
         console.log(error)
       })
