@@ -1,26 +1,26 @@
 <template>
   <div>
     <v-row>
-      <img class="header-image" :src="headerImage">
+      <img class="header-image" :src="$axios.defaults.baseURL + data.banner">
     </v-row>
     <v-row class="logo elevation-2">
-      <v-col class="d-flex align-center">
+      <v-col  class="d-flex align-center">
         <div class="d-flex align-center ml-10">
-          <div class="mr-2">
+          <div class="mr-2 d-flex align-center">
             <v-icon color="primary">mdi-calendar</v-icon>
-            <span class="primary--text">2020-11-06</span>
+            <span style="font-size: small" class="primary--text">{{getDate()}}</span>
           </div>
-          <div class="ml-2">
+          <div class="ml-2 d-flex align-center">
             <v-icon color="primary">mdi-account</v-icon>
-            <span class="primary--text">150</span>
+            <span style="font-size: small" class="primary--text">{{ data.members }}</span>
           </div>
         </div>
       </v-col>
       <v-col class="text-center d-flex justify-center">
         <v-avatar class="avatar" size="150">
-          <img :src="logo">
+          <img :src="$axios.defaults.baseURL + data.logo">
         </v-avatar>
-        <h1>{{ name }}</h1>
+        <h1>{{ data.name }}</h1>
       </v-col>
       <v-col class="d-flex justify-end align-center">
         <v-btn
@@ -29,9 +29,11 @@
           :loading="loading"
           :disabled="loading"
           color="primary"
-          @click="loader = 'loading'">
-          <v-icon class="mr-2">mdi-account-plus</v-icon>
-          <span>Join</span>
+          @click="userState">
+          <v-icon v-if="!userJoined" class="mr-2">mdi-account-plus</v-icon>
+          <v-icon v-else class="mr-2">mdi-account-minus</v-icon>
+          <span v-if="!userJoined">Join</span>
+          <span v-else>Leave</span>
         </v-btn>
       </v-col>
     </v-row>
@@ -39,25 +41,48 @@
 </template>
 
 <script>
+import {dateStandard} from '@/store/modules/community/community'
 export default {
   name: "Intro",
-  props: ['headerImage', 'logo', 'name'],
+  props: ['data', 'userJoined'],
   data() {
     return {
-      loader: null,
-      loading: false
+      loading: false,
+    }
+  },
+  methods: {
+    userState() {
+      this.loading = !this.loading;
+      if (this.userJoined) {
+        this.leave()
+      } else  {
+        this.join()
+      }
+    },
+    join() {
+      this.$axios.post(`api/community/join_community?name=${this.data.name}`).then(
+        () => {
+          this.$emit('userState');
+          this.loading = !this.loading;
+        }
+      ).catch();
+    },
+    leave() {
+      this.$axios.$delete(`api/community/leave_community?name=${this.data.name}`).then(
+        () => {
+          this.$emit('userState');
+          this.loading = !this.loading;
+        }
+      ).catch();
+    },
+    getDate() {
+      return dateStandard(this.data.since);
     }
   },
   watch: {
-    loader () {
-      const l = this.loader
-      this[l] = !this[l]
-
-      setTimeout(() => (this[l] = false), 3000)
-
-      this.loader = null
-    },
   },
+  mounted() {
+  }
 }
 </script>
 

@@ -4,58 +4,73 @@
       People
     </v-card-title>
     <v-card-text>
-      <v-list rounded dense>
+      <v-list dense rounded>
         <v-subheader>
           <v-icon>mdi-account-multiple</v-icon>
-          <span class="ml-1">150</span>
+          <span class="ml-1">{{ this.people.length }}</span>
         </v-subheader>
         <v-list-item-group>
           <v-list-item
-            v-for="(item, i) in [1,2,3,4,5,6,7,8,9,10]"
-            :key="i">
-            <v-list-item-icon>
-              <v-avatar size="20">
-                <img src="https://seeklogo.com/images/V/vuetify-logo-3BCF73C928-seeklogo.com.png" alt="">
-              </v-avatar>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>amiresm</v-list-item-title>
+              class="d-flex align-center"
+              v-for="(item, i) in this.people"
+              :key="i">
+            <v-list-item-content >
+              <div class="d-flex">
+                <v-avatar size="25" class="mr-2">
+                  <img :src="$axios.defaults.baseURL + item.profile_picture" alt="">
+                </v-avatar>
+                <v-list-item-title>@{{ item.username }}</v-list-item-title>
+              </div>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <br>
       <v-dialog
-        v-model="dialog"
-        persistent
-        max-width="600px">
+          v-model="dialog"
+          max-width="600px"
+          persistent>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            outlined
-            color="primary"
-            v-bind="attrs"
-            small
-            v-on="on">
+              v-bind="attrs"
+              v-on="on"
+              color="primary"
+              outlined
+              small>
             See all
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">People in this community</span>
+            <span class="headline">People</span>
           </v-card-title>
           <v-card-text>
             <v-container>
-              <v-row>
-                <h1>Hello</h1>
-              </v-row>
+              <v-list rounded>
+                <v-list-item-group>
+                  <v-list-item
+                      v-for="(item, i) in this.people"
+                      :key="i">
+                    <v-list-item-content>
+                      <div class="d-flex">
+                        <v-avatar size="40" class="mr-2">
+                          <img :src="$axios.defaults.baseURL + item.profile_picture" alt="">
+                        </v-avatar>
+                        <v-list-item-title>@{{ item.username }}</v-list-item-title>
+                      </div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
-              outlined
-              color="error"
-              text
-              @click="dialog = false">
+                color="error"
+                outlined
+                text
+                @click="dialog = false">
               Close
             </v-btn>
           </v-card-actions>
@@ -68,6 +83,7 @@
 <script>
 export default {
   name: "People",
+  props: ['people'],
   data() {
     return {
       dialog: false

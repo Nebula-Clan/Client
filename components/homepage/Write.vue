@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  name: 'write.component'
+  name: 'Write'
 }
 </script>
 

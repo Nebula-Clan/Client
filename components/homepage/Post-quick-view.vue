@@ -34,7 +34,7 @@
     <v-row>
       <v-col class="mx-5 header-image">
         <img alt="image"
-             :src="'http://huddle.pythonanywhere.com/' + post.header_image">
+             :src="$axios.defaults.baseURL + post.header_image">
       </v-col>
     </v-row>
 
@@ -47,19 +47,19 @@
     <v-row class="mx-2">
       <v-col>
         <nuxt-link class="text-decoration-none white--text d-flex"
-                   :to="'/profile/'+author.username">
+                   :to="'/profile/'+post.author.username">
           <div>
             <v-avatar
               class="profile-pic"
               size="40">
               <img
                 alt="John"
-                :src="'http://huddle.pythonanywhere.com/'+author.profile_picture">
+                :src="$axios.defaults.baseURL+post.author.profile_picture">
             </v-avatar>
           </div>
           <div class="d-flex flex-column ml-3">
-            <span><b>{{ author.username }}</b></span>
-            <span style="font-size: smaller">{{ author.first_name }} {{ author.last_name }}</span>
+            <span><b>{{ post.author.username }}</b></span>
+            <span style="font-size: smaller">{{ post.author.first_name }} {{ post.author.last_name }}</span>
           </div>
         </nuxt-link>
       </v-col>
@@ -99,7 +99,7 @@
 <script>
 export default {
   name: 'Post-quick-view',
-  props: ['post', 'author'],
+  props: ['post'],
   data: () => {
     return {
     }
