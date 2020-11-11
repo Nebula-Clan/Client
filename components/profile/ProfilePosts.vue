@@ -2,12 +2,26 @@
      <v-container fluid class="py-2">
         <v-row ref="VCardParent">
             <v-card :min-width="postWidth" :id="postID">
-                <PostComp :post="post" />
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-menu>
+                <v-card-title>
+                    <v-row>
+                        <v-col class="ml-5">
+                            <nuxt-link class="text-decoration-none white--text" to="#">
+                            <h2>{{ post.postTitle }}</h2>
+                            </nuxt-link>
+                            <div class="mr-2">
+                            <v-icon size="15">
+                                mdi-clock
+                            </v-icon>
+                            <span style="font-size: smaller">5</span>
+                            </div>
+                        </v-col>
+
+                        <v-col
+                            class="text-right"
+                            cols="2">
+                            <v-menu>
                         <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
+                        <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
                             <v-icon>mdi-dots-vertical</v-icon>
                         </v-btn>
                         </template>
@@ -26,6 +40,8 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
+                        </v-col>
+                    </v-row>
 
                     <v-overlay
                     :z-index="zIndex"
@@ -42,6 +58,10 @@
                     >
                         <ProfileListOfPostLikes @cancel="likesOverlay = !likesOverlay" />
                     </v-overlay>
+                </v-card-title>
+                <PostComp :post="post" />
+                <v-divider></v-divider>
+                <v-card-actions>
 
                     <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
                         <v-icon style="cursor: pointer">mdi-heart</v-icon>

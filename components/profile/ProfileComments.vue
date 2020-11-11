@@ -34,7 +34,8 @@
                 </v-container>
                 <!-- <CommentComp :comment="comment" :isReply="like" /> -->
                 <v-card-text>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta nihil voluptatem eos corrupti placeat! Optio possimus quam vitae minus et, repellat consequuntur aperiam consequatur dolor magnam illo quisquam unde accusantium excepturi officia fugiat corporis explicabo animi, dolorum reiciendis ab libero vel? Animi explicabo quidem, totam in, repellendus accusantium laboriosam sed facilis ducimus fuga omnis error nisi eveniet, corrupti dolorem rerum.
+                    <!-- {{ comment.commentBody }} -->
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error repudiandae laborum officiis repellendus dicta delectus minima provident nulla? Omnis, dolor! Voluptatum perferendis quibusdam eaque sed, sit at! Eius adipisci reiciendis in rem placeat veniam at enim, obcaecati ducimus, autem minima cupiditate delectus magnam maiores iste nemo omnis quasi error hic excepturi! Ipsa, earum. Voluptate quisquam ratione suscipit ipsam! Mollitia, voluptate.
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -54,7 +55,7 @@
 
 <script>
 import CommentComp from './CommentComp'
-import PostComp from './PostComp'
+import PostReplyComp from './PostReplyComp'
 
 export default {
     props: {
@@ -135,7 +136,7 @@ export default {
         },
         setComponentObject() {
             if (this.comment.commentTypeOfReply === 'Post') {
-                this.comp = PostComp
+                this.comp = PostReplyComp
             } else {
                 this.comp = CommentComp
             }

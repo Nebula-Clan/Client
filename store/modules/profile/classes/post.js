@@ -57,6 +57,7 @@ class Post {
         this.postImageURL = json.header_image
         this.postDescription = json.description
         this.postAuthor = json.author.first_name
+        this.postDescription = json.description
     }
 }
 

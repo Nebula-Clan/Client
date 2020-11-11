@@ -16,6 +16,10 @@ class Comment {
         this._replyType = replyType
     }
 
+    set commentOwnerNickname(nickname) {
+        this._commentOwnerNickname = nickname
+    }
+
     set commentOwnerUsername(username) {
         this._commentOwnerUsername = username
     }
@@ -32,7 +36,8 @@ class Comment {
         this.commentID = json.id
         this.commentBody = json.content
         this.liked = json.is_liked
-        this.commentOwnerUsername = json.author.first_name
+        this.commentOwnerUsername = json.author.username
+        this.commentOwnerNickname = json.author.first_name
     }
 
     get commentID() {
@@ -49,6 +54,10 @@ class Comment {
 
     get commentTypeOfReply() {
         return this._replyType
+    }
+
+    get commentOwnerNickname() {
+        return this._commentOwnerNickname
     }
 
     get commentOwnerUsername() {
