@@ -3,40 +3,40 @@
     <div class="profile mb-10">
       <v-img
             class="white--text align-end custom-rounded"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            :src="'http://huddle.pythonanywhere.com' + user.banner_picture "
             height="80px">
       </v-img>
       <v-avatar
         class="profile-pic"
         size="80">
         <img
-          src="https://cdn.vuetifyjs.com/images/john.jpg"
+          :src="'http://huddle.pythonanywhere.com'+ user.profile_picture "
           alt="John">
       </v-avatar>
     </div>
     <v-card-title  class="justify-center">
-      {{firstname}} {{lastname}}
+      {{user.first_name}} {{user.last_name}}
     </v-card-title>
     <v-card-subtitle class="text-center">
-      {{username}}
+      {{user.username}}
     </v-card-subtitle>
     <v-card-text class="text-center">
-      <v-icon>mdi-format-quote-open</v-icon>{{bio}}<v-icon>mdi-format-quote-close</v-icon>
+      <v-icon>mdi-format-quote-open</v-icon>{{user.biology}}<v-icon>mdi-format-quote-close</v-icon>
     </v-card-text>
     <v-divider class="primary"></v-divider>
     <v-row class="text-center pa-2 justify-space-around">
       <div>
-        <b>{{followings}}</b>
+        <b>{{'-'}}</b>
         <br>
         <span>Followings</span>
       </div>
       <div>
-        <b>{{posts}}</b>
+        <b>{{'-'}}</b>
         <br>
         <span>Posts</span>
       </div>
       <div>
-        <b>{{followers}}</b>
+        <b>{{'-'}}</b>
         <br>
         <span>Followers</span>
       </div>
@@ -47,15 +47,9 @@
 <script>
 export default {
   name: "user.component",
+  props: ['user'],
   data: () => {
     return {
-      username: 'amiresm',
-      firstname: 'Amir',
-      lastname: 'Esmaeili',
-      bio: 'A sad middle eastern',
-      followers: 100,
-      followings: 343,
-      posts: 1000
     }
   }
 }
