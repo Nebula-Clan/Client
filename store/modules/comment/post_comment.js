@@ -23,7 +23,33 @@ const actions = {
         }
       }
     )
-  }
+  },
+  getRepliesComments({commit}, data) {
+    return this.$axios.get('/api/comments/reply/get', {
+        params: {
+          "reply_to": data.commentId,
+          "start_index": DEFAULT_OPTIONS.START_INDEX,
+          "max_len": DEFAULT_OPTIONS.MAX_LENGTH,
+          "depth": DEFAULT_OPTIONS.REPLAY_DEPTH,
+          "max_reply_len": DEFAULT_OPTIONS.MAX_REPLAY_LENGTH
+        }
+      }
+    )
+  },
+  replyToComment({commit}, data) {
+    return this.$axios.$post('/api/comments/reply/submit', {
+        reply_to_id: data.commentId,
+        content: data.content,
+      }
+    )
+  },
+  replyToPost({commit}, data) {
+    return this.$axios.$post('/api/comments/post/submit', {
+        post: data.postId,
+          content: data.content,
+      }
+    )
+  },
 }
 
 const mutations = {}

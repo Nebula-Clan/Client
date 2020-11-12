@@ -17,7 +17,7 @@
         :author="author"
         :content="content"/>
       <div>
-        <NestedComments :root="comments"/>
+        <NestedComments :postId="$route.params.id" :root="comments"/>
       </div>
     </v-col>
     <v-col
