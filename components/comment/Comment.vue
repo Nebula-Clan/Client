@@ -1,5 +1,7 @@
 <template>
-  <div class="comment">
+  <v-card
+    class="comment pa-2 mt-1"
+    :color="depth % 2 === 1 ? '#2a2a2a' : '#1e1e1e'">
     <a class="avatar">
       <img :src="$axios.defaults.baseURL + comment.author.profile_picture" :alt="comment.author.username">
     </a>
@@ -11,46 +13,73 @@
       </div>
       <div class="text">
         {{ comment.content }}
-        Elliot you are always so right :)
       </div>
       <!-- Actions  -->
-      <div class="actions">
-        <a
-          class="reply"
-          @click="isReplyTextAreaExpanded = !isReplyTextAreaExpanded">
-          Reply
-        </a>
-        <a
-          class="reply"
-          @click="isRepliesExpanded = !isRepliesExpanded">
-          {{ replies.length === 0 ? "" : isRepliesExpanded ? "Hide Replays" : "Show replies" }}
-        </a>
-        <v-btn
-          icon>
-          <v-icon small>mdi-heart</v-icon>
-        </v-btn>
-      </div>
+      <v-row
+        class="actions justify-content"
+        no-gutters>
+        <v-col class="my-auto" cols="1">
+          <a
+            v-if="isReplyTextAreaExpanded"
+            class="reply"
+            @click="isReplyTextAreaExpanded = !isReplyTextAreaExpanded">
+            <v-icon class="mr-1" small>mdi-close</v-icon>
+            Cancel
+          </a>
+          <a
+            v-else
+            class="reply"
+            @click="isReplyTextAreaExpanded = !isReplyTextAreaExpanded">
+            <v-icon class="mr-1" small>mdi-reply</v-icon>
+            Reply
+          </a>
+        </v-col>
+        <v-col class="my-auto" cols="2">
+          <a
+            v-if="replies.length !== 0 && isRepliesExpanded"
+            class="reply"
+            @click="isRepliesExpanded = !isRepliesExpanded">
+            <v-icon class="mr-1" small>mdi-arrow-up-drop-circle-outline</v-icon>
+            Hide Replays
+          </a>
+          <a
+            v-else-if="replies.length !== 0 && !isRepliesExpanded"
+            class="reply"
+            @click="isRepliesExpanded = !isRepliesExpanded">
+            <v-icon class="mr-1" small>mdi-arrow-down-drop-circle-outline</v-icon>
+            Show replies ({{ replies.length }})
+          </a>
+        </v-col>
+        <v-col cols="8"></v-col>
+        <v-col cols="1">
+          <v-btn icon>
+            <v-icon small>mdi-heart</v-icon>
+          </v-btn>
+          <a
+            class="reply"
+            @click="openLikeDialog">
+            ({{ 12 }})
+          </a>
+        </v-col>
+      </v-row>
     </div>
     <!-- Replay  -->
     <v-expand-transition>
       <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
         <v-textarea
           filled
-          :label="`Replay ${comment.author.username}`"
           auto-grow
-          :value="replayText"
+          v-model="replayText"
+          :label="`Reply ${comment.author.username}`"
         ></v-textarea>
         <div class="pb-2 d-flex flex-row-reverse">
           <v-btn
+            @click="replyComment"
             depressed
+            color="primary"
+            :loading="isLoadingToSend"
             elevation="2">
             Send
-          </v-btn>
-          <v-btn
-            class="mr-4"
-            depressed
-            elevation="2">
-            Cancel
           </v-btn>
         </div>
       </div>
@@ -58,12 +87,15 @@
     <v-expand-transition v-if="replies.length !== 0">
       <Comments
         v-show="isRepliesExpanded"
+        :depth="depth + 1"
         :root="replies"/>
     </v-expand-transition>
-  </div>
+  </v-card>
 </template>
 
 <script>
+
+import {mapActions} from "vuex";
 
 export default {
   name: "Comment",
@@ -76,11 +108,12 @@ export default {
     likes: 0,
 
     isReplyTextAreaExpanded: false,
+    isLoadingToSend: false,
     replayText: "",
 
     isRepliesExpanded: false,
   }),
-  props: ['comment', 'replies'],
+  props: ['comment', 'replies', 'depth'],
   computed: {
     dateDuration: {
       get: function () {
@@ -97,6 +130,36 @@ export default {
         }
       }
     }
+  },
+  methods: {
+    ...mapActions('modules/comment/post_comment', ['replyToComment']),
+    ...mapActions('modules/comment/post_comment', ['getRepliesComments']),
+    openLikeDialog() {
+
+    },
+    replyComment() {
+      this.isLoadingToSend = true;
+      this.replyToComment({
+        commentId: this.comment.id,
+        content: this.replayText,
+      }).then(({data}) => {
+        this.fetchRepliesToComment()
+      }).catch((error) => {
+        console.log(error);
+      })
+    },
+    fetchRepliesToComment() {
+      this.getRepliesComments({
+        commentId: this.comment.id
+      }).then(({data}) => {
+        this.replies = data.replies;
+        this.isLoadingToSend = false;
+        this.isReplyTextAreaExpanded = false;
+        this.replayText = "";
+      }).catch((error) => {
+        console.log(error);
+      })
+    }
   }
 }
 </script>
@@ -109,8 +172,6 @@ export default {
 .comment {
   position: relative;
   background: none;
-  margin: 0.5em 0em 0em;
-  padding: 0.5em 0em 0em;
   border: none;
   border-top: none;
   line-height: 1.2;

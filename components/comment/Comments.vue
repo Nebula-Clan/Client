@@ -1,6 +1,6 @@
 <template>
   <div class="comments">
-    <Comment :comment="c.comment" :replies="c.replies" v-for="c in root"/>
+    <Comment :depth="depth" :comment="c.comment" :replies="c.replies" v-for="c in root"/>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
   name: "Comments",
   components: {Comment: () => import('@/components/comment/Comment')},
-  props: ['root']
+  props: ['root', 'depth']
 }
 </script>
 

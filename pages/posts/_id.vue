@@ -12,7 +12,10 @@
       lg="8"
       md="6"
       sm="6">
-      <PostView :post="post" :author="author" :content="content"/>
+      <PostView
+        :post="post"
+        :author="author"
+        :content="content"/>
       <div>
         <NestedComments :root="comments"/>
       </div>
@@ -56,6 +59,7 @@ export default {
     post: '',
     author: '',
     content: '',
+    isReplyTextAreaExpanded: false,
     comments: [],
   }),
   mounted() {
@@ -65,11 +69,12 @@ export default {
     ...mapActions('modules/comment/post_comment', ['getComments']),
     fetchComments() {
       this.getComments({postId: this.$route.params.id}).then(({data}) => {
+        console.log(data)
         this.comments = data.comments
       }).catch((error) => {
         console.log(error)
       })
-    }
+    },
   }
 }
 </script>
