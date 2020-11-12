@@ -61,19 +61,33 @@
                     </v-col>
                     <v-col cols="12">
                       <v-text-field outlined
-                                    v-model="hashtags"
+                                    @input="recommend"
+                                    v-model="hashtag"
                                     label="Up to 5 hashtags"
-                                    :rules="hashtagRules"
                                     @change="addHashtags">
                       </v-text-field>
-                      <div>
+                      <div v-if="suggestions.length > 0">
+                        <span>Suggestion</span>
+                        <v-chip
+                          class="ma-1"
+                          small
+                          @click="setHashtag(item.text)"
+                          :key="i"
+                          v-for="(item, i) in suggestions">
+                          {{ item.text }}
+                        </v-chip>
+                      </div>
+
+                      <div
+                        class="my-2">
                         <v-chip
                           outlined
-                          class="mx-1"
+                          @click="deleteHashtag(i)"
+                          class="ma-1"
                           :key="i"
                           :color="chipsColors[i]"
                           v-for="(tag, i) in this.post.hashtags">
-                          {{tag}}
+                          #{{tag}}
                         </v-chip>
                       </div>
                     </v-col>
@@ -95,7 +109,7 @@
                 :disabled="!formValid"
                 color="primary"
                 text
-                @click="onSubmit()">
+                @click="publish">
                 Create
               </v-btn>
             </v-card-actions>
@@ -115,7 +129,8 @@ export default {
   data: () => ({
     dialog: false,
     formValid: false,
-    hashtags: '',
+    hashtag: '',
+    suggestions: [],
     post: {
       title: '',
       description: '',
@@ -132,9 +147,6 @@ export default {
     descRules: [
       t => !!t || 'Description is required',
       t => t.length <= 750 || 'Max length is 750 characters'
-    ],
-    hashtagRules: [
-      t => t.replace(/ /g, '').split(',').length <= 5 || 'Max hashtag is 5',
     ],
     chipsColors: [
       'blue', 'red', 'green', 'purple', 'orange'
@@ -153,11 +165,28 @@ export default {
       })
     },
     addHashtags() {
-      const hashtagStr = this.hashtags.replace(/ /g, '')
-      const hashtags = hashtagStr.split(',').map(h => '#'+h)
-      if (hashtags.length <= 5) {
-        this.post.hashtags = hashtags
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      if (this.post.hashtags.length < 5) {
+        this.post.hashtags.push(hashtagStr);
       }
+      this.hashtag = '';
+    },
+    recommend() {
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
+        response => {
+          this.suggestions = response.hashtags
+        }
+      ).catch();
+    },
+    setHashtag(item) {
+      this.hashtag = '';
+      this.post.hashtags.pop();
+      this.post.hashtags.push(item);
+      this.suggestions = [];
+    },
+    deleteHashtag(index) {
+      this.post.hashtags.splice(index, 1);
     }
   }
 }
