@@ -7,7 +7,7 @@
     </v-row>
     <v-row>
       <v-col md="8" v-if="posts">
-        <Post
+        <PostQuickView
           :key="post.id"
           :post="post"
           v-for="post in posts"/>
@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import Post from "~/components/search/Post"
 import Settings from "@/components/search/Settings";
+import PostQuickView from '@/components/homepage/Post-quick-view'
 export default {
   name: "hashtag",
   components: {
     Settings,
-    Post
+    PostQuickView
   },
   data() {
     return {
