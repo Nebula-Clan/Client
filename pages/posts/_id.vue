@@ -12,7 +12,13 @@
       lg="8"
       md="6"
       sm="6">
-      <PostView :post="post" :author="author" :content="postContent"/>
+      <PostView
+        :post="post"
+        :author="author"
+        :content="postContent"/>
+      <div>
+        <NestedComments :postId="$route.params.id" :root="comments"/>
+      </div>
     </v-col>
     <v-col
       cols="12"
@@ -33,11 +39,13 @@ import Communities from "@/components/homepage/Communities";
 import Write from "@/components/homepage/Write";
 import PostQuickView from "@/components/homepage/Post-quick-view";
 import PostView from "@/components/post/PostView";
+import NestedComments from "@/components/comment/NestedComments";
 import {mapActions} from "vuex";
 
 export default {
-  name: "_post_id",
+  name: "_id",
   components: {
+    NestedComments,
     PostView,
     User,
     Categories,
@@ -48,22 +56,36 @@ export default {
   data: () => ({
     post: '',
     author: '',
-    postContent: ''
+    postContent: '',
+    comments: [],
   }),
   mounted() {
-    this.getFullPost({
-      id: this.$route.params.id,
-    }).then((res) => {
-      console.log(res)
-      this.post = res.data.post;
-      this.author = res.data.post.author;
-      this.postContent = res.data.post.post_content.content_text;
-    }).catch((error) => {
-      console.log(error);
-    });
+    this.fetchComments();
+    this.fetchPostContent();
   },
   methods: {
     ...mapActions('modules/post', ['getFullPost']),
+    ...mapActions('modules/comment/post_comment', ['getComments']),
+    fetchComments() {
+      this.getComments({postId: this.$route.params.id}).then(({data}) => {
+        console.log(data)
+        this.comments = data.comments
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    fetchPostContent() {
+      this.getFullPost({
+        id: this.$route.params.id,
+      }).then(({data}) => {
+        console.log(data)
+        this.post = data.post;
+        this.author = data.post.author;
+        this.postContent = data.post.post_content.content_text;
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
   }
 }
 </script>

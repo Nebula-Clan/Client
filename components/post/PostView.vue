@@ -92,9 +92,7 @@
 <script>
 export default {
   name: 'PostView',
-  data: () => {
-    return {}
-  },
+  data: () => ({}),
   methods: {},
   computed: {
     dateDuration: {
