@@ -67,7 +67,7 @@
     <v-expand-transition>
       <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
         <v-textarea
-          filled
+          outlined
           auto-grow
           v-model="replayText"
           :label="`Reply ${comment.author.username}`"
@@ -76,6 +76,7 @@
           <v-btn
             @click="replyComment"
             depressed
+            outlined
             color="primary"
             :loading="isLoadingToSend"
             elevation="2">

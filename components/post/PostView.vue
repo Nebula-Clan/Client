@@ -1,5 +1,5 @@
 <template>
-  <v-card class="my-2 pa-1" elevation="2">
+  <v-card class="mb-2 pa-1" elevation="2">
 
     <v-row>
       <v-col class="ml-5">
@@ -46,8 +46,8 @@
               class="profile-pic"
               size="40">
               <img
-                alt="John"
-                src="https://cdn.vuetifyjs.com/images/john.jpg">
+                :alt="author.username"
+                :src="$axios.defaults.baseURL + author.profile_picture">
             </v-avatar>
           </div>
           <div class="d-flex flex-column ml-3">

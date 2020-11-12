@@ -1,8 +1,10 @@
 import axios from 'axios'
 
-const state = {}
+const state = {
+}
 
-const getters = {}
+const getters = {
+}
 
 const actions = {
   createPost({commit}, post) {

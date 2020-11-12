@@ -1,19 +1,24 @@
 <template>
   <v-card class="pa-2">
     <div class="ui comments mx-2">
-      <Comment :depth="0" :comment="item.comment" :replies="item.replies" v-for="item in root"/>
+      <Comment
+        :depth="0"
+        :comment="item.comment"
+        :replies="item.replies"
+        :key="i"
+        v-for="(item, i) in root"/>
     </div>
-    <v-divider class="my-2"></v-divider>
+<!--    <v-divider class="my-2"></v-divider>-->
     <!-- Replay  -->
-    <v-card class="pa-2" color="#2a2a2a">
       <v-textarea
-        filled
+        outlined
         auto-grow
         v-model="replayText"
         :label="`Reply the post`"
       ></v-textarea>
       <div class="pb-2 d-flex flex-row-reverse">
         <v-btn
+          outlined
           @click="replyComment"
           depressed
           color="primary"
@@ -22,7 +27,6 @@
           Send
         </v-btn>
       </div>
-    </v-card>
   </v-card>
 </template>
 

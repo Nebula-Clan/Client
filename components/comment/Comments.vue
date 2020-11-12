@@ -1,6 +1,11 @@
 <template>
   <div class="comments">
-    <Comment :depth="depth" :comment="c.comment" :replies="c.replies" v-for="c in root"/>
+    <Comment
+      :depth="depth"
+      :comment="c.comment"
+      :replies="c.replies"
+      :key="i"
+      v-for="(c,i) in root"/>
   </div>
 </template>
 
