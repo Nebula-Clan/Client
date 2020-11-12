@@ -6,10 +6,11 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col md="8">
-        <Post/>
-        <Post/>
-        <Post/>
+      <v-col md="8" v-if="posts">
+        <Post
+          :key="post.id"
+          :post="post"
+          v-for="post in posts"/>
       </v-col>
       <v-col md="4">
         <Settings/>
@@ -30,12 +31,29 @@ export default {
   data() {
     return {
       hashtag: this.$route.query.keyword,
-      sort: this.$route.query.sort
+      sort: this.$route.query.sort,
+      posts: []
     }
   },
   mounted() {
+    this.getPosts();
   },
-  watchQuery: true
+  methods: {
+    getPosts() {
+      this.$axios.get(`api/hashtag/posts?text=${this.hashtag}`).then(
+        response =>
+          this.posts = response.data.posts
+      ).catch(
+        error => console.log(error)
+      );
+    }
+  },
+  watch: {
+    '$route.query.keyword': function () {
+      this.hashtag = this.$route.query.keyword
+      this.getPosts();
+    }
+  }
 }
 </script>
 

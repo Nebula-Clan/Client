@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="8">
+  <v-card elevation="2">
     <v-card-title>
       <v-icon class="pr-3">mdi-pencil</v-icon>
       New Post
@@ -82,7 +82,8 @@
                         class="my-2">
                         <v-chip
                           outlined
-                          @click="deleteHashtag(i)"
+                          close
+                          @click:close="deleteHashtag(i)"
                           class="ma-1"
                           :key="i"
                           :color="chipsColors[i]"
