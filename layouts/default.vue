@@ -117,6 +117,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Complete PostView',
           to: '/posts/1/'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Django Community',
+          to: '/community/Django'
         }
       ],
       miniVariant: false,
