@@ -73,6 +73,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              @click="setCommentToPost(isCommentToPostExpanded)"
               v-bind="attrs"
               v-on="on"
               icon>
@@ -90,10 +91,11 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: 'PostView',
   data: () => ({}),
-  methods: {},
   computed: {
     dateDuration: {
       get: function () {
@@ -107,7 +109,11 @@ export default {
           return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
         }
       }
-    }
+    },
+    ...mapGetters('modules/post', ['isCommentToPostExpanded'])
+  },
+  methods: {
+    ...mapActions('modules/post', ['setCommentToPost']),
   },
   props: ['post', 'author', 'content'],
 }

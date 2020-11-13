@@ -1,12 +1,15 @@
 import axios from 'axios'
 
 const state = {
+  isCommentToPostExpanded: false,
 }
 
 const getters = {
+  isCommentToPostExpanded: state => state.isCommentToPostExpanded
 }
 
 const actions = {
+  // Requests
   createPost({commit}, post) {
     let data = new FormData()
     data.append('title', post.title)
@@ -25,10 +28,16 @@ const actions = {
         id: postData.id,
       }
     })
+  },
+  // Post view management
+  setCommentToPost({commit}, status) {
+    commit('setIsCommentToPostExpanded', !status);
   }
 }
 
-const mutations = {}
+const mutations = {
+  setIsCommentToPostExpanded: (state, status) => (state.isCommentToPostExpanded = status),
+}
 
 export default {
   state,

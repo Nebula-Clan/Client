@@ -1,5 +1,27 @@
 <template>
   <v-card class="pa-2">
+    <v-expand-transition>
+      <!-- Replay  -->
+      <div v-show="isCommentToPostExpanded">
+        <v-textarea
+          outlined
+          auto-grow
+          v-model="replayText"
+          :label="`Reply the post`"
+        ></v-textarea>
+        <div class="pb-2 d-flex flex-row-reverse">
+          <v-btn
+            outlined
+            @click="replyComment"
+            depressed
+            color="primary"
+            :loading="isLoadingToSend"
+            elevation="2">
+            Send
+          </v-btn>
+        </div>
+      </div>
+    </v-expand-transition>
     <div class="ui comments mx-2">
       <Comment
         :depth="0"
@@ -8,31 +30,12 @@
         :key="i"
         v-for="(item, i) in root"/>
     </div>
-<!--    <v-divider class="my-2"></v-divider>-->
-    <!-- Replay  -->
-      <v-textarea
-        outlined
-        auto-grow
-        v-model="replayText"
-        :label="`Reply the post`"
-      ></v-textarea>
-      <div class="pb-2 d-flex flex-row-reverse">
-        <v-btn
-          outlined
-          @click="replyComment"
-          depressed
-          color="primary"
-          :loading="isLoadingToSend"
-          elevation="2">
-          Send
-        </v-btn>
-      </div>
   </v-card>
 </template>
 
 <script>
 import Comment from "@/components/comment/Comment";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "NestedComments",
@@ -41,7 +44,11 @@ export default {
     isLoadingToSend: false,
     replayText: "",
   }),
+  computed: {
+    ...mapGetters('modules/post', ['isCommentToPostExpanded'])
+  },
   methods: {
+    ...mapActions('modules/post', ['setCommentToPost']),
     ...mapActions('modules/comment/post_comment', ['replyToPost']),
     ...mapActions('modules/comment/post_comment', ['getComments']),
     replyComment() {
@@ -57,7 +64,8 @@ export default {
     },
     fetchComments() {
       this.getComments({postId: this.$route.params.id}).then(({data}) => {
-        this.root = data.comments
+        this.root = data.comments;
+        this.setCommentToPost(this.isCommentToPostExpanded);
         this.isLoadingToSend = false;
         this.replayText = "";
       }).catch((error) => {
