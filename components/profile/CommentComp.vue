@@ -2,7 +2,20 @@
     <v-container @click="oneClick" class="cursor py-1">
         <v-list-item three-line>
             <v-list-item-avatar v-if="isReply" size="80">
-                <v-img src="/images/LL1.jpg"></v-img>
+                <v-img :src="getCommentOwnerImage">
+                    <template v-slot:placeholder>
+                        <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                        >
+                        <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                        ></v-progress-circular>
+                        </v-row>
+                    </template>
+                </v-img>
             </v-list-item-avatar>
             <v-list-item-content class="align-list-item">
                 <div class="overline mb-0" v-if="isReply">
@@ -10,8 +23,7 @@
                 </div>
                 <v-list-item-subtitle class="comment-expand">
                     <v-clamp autoresize :max-lines="lines" @clampchange="isClamped">
-                        <!-- {{ comment.commentBody }} -->
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus architecto aliquam molestiae sit ab, vero provident quo quis consectetur. Veniam libero deserunt, recusandae eligendi accusantium laboriosam nobis mollitia ut sit tempora, totam optio, id ad quibusdam exercitationem? Vero, perspiciatis. Quia expedita totam quis harum officia quod, autem quibusdam perspiciatis facilis, temporibus quisquam eum numquam cupiditate sed. Harum officiis magnam iste?
+                        {{ comment.commentBody }}
                     </v-clamp>
                 </v-list-item-subtitle>
             </v-list-item-content>
@@ -56,8 +68,8 @@ export default {
         }
     },
     computed: {
-        getCommentImage() {
-            return ''
+        getCommentOwnerImage() {
+            return this.$axios.defaults.baseURL + this.comment.commentOwnerImageUrl
         },
         getExpandClass() {
             if (this.expanded) {

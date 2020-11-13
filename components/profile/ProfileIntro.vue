@@ -72,6 +72,7 @@ export default {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
         ...mapActions('modules/profile/profilePosts', ['getProfilePosts']),
         ...mapActions('modules/profile/profileComments', ['getProfileComments']),
+        ...mapActions('modules/profile/profileLikes', ['getProfileLikes']),
         switchToProperTab(query) {
             if (query) {
                 if (query === 'comments') {
@@ -95,6 +96,7 @@ export default {
             this.comp = ProfileComments
         },
         switchToLikes() {
+            this.getProfileLikes(this.username)
             this.comp = ProfileLikes
         },
         componentArgs(index) {

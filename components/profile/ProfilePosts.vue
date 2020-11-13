@@ -102,7 +102,7 @@ export default {
     },
     computed: {
         likedPost() {
-            if (!this.dislike && (this.liked || this.like)) {
+            if (this.post.isLiked || !this.dislike && (this.liked || this.like)) {
                 return 'pink'
             } else {
                 return ''

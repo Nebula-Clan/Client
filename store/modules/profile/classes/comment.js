@@ -24,12 +24,16 @@ class Comment {
         this._commentOwnerUsername = username
     }
 
+    set commentOwnerImageUrl(imageUrl) {
+        this._imageUrl = imageUrl
+    }
+
     set commentReply(reply) {
         this._reply = reply
     }
 
-    set liked(isLiked) {
-        this._liked = isLiked
+    set isLiked(isLiked) {
+        this._isLiked = isLiked
     }
 
     parseCommentFromJson(json) {
@@ -38,6 +42,8 @@ class Comment {
         this.liked = json.is_liked
         this.commentOwnerUsername = json.author.username
         this.commentOwnerNickname = json.author.first_name
+        this.commentOwnerImageUrl = json.author.profile_picture
+        this.isLiked = json.is_liked
     }
 
     get commentID() {
@@ -64,8 +70,12 @@ class Comment {
         return this._commentOwnerUsername
     }
 
-    get liked() {
-        return this._liked
+    get commentOwnerImageUrl() {
+        return this._imageUrl
+    }
+
+    get isLiked() {
+        return this._isLiked
     }
 
     get commentReply() {

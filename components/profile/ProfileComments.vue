@@ -34,8 +34,8 @@
                 </v-container>
                 <!-- <CommentComp :comment="comment" :isReply="like" /> -->
                 <v-card-text>
-                    <!-- {{ comment.commentBody }} -->
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error repudiandae laborum officiis repellendus dicta delectus minima provident nulla? Omnis, dolor! Voluptatum perferendis quibusdam eaque sed, sit at! Eius adipisci reiciendis in rem placeat veniam at enim, obcaecati ducimus, autem minima cupiditate delectus magnam maiores iste nemo omnis quasi error hic excepturi! Ipsa, earum. Voluptate quisquam ratione suscipit ipsam! Mollitia, voluptate.
+                    {{ comment.commentBody }}
+                    <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error repudiandae laborum officiis repellendus dicta delectus minima provident nulla? Omnis, dolor! Voluptatum perferendis quibusdam eaque sed, sit at! Eius adipisci reiciendis in rem placeat veniam at enim, obcaecati ducimus, autem minima cupiditate delectus magnam maiores iste nemo omnis quasi error hic excepturi! Ipsa, earum. Voluptate quisquam ratione suscipit ipsam! Mollitia, voluptate. -->
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
@@ -79,7 +79,7 @@ export default {
     },
     computed: {
         likedComment() {
-            if (this.comment.liked || !this.dislike && (this.comment.liked || this.like)) {
+            if (this.comment.isLiked || !this.dislike && (this.comment.liked || this.like)) {
                 return 'pink'
             } else {
                 return ''

@@ -1,8 +1,19 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-img :src="getProfileBannerImageURL" :eager="true" max-height="450" alt="shit">
-
+            <v-img :src="getProfileBanner" :eager="true" @error="defaultBanner" max-height="450">
+                <template v-slot:placeholder>
+                    <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                    >
+                    <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                    ></v-progress-circular>
+                    </v-row>
+                </template>
             </v-img> 
         </v-row>
         <v-row>
@@ -15,7 +26,7 @@
                                     Posts
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    {{ getNumberOfPosts }}
+                                    {{ profile.numberOfPosts }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
@@ -23,7 +34,7 @@
                                     Following
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    {{ getNumberOfFollowing }}
+                                    {{ profile.numberOfFollowing }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
@@ -31,7 +42,7 @@
                                     Followers
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    {{ getNumberOfFollowers }}
+                                    {{ profile.numberOfFollowers }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
@@ -39,7 +50,7 @@
                                     Likes
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    {{ getNumberOfLikes }}
+                                    {{ profile.numberOfLikes }}
                                 </p>
                             </v-col>
                             <v-col cols="2" lg="1" sm="2" xs="2" :class="getPaddingAndMargin">
@@ -47,7 +58,7 @@
                                     Comments
                                 </p>
                                 <p class="text-center mb-0 text--secondary">
-                                    {{ getNumberOfComments }}
+                                    {{ profile.numberOfComments }}
                                 </p>
                             </v-col>
                         </v-row>
@@ -62,13 +73,15 @@
 import { mapGetters } from 'vuex'
 
 export default {
+    data() {
+        return {
+            bannerImageForError: '/images/login-background.jpg',
+            hasError: false,
+            isCompleted: false
+        }
+    },
     computed: {
-        ...mapGetters('modules/profile/profileInfo',
-         ['getNumberOfPosts', 'getNumberOfFollowing', 'getNumberOfFollowers', 'getNumberOfLikes', 'getNumberOfComments', 'getProfileBannerImage']),
-        getProfileBannerImageURL() {
-            console.log(this.$axios.defaults.baseURL + this.getProfileBannerImage)
-            return this.$axios.defaults.baseURL + this.getProfileBannerImage
-        },
+        ...mapGetters('modules/profile/profileInfo',['getProfile', 'getStatusOfReq']),
         getPaddingAndMargin() {
             if (this.$vuetify.breakpoint.xl) {
                 return 'pa-2 mx-10'
@@ -80,6 +93,28 @@ export default {
                 return 'pa-2 mx-0'
             } else if (this.$vuetify.breakpoint.xs) {
                 return 'pa-2 mx-0'
+            }
+        },
+        profile() {
+            return this.getProfile
+        },
+        watchReqUntilCompleted() {
+            if (this.getStatusOfReq) {
+                this.isCompleted = true
+            }
+            return this.isCompleted
+        },
+        getProfileBanner() {
+            if (this.watchReqUntilCompleted && this.hasError) {
+                return this.bannerImageForError
+            }
+            return this.$axios.defaults.baseURL + this.profile.profileBannerUrl
+        }
+    },
+    methods: {
+        defaultBanner() {
+            if (this.isCompleted) {
+                this.hasError = true
             }
         }
     }

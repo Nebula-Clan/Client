@@ -1,27 +1,39 @@
 class Like {
 
-    setLikeID(likeID) {
-        this.id = likeID
+    set likeID(likeID) {
+        this._id = likeID
     }
 
-    setTypeOfLike(likeType) {
-        this.likeType = likeType
+    set typeOfLike(likeType) {
+        this._likeType = likeType
     }
 
-    setLikeOwnerUsername(username) {
-        this.likeOwnerUsername = username
+    set likeOwnerUsername(username) {
+        this._likeOwnerUsername = username
     }
 
-    getLikeID() {
-        return this.id
+    set likeReply(reply) {
+        this._reply = reply
     }
 
-    getLikeType() {
-        return this.likeType
+    parseLikeFromJson(json) {
+
     }
 
-    getLikeOwnerUsername() {
-        return this.likeOwnerUsername
+    get likeID() {
+        return this._id
+    }
+
+    get typeOfLike() {
+        return this._likeType
+    }
+
+    get likeOwnerUsername() {
+        return this._likeOwnerUsername
+    }
+
+    get likeReply() {
+        return this._reply
     }
 }
 

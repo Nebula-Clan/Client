@@ -2,14 +2,29 @@
     <v-row :class="[marginSize, avatar]" max-width="250">
         <v-col cols="12" >
             <v-avatar :size="avatarSize" class="avatar-border">
-                <v-img :src="getProfileImageURL" alt="John">
+                <v-img v-if="!showImageByName" :src="getProfileImage" @error="defaultImage">
+                    <template v-slot:placeholder>
+                        <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                        >
+                        <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                        ></v-progress-circular>
+                        </v-row>
+                    </template>
                 </v-img>
+                <p v-else>
+                    sdf
+                </p>
             </v-avatar>
         </v-col>
         <v-col cols="12" class="pb-0 ml-5">
             <v-row>
                 <div class="text-h6">
-                    {{ getNickname }}
+                    {{ profile.nickname }}
                 </div>
                 <v-btn depressed class="ml-auto mr-10" :color="followAndUnfollowColor" @click="changeStatusOfFollow" :loading="followLoading">
                     {{ followStatus }}
@@ -18,12 +33,12 @@
         </v-col>
         <v-col cols="12" class="pt-0 ml-2 pb-0">
             <div class="text-caption text--secondary">
-                {{ '@' + getUsername }}
+                {{ '@' + profile.username }}
             </div>
         </v-col>
         <v-col cols="12" class="ml-2">
             <div class="text-caption">
-                {{ getDescription }}
+                {{ profile.description }}
             </div>
         </v-col>
     </v-row>
@@ -37,11 +52,17 @@ export default {
         return {
             avatarClass: "avatar-lg",
             follow: false,
-            followLoading: false
+            followLoading: false,
+            isCompleted: false,
+            hasError: false,
+            showImageByName: false
         }
     },
     computed: {
-        ...mapGetters('modules/profile/profileInfo', ['getNickname', 'getUsername', 'getDescription', 'getProfileImage', 'getProfileBannerImage']),
+        ...mapGetters('modules/profile/profileInfo',['getProfile', 'getStatusOfReq']),
+        profile() {
+            return this.getProfile
+        },
         avatar() {
             if (this.$vuetify.breakpoint.lg || this.$vuetify.breakpoint.xl) {
                 return 'avatar-lg'
@@ -89,12 +110,19 @@ export default {
                 return 'blue darken-1'
             }
         },
-        getProfileImageURL() {
-            console.log(this.$axios.defaults.baseURL + this.getProfileImage)
-            return this.$axios.defaults.baseURL + this.getProfileImage
+        watchReqUntilCompleted() {
+            if (this.getStatusOfReq) {
+                this.isCompleted = true
+            }
+            return this.isCompleted
         },
-        getProfileBannerImageURL() {
-            return this.$axios.defaults.baseURL + this.getProfileBannerImage()
+        getProfileImage() {
+            console.log(this.profile.profileImageUrl)
+            if (this.watchReqUntilCompleted && this.hasError) {
+                this.showImageByName = true
+                return ''
+            }
+            return this.$axios.defaults.baseURL + this.profile.profileImageUrl
         }
     },
     methods: {
@@ -104,6 +132,11 @@ export default {
                 this.follow = !this.follow
                 this.followLoading = false
             }, 2000)
+        },
+        defaultImage() {
+            if (this.isCompleted) {
+                this.hasError = true
+            }
         }
     }
 }

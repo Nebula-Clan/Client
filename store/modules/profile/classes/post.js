@@ -26,6 +26,10 @@ class Post {
         this._author = author 
     }
 
+    set isLiked(liked) {
+        this._isLiked = liked
+    }
+
     get postID() {
         return this._id
     }
@@ -51,6 +55,10 @@ class Post {
         return this._author
     }
 
+    get isLiked() {
+        return this._isLiked
+    }
+
     parsePostFromJson(json) {
         this.postID = json.id
         this.postTitle = json.title
@@ -58,6 +66,7 @@ class Post {
         this.postDescription = json.description
         this.postAuthor = json.author.first_name
         this.postDescription = json.description
+        this.isLiked = json.liked_by_viewer
     }
 }
 

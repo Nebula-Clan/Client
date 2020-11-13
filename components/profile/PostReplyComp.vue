@@ -2,7 +2,20 @@
     <v-container @click="oneClick" class="post-cursor py-3">
         <v-list-item three-line>
             <v-list-item-avatar tile size="80" color="grey">
-                <v-img :src="getPostImage"></v-img>
+                <v-img :src="getPostImage">
+                    <template v-slot:placeholder>
+                        <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                        >
+                        <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                        ></v-progress-circular>
+                        </v-row>
+                    </template>
+                </v-img>
             </v-list-item-avatar>
             <v-list-item-content>
                 <div class="overline mb-3">
