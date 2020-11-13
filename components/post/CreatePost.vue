@@ -160,7 +160,8 @@ export default {
     ...mapActions('modules/post', ['createPost']),
     publish () {
       this.createPost(this.post).then((response) => {
-        console.log(response)
+        console.log(response);
+        this.dialog = false;
       }).catch((e) => {
         console.error(e)
       })

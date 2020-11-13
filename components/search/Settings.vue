@@ -34,7 +34,7 @@ export default {
   name: "Settings",
   data() {
     return {
-      sort: 'latest'
+      sort: this.$route.query.sort
     }
   },
   methods: {
@@ -44,8 +44,8 @@ export default {
     }
   },
   watch: {
-    $route (to ,from) {
-      this.sort = to.query.sort
+    '$route.query.sort': function () {
+      this.sort = this.$route.query.sort
     }
   }
 }

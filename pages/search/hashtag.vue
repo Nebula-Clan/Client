@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     getPosts() {
-      this.$axios.get(`api/hashtag/posts?text=${this.hashtag}`).then(
+      this.$axios.get(`api/hashtag/posts?text=${this.hashtag}&sort=${this.sort}`).then(
         response =>
           this.posts = response.data.posts
       ).catch(
@@ -51,6 +51,10 @@ export default {
   watch: {
     '$route.query.keyword': function () {
       this.hashtag = this.$route.query.keyword
+      this.getPosts();
+    },
+    '$route.query.sort': function () {
+      this.sort = this.$route.query.sort
       this.getPosts();
     }
   }
