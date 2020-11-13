@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row>
-      <img class="header-image" :src="$axios.defaults.baseURL + data.banner">
+    <v-row class="header-image"  >
+      <img v-if="data.banner !== '/media/null'" :src="$axios.defaults.baseURL + data.banner">
     </v-row>
     <v-row class="logo elevation-2">
       <v-col  class="d-flex align-center">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {dateStandard} from '@/store/modules/community/community'
+import {dateStandard} from '@/shared-functions/community/community'
 export default {
   name: "Intro",
   props: ['data', 'userJoined'],
@@ -82,14 +82,18 @@ export default {
   watch: {
   },
   mounted() {
+    console.log(this.data.banner)
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .header-image {
-  width: 100%;
   height: 300px;
+  img {
+    width: 100%;
+    height: 300px;
+  }
 }
 .logo {
   background-color: #23241f;

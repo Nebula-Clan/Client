@@ -3,7 +3,7 @@
 
     <v-row>
       <v-col class="ml-5">
-        <nuxt-link class="text-decoration-none white--text" to="#">
+        <nuxt-link class="text-decoration-none white--text" :to="'/posts/' + post.id">
           <h2>{{ post.title }}</h2>
         </nuxt-link>
         <div class="mr-2">
