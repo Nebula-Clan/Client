@@ -112,6 +112,11 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Profile',
           to: '/profile/had0007'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Complete PostView',
+          to: '/posts/1/'
         }
       ],
       miniVariant: false,

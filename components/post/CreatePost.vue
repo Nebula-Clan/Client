@@ -123,7 +123,7 @@
 
 <script>
 import Editor from '@/components/post/Editor'
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'CreatePost',
@@ -158,10 +158,10 @@ export default {
   },
   methods: {
     ...mapActions('modules/post', ['createPost']),
-    publish () {
+    publish() {
       this.createPost(this.post).then((response) => {
-        console.log(response);
-        this.dialog = false;
+        console.log(response)
+        this.$auth.redirect('home')
       }).catch((e) => {
         console.error(e)
       })
@@ -196,7 +196,7 @@ export default {
 
 
 <style lang="scss" scoped>
-  .publish-form {
-    width: 100%;
-  }
+.publish-form {
+  width: 100%;
+}
 </style>

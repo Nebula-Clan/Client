@@ -16,7 +16,6 @@
       <br>
       <PostQuickView
         v-for="(post, i) in posts" :key="i" :post="post" :author="author"/>
-
     </v-col>
     <v-col
       cols="12"
