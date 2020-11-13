@@ -2,7 +2,7 @@
   <v-card class="mb-2 pa-1" elevation="2">
     <v-row>
       <v-col class="ml-5">
-        <nuxt-link class="text-decoration-none white--text" to="#">
+        <nuxt-link class="text-decoration-none white--text" :to="'/posts/' + post.id">
           <h2>{{ post.title }}</h2>
         </nuxt-link>
         <div class="mr-2">
@@ -33,7 +33,7 @@
     <v-row>
       <v-col v-if="post.header_image" class="mx-5 header-image">
         <img alt="image"
-             :src="'http://huddle.pythonanywhere.com/' + post.header_image">
+             :src="$axios.defaults.baseURL + post.header_image">
       </v-col>
     </v-row>
 
@@ -69,7 +69,7 @@
               size="40">
               <img
                 alt="John"
-                :src="$axios.defaults.baseURL + post.author.profile_picture">
+                :src="$axios.defaults.baseURL+post.author.profile_picture">
             </v-avatar>
           </div>
           <div class="d-flex flex-column ml-3">

@@ -54,6 +54,11 @@ export default {
     }
   },
   mounted() {
+    this.$axios.get('/api/posts/get_user_posts?'+'username='+'had0007')
+      .then((res) => {
+          this.posts = res.data.all_user_posts
+          this.author = res.data.author
+        }).catch();
   }
 }
 </script>
