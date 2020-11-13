@@ -22,7 +22,7 @@
       lg="2"
       md="3"
       sm="3">
-      <User :user="currentUser"/>
+      <User :user="this.$auth.user"/>
       <br>
       <Communities/>
     </v-col>
@@ -49,15 +49,14 @@ export default {
     return {
       posts: null,
       author: null,
-      currentUser: this.$auth.user
     }
   },
   mounted() {
-    this.$axios.get('/api/posts/get_user_posts?'+'username='+'had0007')
+    this.$axios.get('/api/posts/get_user_posts?' + 'username=' + 'had0007')
       .then((res) => {
-          this.posts = res.data.all_user_posts
-          this.author = res.data.author
-        }).catch();
+        this.posts = res.data.all_user_posts
+        this.author = res.data.author
+      }).catch();
   }
 }
 </script>

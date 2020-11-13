@@ -25,7 +25,7 @@
       lg="2"
       md="3"
       sm="3">
-      <User/>
+      <User :user="this.$auth.user"/>
       <br>
       <Communities/>
     </v-col>
@@ -56,13 +56,7 @@ export default {
   data: () => ({
     post: '',
     author: '',
-    postContent: `
-    <style>
-    img {
-    width: 100%;
-    }
-    </style>
-    `,
+    postContent: `<style>img{width: 100%;}</style>`,
     comments: [],
   }),
   mounted() {
@@ -87,7 +81,7 @@ export default {
         console.log(data)
         this.post = data.post;
         this.author = data.post.author;
-        this.postContent+= data.post.post_content.content_text;
+        this.postContent += data.post.post_content.content_text;
       }).catch((error) => {
         console.log(error);
       });
