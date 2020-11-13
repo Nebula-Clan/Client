@@ -1,6 +1,5 @@
 <template>
-  <v-card class="my-2 pa-1" elevation="2">
-
+  <v-card class="mb-2 pa-1" elevation="2">
     <v-row>
       <v-col class="ml-5">
         <nuxt-link class="text-decoration-none white--text" to="#">
@@ -32,7 +31,7 @@
     </v-row>
 
     <v-row>
-      <v-col class="mx-5 header-image">
+      <v-col v-if="post.header_image" class="mx-5 header-image">
         <img alt="image"
              :src="'http://huddle.pythonanywhere.com/' + post.header_image">
       </v-col>
@@ -44,22 +43,38 @@
       </v-col>
     </v-row>
 
+    <v-row>
+      <v-col class="d-flex justify-right ml-2">
+        <v-chip
+          nuxt
+          :key="i"
+          v-for="(tag, i) in post.hashtags"
+          :to="'/search/hashtag?keyword=' + tag.text + '&sort=latest'"
+          outlined
+          small
+          class="mx-1"
+          :color="chipsColors[i]">
+          #{{tag.text}}
+        </v-chip>
+      </v-col>
+    </v-row>
+
     <v-row class="mx-2">
       <v-col>
         <nuxt-link class="text-decoration-none white--text d-flex"
-                   :to="'/profile/'+author.username">
+                   :to="'/profile/'+post.author.username">
           <div>
             <v-avatar
               class="profile-pic"
               size="40">
               <img
                 alt="John"
-                src="https://cdn.vuetifyjs.com/images/john.jpg">
+                :src="$axios.defaults.baseURL + post.author.profile_picture">
             </v-avatar>
           </div>
           <div class="d-flex flex-column ml-3">
-            <span><b>{{ author.username }}</b></span>
-            <span style="font-size: smaller">{{ author.first_name }} {{ author.last_name }}</span>
+            <span><b>{{ post.author.username }}</b></span>
+            <span style="font-size: smaller">{{ post.author.first_name }} {{ post.author.last_name }}</span>
           </div>
         </nuxt-link>
       </v-col>
@@ -70,6 +85,7 @@
             <v-btn
               v-bind="attrs"
               v-on="on"
+              :color="post.liked_by_viewer? 'red':'white'"
               icon>
               <v-icon>mdi-heart</v-icon>
             </v-btn>
@@ -99,9 +115,12 @@
 <script>
 export default {
   name: 'Post-quick-view',
-  props: ['post', 'author'],
+  props: ['post'],
   data: () => {
     return {
+      chipsColors: [
+        'blue', 'red', 'green', 'purple', 'orange'
+      ]
     }
   },
   methods: {},

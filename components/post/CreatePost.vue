@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="8">
+  <v-card elevation="2">
     <v-card-title>
       <v-icon class="pr-3">mdi-pencil</v-icon>
       New Post
@@ -59,6 +59,39 @@
                         truncate-length="30"
                       ></v-file-input>
                     </v-col>
+                    <v-col cols="12">
+                      <v-text-field outlined
+                                    @input="recommend"
+                                    v-model="hashtag"
+                                    label="Up to 5 hashtags"
+                                    @change="addHashtags">
+                      </v-text-field>
+                      <div v-if="suggestions.length > 0">
+                        <span>Suggestion</span>
+                        <v-chip
+                          class="ma-1"
+                          small
+                          @click="setHashtag(item.text)"
+                          :key="i"
+                          v-for="(item, i) in suggestions">
+                          {{ item.text }}
+                        </v-chip>
+                      </div>
+
+                      <div
+                        class="my-2">
+                        <v-chip
+                          outlined
+                          close
+                          @click:close="deleteHashtag(i)"
+                          class="ma-1"
+                          :key="i"
+                          :color="chipsColors[i]"
+                          v-for="(tag, i) in this.post.hashtags">
+                          #{{tag}}
+                        </v-chip>
+                      </div>
+                    </v-col>
                   </v-form>
                 </v-row>
               </v-container>
@@ -74,9 +107,10 @@
               </v-btn>
               <v-btn
                 outlined
+                :disabled="!formValid"
                 color="primary"
                 text
-                @click="onSubmit()">
+                @click="publish">
                 Create
               </v-btn>
             </v-card-actions>
@@ -96,6 +130,8 @@ export default {
   data: () => ({
     dialog: false,
     formValid: false,
+    hashtag: '',
+    suggestions: [],
     post: {
       title: '',
       description: '',
@@ -103,6 +139,7 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: undefined,
+      hashtags: []
     },
     titleRules: [
       t => !!t || 'Title is required',
@@ -111,6 +148,9 @@ export default {
     descRules: [
       t => !!t || 'Description is required',
       t => t.length <= 750 || 'Max length is 750 characters'
+    ],
+    chipsColors: [
+      'blue', 'red', 'green', 'purple', 'orange'
     ]
   }),
   components: {
@@ -120,10 +160,35 @@ export default {
     ...mapActions('modules/post', ['createPost']),
     publish () {
       this.createPost(this.post).then((response) => {
-        console.log(response)
+        console.log(response);
+        this.dialog = false;
       }).catch((e) => {
         console.error(e)
       })
+    },
+    addHashtags() {
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      if (this.post.hashtags.length < 5) {
+        this.post.hashtags.push(hashtagStr);
+      }
+      this.hashtag = '';
+    },
+    recommend() {
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
+        response => {
+          this.suggestions = response.hashtags
+        }
+      ).catch();
+    },
+    setHashtag(item) {
+      this.hashtag = '';
+      this.post.hashtags.pop();
+      this.post.hashtags.push(item);
+      this.suggestions = [];
+    },
+    deleteHashtag(index) {
+      this.post.hashtags.splice(index, 1);
     }
   }
 }
