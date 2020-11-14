@@ -1,51 +1,88 @@
 class Comment {
 
-    setCommentID(commentID) {
-        this.id = commentID
+    set commentID(commentID) {
+        this._id = commentID
     }
 
-    setCommentBody(commentBody) {
-        this.body = commentBody
+    set commentBody(commentBody) {
+        this._body = commentBody
     }
 
-    setCommentHashtags(hashtags) {
-        this.hashtags = hashtags
+    set commentHashtags(hashtags) {
+        this._hashtags = hashtags
     }
 
-    setTypeOfComment(commentType) {
-        this.commentType = commentType
+    set commentTypeOfReply(replyType) {
+        this._replyType = replyType
     }
 
-    setCommentOwnerUsername(username) {
-        this.commentOwnerUsername = username
+    set commentOwnerNickname(nickname) {
+        this._commentOwnerNickname = nickname
     }
 
-    getCommentID() {
-        return this.id
+    set commentOwnerUsername(username) {
+        this._commentOwnerUsername = username
     }
 
-    getCommentBody() {
-        return this.body
+    set commentOwnerImageUrl(imageUrl) {
+        this._imageUrl = imageUrl
     }
 
-    getCommentHashtags() {
-        return this.hashtags
+    set commentReply(reply) {
+        this._reply = reply
     }
 
-    getCommentType() {
-        return this.commentType
+    set isLiked(isLiked) {
+        this._isLiked = isLiked
     }
 
-    getCommentOwnerUsername() {
-        return this.commentOwnerUsername
+    parseCommentFromJson(json) {
+        this.commentID = json.id
+        this.commentBody = json.content
+        this.liked = json.is_liked
+        this.commentOwnerUsername = json.author.username
+        this.commentOwnerNickname = json.author.first_name
+        this.commentOwnerImageUrl = json.author.profile_picture
+        this.isLiked = json.is_liked
     }
 
-    getLiked() {
-        this.liked = false
-        return this.liked
+    get commentID() {
+        return this._id
     }
 
-    isReply() {
+    get commentBody() {
+        return this._body
+    }
+
+    get commentHashtags() {
+        return this._hashtags
+    }
+
+    get commentTypeOfReply() {
+        return this._replyType
+    }
+
+    get commentOwnerNickname() {
+        return this._commentOwnerNickname
+    }
+
+    get commentOwnerUsername() {
+        return this._commentOwnerUsername
+    }
+
+    get commentOwnerImageUrl() {
+        return this._imageUrl
+    }
+
+    get isLiked() {
+        return this._isLiked
+    }
+
+    get commentReply() {
+        return this._reply
+    }
+
+    get isReply() {
         return false
     }
 }

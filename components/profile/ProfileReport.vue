@@ -1,6 +1,11 @@
 <template>
     <v-container fluid>
         <v-card min-width="400" max-width="400" elevation="24">
+            <v-container class="py-0">
+                <v-row justify="end" align="end">
+                    <v-icon class="ml-auto" @click="cancel">mdi-close</v-icon>
+                </v-row>
+            </v-container>
             <v-row justify="center" align="center">
                 <v-card-title class="text-center">
                     <div>

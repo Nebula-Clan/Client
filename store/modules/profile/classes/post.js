@@ -1,35 +1,77 @@
+const { default: post } = require("../../post")
+
 class Post {
 
-    setPostID(postID) {
-        this.id = postID
+    set postID(postID) {
+        this._id = postID
     }
 
-    setPostTitle(PostTitle) {
-        this.title = PostTitle
+    set postTitle(PostTitle) {
+        this._title = PostTitle
     }
 
-    setPostHashtags(hashtags) {
-        this.hashtags = hashtags
+    set postHashtags(hashtags) {
+        if (!this._hashtags) {
+            this._hashtags = []
+        }
+        this._hashtags.push(hashtags)
     }
 
-    setPostImageURL(postImgUrl) {
-        this.imageURL = postImgUrl
+    set postImageURL(postImgUrl) {
+        this._imageURL = postImgUrl
     }
 
-    getPostID() {
-        return this.id
+    set postDescription(description) {
+        this._descirption = description
     }
 
-    getPostTitle() {
-        return this.title
+    set postAuthor(author) {
+        this._author = author 
     }
 
-    getPostHashtags() {
-        return this.hashtags
+    set isLiked(liked) {
+        this._isLiked = liked
     }
 
-    getPostImageURL() {
-        return this.imageURL
+    get postID() {
+        return this._id
+    }
+
+    get postTitle() {
+        return this._title
+    }
+
+    get postHashtags() {
+        return this._hashtags
+    }
+
+    get postImageURL() {
+        return this._imageURL
+    }
+
+    get postDescription() {
+        return this._descirption
+    }
+
+    get postAuthor() {
+        return this._author
+    }
+
+    get isLiked() {
+        return this._isLiked
+    }
+
+    parsePostFromJson(json) {
+        this.postID = json.id
+        this.postTitle = json.title
+        this.postImageURL = json.header_image
+        this.postDescription = json.description
+        this.postAuthor = json.author.first_name
+        this.postDescription = json.description
+        this.isLiked = json.is_liked
+        json.hashtags.forEach((item) => {
+            this.postHashtags = item.text
+        })
     }
 }
 
