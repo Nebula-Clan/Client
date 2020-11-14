@@ -93,14 +93,14 @@ export default {
             }
         },
         changeRoute() {
-            console.log(this.$router)
-            this.$router.push({
+            let route = this.$router.resolve({
                 path: `/profile/${ this.comment.commentOwnerUsername }`,
                 query: {
                     'show': 'comments'
                 },
                 hash: `#${ this.comment.commentID }`
             })
+            window.open(route.href,"_self")
         },
         oneClick: function(event){
           this.clicks++ 

@@ -125,7 +125,7 @@ export default {
         countChild() {
             this.numberOfChildRendred++
             if (this.numberOfChildRendred == this.componentObjects.length) {
-                this.setHash(this.hash)
+                setTimeout(() => {this.setHash(this.hash)}, 1)
             }
         }
     }
