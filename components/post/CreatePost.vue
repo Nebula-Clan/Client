@@ -138,7 +138,7 @@ export default {
       contentType: 'OT',
       category: 'OTHER',
       content: '',
-      headerImage: undefined,
+      headerImage: null,
       hashtags: []
     },
     titleRules: [

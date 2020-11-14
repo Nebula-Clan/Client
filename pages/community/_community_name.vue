@@ -10,7 +10,7 @@
         <About v-if="introData" :name="introData.name" :about="introData.about"/>
       </v-col>
       <v-col>
-        <Write />
+        <Write v-if="name" :community="name" @posted="getPosts" />
         <br>
         <PostQuickView v-if="posts" :key="post.id" v-for="post in posts" :post="post"/>
       </v-col>
@@ -41,11 +41,13 @@ export default {
       introData: null,
       isUserJoined: false,
       members: null,
-      posts: null
+      posts: null,
+      name: null
     }
   },
   mounted() {
-    this.getInfo()
+    this.getInfo();
+    this.getPosts();
   },
   methods: {
     getInfo() {
@@ -65,8 +67,15 @@ export default {
           this.members = response.data.community.members;
           const user = this.members.filter(u => u.username === this.$auth.user.username);
           this.isUserJoined = user.length === 1;
-          this.posts = response.data.community.posts
+          // this.posts = response.data.community.posts
         }
+      ).catch(
+        error => console.log(error)
+      );
+    },
+    getPosts() {
+      this.$axios.get(`api/community/community_posts?name=${this.name}`).then(
+        response => this.posts = response.data.posts
       ).catch(
         error => console.log(error)
       );

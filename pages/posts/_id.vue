@@ -5,7 +5,7 @@
       lg="2"
       md="3"
       sm="3">
-      <Categories/>
+<!--      <Categories/>-->
     </v-col>
     <v-col
       cols="12"
@@ -25,9 +25,9 @@
       lg="2"
       md="3"
       sm="3">
-      <User :user="this.$auth.user"/>
+<!--      <User :user="this.$auth.user"/>-->
       <br>
-      <Communities/>
+<!--      <Communities/>-->
     </v-col>
   </v-row>
 </template>

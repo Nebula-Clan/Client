@@ -67,7 +67,9 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-      <nuxt/>
+      <nuxt>
+      </nuxt>
+      <Snackbar></Snackbar>
     </v-main>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -90,10 +92,10 @@
 </template>
 
 <script>
-import * as storage from "core-js";
-
+import Snackbar from '~/components/shared/Snackbar.vue'
 export default {
-  data() {
+  components: {Snackbar},
+  data () {
     return {
       clipped: false,
       drawer: false,

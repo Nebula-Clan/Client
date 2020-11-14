@@ -6,6 +6,7 @@
         :src="this.$axios.defaults.baseURL + user.banner_picture"
         height="80px">
       </v-img>
+      <nuxt-link :to="'/profile/'+user.username">
       <v-avatar
         class="profile-pic"
         size="80">
@@ -13,6 +14,7 @@
           :src="this.$axios.defaults.baseURL + user.profile_picture"
           alt="John">
       </v-avatar>
+      </nuxt-link>
     </div>
     <v-card-title class="justify-center">
       {{ user.first_name }} {{ user.last_name }}

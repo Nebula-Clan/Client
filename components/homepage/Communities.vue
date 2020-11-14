@@ -24,13 +24,18 @@
           <v-list-item-group>
           <nuxt-link
             class="text-decoration-none"
-            v-for="(item, i) in suggestions"
+            v-for="(item, i) in communities"
             :key="i"
-            :to="item.link">
+            :to="'/community/'+item.name">
             <v-list-item>
+              <v-list-item-avatar>
+                <v-avatar>
+                  <img :src="$axios.defaults.baseURL + item.picture" alt="">
+                </v-avatar>
+              </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{item.name}} | {{item.members}} <v-icon size="15">mdi-account</v-icon>
+                  {{item.name}} | {{item.members_number}} <v-icon size="15">mdi-account</v-icon>
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -44,13 +49,13 @@
 import CreateCommunity from '@/components/community/Create-Community'
 export default {
   name: 'communities.component',
+  props: ['communities'],
   components: {
     CreateCommunity
   },
   data: () => {
     return {
       dialog: false,
-      suggestions: []
     }
   }
 }
