@@ -74,13 +74,28 @@ export default {
           }
         },
       },
+      github: {
+        _scheme: 'oauth2',
+        scope: ['openid', 'profile', 'email'],
+        access_type: undefined,
+        access_token_endpoint: undefined,
+        response_type: 'token',
+        token_type: 'Bearer',
+        redirect_uri: 'http://localhost:3000/feed',
+        token_key: 'access_token',
+        state: 'UNIQUE_AND_NON_GUESSABLE',
+        client_id: 'f411dade05bf26eadb71',
+        client_secret: 'ad06bb50f00202d3f0a70d6d1a2880d4770fa048'
+      }
     },
     redirect: {
-      login: '/feed',
-      logout: '/feed',
-      callback: '/feed',
-      home: '/feed'
+      home: '/feed',
+      login: '/login'
     }
+  },
+
+  router: {
+    base: '/'
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -90,12 +105,12 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
+          primary: '#BB86FC',
+          accent: '#4aff80',
+          secondary: '#03dac6',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: '#CF6679',
           success: colors.green.accent3
         }
       }
@@ -103,6 +118,5 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-  }
+  build: {}
 }

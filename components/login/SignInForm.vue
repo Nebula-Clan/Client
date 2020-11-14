@@ -1,28 +1,28 @@
 <template>
   <v-card
-    class="pa-7 border-lay"
+    class="pa-7"
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Login</div>
     <v-divider class="my-6"></v-divider>
     <v-form v-model="formValid" @submit.prevent="onSubmit">
       <v-text-field
-        color="blue lighten-2"
         label="Username"
         :rules="fieldRules"
         v-model="username"
+        outlined
         append-icon="mdi-account"/>
       <v-text-field
-        color="blue lighten-2"
         label="Password"
         :rules="fieldRules"
         v-model="password"
+        outlined
         :append-icon="passwordVisible? 'mdi-eye': 'mdi-eye-off'"
         @click:append="passwordVisible = !passwordVisible"
         :type="passwordVisible ? 'text': 'password'"/>
       <v-btn
         class="mt-5"
-        color="green darken-2"
+        color="primary"
         :disabled="!formValid"
         type="submit"
         block>
@@ -31,29 +31,39 @@
     </v-form>
     <v-divider class="my-6"></v-divider>
     <div>
-      <v-btn
-        class="mt-3 pa-5"
-        color="red darken-1"
-        block>
-        <i class="fab fa-google mr-3"/> Sign in with Google
-      </v-btn>
-      <v-btn
-        class="mt-3 pa-5"
-        color="blue darken-1"
-        block>
-        <i class="fab fa-facebook-f mr-3"/> Sign in with Facebook
-      </v-btn>
+      <SocialButton :uiData="socialAccounts.github" :on-click="loginGithub"/>
+      <SocialButton :uiData="socialAccounts.google" :on-click="loginGoogle"/>
+      <SocialButton :uiData="socialAccounts.facebook" :on-click="loginFacebook"/>
       <v-divider class="my-6"></v-divider>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
+    <v-snackbar
+      v-model="errorHandling.hasError"
+      color="red darken-4"
+      :timeout="4000">
+
+      {{ errorHandling.msg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="errorHandling.hasError = false">
+          Dismiss
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
+import SocialButton from "@/components/buttons/SocialButton";
 
 export default {
   name: 'SignIn',
+  components: { SocialButton },
   data: () => {
     return {
       formValid: false,
@@ -63,27 +73,60 @@ export default {
       fieldRules: [
         u => !!u || 'This field is required'
       ],
+
+      socialAccounts: {
+        github: {
+          text: 'Sign in with Github',
+          icon: 'fab fa-github',
+          color: 'black'
+        },
+        google: {
+          text: 'Sign in with Google',
+          icon: 'fab fa-google',
+          color: 'red darken-1'
+        },
+        facebook: {
+          text: 'Sign in with Facebook',
+          icon: 'fab fa-facebook-f ',
+          color: 'blue darken-1'
+        }
+      },
+
+      errorHandling: {
+        hasError: false,
+        msg: '',
+      }
     }
   },
   methods: {
     ...mapActions('modules/authentication', ['login']),
-    onSubmit () {
+    onSubmit() {
       this.login({
         username: this.username,
         password: this.password
       }).then((response) => {
-        console.log(response)
-      }).catch((e) => {
-        console.error(e)
+        this.$auth.redirect('home')
+      }).catch((error) => {
+        if (error.response) {
+          if (error.response.status === 403) {
+            this.errorHandling.hasError = true
+            this.errorHandling.msg = "Incorrect username or password."
+          }
+        }
       })
+    },
+    loginGithub() {
+      this.$auth.loginWith('github');
+    },
+    loginGoogle() {
+
+    },
+    loginFacebook() {
+
     }
   }
 }
 </script>
 
 <style scoped>
-.border-lay {
-  border-radius: 10px 0 0 10px;
-  border: none;
-}
 </style>

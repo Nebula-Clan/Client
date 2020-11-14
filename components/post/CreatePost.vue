@@ -1,82 +1,24 @@
 <template>
-  <v-card elevation="8">
+  <v-card elevation="2">
     <v-card-title>
       <v-icon class="pr-3">mdi-pencil</v-icon>
       New Post
     </v-card-title>
     <Editor @updateEditorContent="post.content=$event"/>
-    <v-divider></v-divider>
+    <v-divider class="primary"></v-divider>
     <v-row class="px-4">
-      <v-col cols="5">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-image</v-icon>
-            </v-btn>
-          </template>
-          <span>Add image</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-sticker-emoji</v-icon>
-            </v-btn>
-          </template>
-          <span>Add emoji</span>
-        </v-tooltip>
-      </v-col>
-      <v-col cols="5">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-help-circle</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a question</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-newspaper</v-icon>
-            </v-btn>
-          </template>
-          <span>Create an article</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-poll</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a poll</span>
-        </v-tooltip>
-      </v-col>
-      <v-col class="text-right" cols="2">
+      <v-col>
         <v-dialog
           v-model="dialog"
           persistent
           max-width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              outlined
+              color="primary"
               v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-send</v-icon>
+              v-on="on">
+              publish
             </v-btn>
           </template>
           <v-card>
@@ -86,49 +28,89 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      filled
-                      v-model="post.title"
-                      label="Title*"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-textarea
-                      filled
-                      v-model="post.description"
-                      name="input-7-4"
-                      label="Description*"
-                      value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-                    ></v-textarea>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-file-input
-                      filled
-                      accept="image/png, image/jpeg, image/bmp"
-                      v-model="post.headerImage"
-                      show-size
-                      prepend-icon="mdi-camera"
-                      label="Select post cover"
-                      truncate-length="30"
-                    ></v-file-input>
-                  </v-col>
+                  <v-form class="publish-form" v-model="formValid" @submit.prevent="publish">
+                    <v-col cols="12">
+                      <v-text-field
+                        outlined
+                        v-model="post.title"
+                        :rules="titleRules"
+                        counter
+                        label="Title">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        outlined
+                        v-model="post.description"
+                        :rules="descRules"
+                        counter
+                        auto-grow
+                        label="Description"
+                      ></v-textarea>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-file-input
+                        outlined
+                        accept="image/png, image/jpeg, image/bmp"
+                        v-model="post.headerImage"
+                        show-size
+                        prepend-icon="mdi-camera"
+                        label="Select post cover"
+                        truncate-length="30"
+                      ></v-file-input>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field outlined
+                                    @input="recommend"
+                                    v-model="hashtag"
+                                    label="Up to 5 hashtags"
+                                    @change="addHashtags">
+                      </v-text-field>
+                      <div v-if="suggestions.length > 0">
+                        <span>Suggestion</span>
+                        <v-chip
+                          class="ma-1"
+                          small
+                          @click="setHashtag(item.text)"
+                          :key="i"
+                          v-for="(item, i) in suggestions">
+                          {{ item.text }}
+                        </v-chip>
+                      </div>
+
+                      <div
+                        class="my-2">
+                        <v-chip
+                          outlined
+                          close
+                          @click:close="deleteHashtag(i)"
+                          class="ma-1"
+                          :key="i"
+                          :color="chipsColors[i]"
+                          v-for="(tag, i) in this.post.hashtags">
+                          #{{tag}}
+                        </v-chip>
+                      </div>
+                    </v-col>
+                  </v-form>
                 </v-row>
               </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="blue darken-1"
+                outlined
+                color="error"
                 text
                 @click="dialog = false">
                 Close
               </v-btn>
               <v-btn
-                color="blue darken-1"
+                outlined
+                :disabled="!formValid"
+                color="primary"
                 text
-                @click="onSubmit()">
+                @click="publish">
                 Create
               </v-btn>
             </v-card-actions>
@@ -141,12 +123,15 @@
 
 <script>
 import Editor from '@/components/post/Editor'
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'CreatePost',
   data: () => ({
     dialog: false,
+    formValid: false,
+    hashtag: '',
+    suggestions: [],
     post: {
       title: '',
       description: '',
@@ -154,24 +139,64 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: undefined,
-    }
+      hashtags: []
+    },
+    titleRules: [
+      t => !!t || 'Title is required',
+      t => t.length <= 50 || 'Max length is 50 characters'
+    ],
+    descRules: [
+      t => !!t || 'Description is required',
+      t => t.length <= 750 || 'Max length is 750 characters'
+    ],
+    chipsColors: [
+      'blue', 'red', 'green', 'purple', 'orange'
+    ]
   }),
   components: {
     Editor
   },
   methods: {
     ...mapActions('modules/post', ['createPost']),
-    onSubmit () {
+    publish() {
       this.createPost(this.post).then((response) => {
         console.log(response)
+        this.$auth.redirect('home')
       }).catch((e) => {
         console.error(e)
       })
+    },
+    addHashtags() {
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      if (this.post.hashtags.length < 5) {
+        this.post.hashtags.push(hashtagStr);
+      }
+      this.hashtag = '';
+    },
+    recommend() {
+      const hashtagStr = this.hashtag.replace(/ /g, '');
+      this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
+        response => {
+          this.suggestions = response.hashtags
+        }
+      ).catch();
+    },
+    setHashtag(item) {
+      this.hashtag = '';
+      this.post.hashtags.pop();
+      this.post.hashtags.push(item);
+      this.suggestions = [];
+    },
+    deleteHashtag(index) {
+      this.post.hashtags.splice(index, 1);
     }
   }
 }
 </script>
 
 
-<style scoped>
+<style lang="scss" scoped>
+.publish-form {
+  width: 100%;
+}
 </style>

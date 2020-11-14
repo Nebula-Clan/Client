@@ -6,13 +6,13 @@
     </v-card-title>
     <v-textarea
       auto-grow
-      class="pa-2"
+      class="px-2"
       clearable
       label="Quick post"
       name="input-7-4"
       outlined>
     </v-textarea>
-    <v-divider></v-divider>
+    <v-divider class="primary"></v-divider>
     <v-row class="px-4">
       <v-col cols="6">
         <v-tooltip bottom>
@@ -69,7 +69,7 @@
 
 <script>
 export default {
-  name: 'write.component'
+  name: 'Write'
 }
 </script>
 

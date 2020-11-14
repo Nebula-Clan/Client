@@ -16,14 +16,13 @@
       <br>
       <PostQuickView
         v-for="(post, i) in posts" :key="i" :post="post" :author="author"/>
-
     </v-col>
     <v-col
       cols="12"
       lg="2"
       md="3"
       sm="3">
-      <User/>
+      <User :user="currentUser"/>
       <br>
       <Communities/>
     </v-col>
@@ -49,17 +48,16 @@ export default {
   data() {
     return {
       posts: null,
-      author: null
+      author: null,
+      currentUser: this.$auth.user
     }
   },
   mounted() {
-    const data = new FormData()
-    data.append('user_id', '9')
-    this.$axios.post('/api/posts/get_user_posts', data)
+    this.$axios.get('/api/posts/get_user_posts?'+'username='+'had0007')
       .then((res) => {
-          this.posts = res.data.all_user_posts,
+          this.posts = res.data.all_user_posts
           this.author = res.data.author
-        }).catch()
+        }).catch();
   }
 }
 </script>

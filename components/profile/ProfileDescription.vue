@@ -21,8 +21,9 @@
                 </p>
             </v-avatar>
         </v-col>
-        <v-col cols="12" class="pb-0 ml-5">
-            <v-row>
+      <v-card class="pa-1" style="width: -moz-available">
+        <v-col cols="12">
+            <v-row class="d-flex justify-space-around">
                 <div class="text-h6">
                     {{ profile.nickname }}
                 </div>
@@ -41,6 +42,7 @@
                 {{ profile.description }}
             </div>
         </v-col>
+      </v-card>
     </v-row>
 </template>
 
