@@ -6,13 +6,13 @@
                 <ProfileDescription/>
             </v-col>
             <v-col cols="12" lg="6" sm="12">
-                <v-tabs style="border-radius:2px" class="mb-4">
-                    <v-tab @click="switchToPosts">Posts</v-tab>
-                    <v-tab @click="switchToComments">Comments</v-tab>
-                    <v-tab @click="switchToLikes">Likes</v-tab>
+                <v-tabs style="border-radius:2px" class="tab-stick mb-4" v-model="selectedTab">
+                    <v-tab @click="switchToPosts" :key="1" >Posts</v-tab>
+                    <v-tab @click="switchToComments" :key="2" >Comments</v-tab>
+                    <v-tab @click="switchToLikes" :key="3" >Likes</v-tab>
                 </v-tabs>
-                <v-container class="ml-0 py-0" v-for="(object, index) in getComponentObjects" :key="index">
-                    <component :is="comp" v-bind="componentArgs(index)"> </component>
+                <v-container class="ml-0 pa-0" v-for="(object, index) in getComponentObjects" :key="index">
+                    <component :is="comp" v-bind="componentArgs(index)" @hook:mounted="countChild"> </component>
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
@@ -36,8 +36,12 @@ export default {
         return {
             n:10,
             model: 0,
+            username: '',
+            selectedTab: 0,
             comp: ProfilePosts,
-            componentObjects: []
+            componentObjects: [],
+            numberOfChildRendred: 0,
+            hash: ''
         }
     },
     computed: {
@@ -56,18 +60,43 @@ export default {
         }
     },
     created() {
-        this.getProfileInfo(this.$route.params.username)
+        this.username = this.$route.params.username
+        console.log(this.$route)
+        this.getProfileInfo(this.username)
+        let query = this.$route.query.show
+        this.switchToProperTab(query)
         console.log(this.$route.params.username)
+        this.hash = this.$route.hash
     },
     methods: {
         ...mapActions('modules/profile/profileInfo', ['getProfileInfo']),
+        ...mapActions('modules/profile/profilePosts', ['getProfilePosts']),
+        ...mapActions('modules/profile/profileComments', ['getProfileComments']),
+        ...mapActions('modules/profile/profileLikes', ['getProfileLikes']),
+        switchToProperTab(query) {
+            if (query) {
+                if (query === 'comments') {
+                    this.selectedTab = 1
+                    this.switchToComments()
+                    return
+                } else if (query === 'likes') {
+                    this.selectedTab = 2
+                    this.switchToLikes()
+                    return
+                }
+            } 
+            this.switchToPosts()
+        },
         switchToPosts() {
+            this.getProfilePosts(this.username)
             this.comp = ProfilePosts
         },
         switchToComments() {
+            this.getProfileComments(this.username)
             this.comp = ProfileComments
         },
         switchToLikes() {
+            this.getProfileLikes(this.username)
             this.comp = ProfileLikes
         },
         componentArgs(index) {
@@ -87,6 +116,17 @@ export default {
         },
         getComponentObjectById(id) {
             return this.componentObjects[id]
+        },
+        setHash(hash) {
+            if (hash) {
+                location.href = hash
+            }
+        },
+        countChild() {
+            this.numberOfChildRendred++
+            if (this.numberOfChildRendred == this.componentObjects.length) {
+                setTimeout(() => {this.setHash(this.hash)}, 1)
+            }
         }
     }
 }
@@ -94,4 +134,11 @@ export default {
 
 <style scoped>
 
+
+.tab-stick {
+    top: 0px;
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 5;
+}
 </style>

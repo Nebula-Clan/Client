@@ -1,33 +1,15 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="vCardWidth">
+            <v-card elevation="24" :min-width="postWidth">
                 <v-container>
                     <v-card-title>
-                        {{ likedObj.getLikeOwnerUsername() }} <v-icon class="mx-1" color="red lighten-1">mdi-heart</v-icon> post ahmad in community zed
+                        <!-- {{ likedObj.getLikeOwnerUsername() }} -->
+                        Hadi Sheikhi Liked post Amir
                     </v-card-title>
-                    <v-row>
-                        <v-card class="post mr-7 ml-2">
-                            <v-list-item three-line>
-                                <v-list-item-avatar tile size="80" color="grey">
-                                        <v-img src="/images/Back3.jpg"></v-img>
-                                </v-list-item-avatar>
-
-                                <v-list-item-content>
-                                    <div class="overline mb-3">
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus sint reprehenderit sapiente quisquam ad. Iusto officiis vitae assumenda soluta vel?
-                                    </div>
-                                    <v-list-item-subtitle>
-                                        <v-row class="ml-1">
-                                            <p v-for="hashtag in hashtags" :key="hashtag" class="mx-1 blue--text text--lighten-1">
-                                                {{ hashtag }}
-                                            </p>
-                                        </v-row>
-                                    </v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-card>
-                    </v-row>
+                    <v-container>
+                        <component :is="comp" v-bind="componentArgument()" class="reply"> </component>
+                    </v-container>
                 </v-container>
             </v-card>
         </v-row>
@@ -36,11 +18,15 @@
 
 
 <script>
+import PostReplyComp from './PostReplyComp'
+import CommentComp from './CommentComp'
+
 export default {
     props: {
         likedObj: {
             required: true,
-            type: Object
+            type: Object,
+            comp: PostReplyComp
         }
     },
     data: () => {
@@ -56,18 +42,69 @@ export default {
                 "#barbar",
                 "#loca",
                 '#toca'
-            ]
+            ],
+            isMounted: false,
+            hack: 0
         }
+    },
+    computed: {
+        postWidth() {
+            this.hack
+            if (!this.isMounted) {
+                return;
+            }
+            return this.$refs.VCardParent.clientWidth
+        }
+    },
+    created() {
+        this.setComponentObject()
     },
     mounted() {
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
+        this.isMounted = true
+        window.addEventListener('resize', this.hackWidth, { passive: true })
+        this.hackWidth()
+    },
+    methods: {
+        likeComment() {
+            if (!this.like) {
+                this.like = true
+                this.dislike = false
+            } else {
+                this.like = false
+                this.dislike = true
+            }
+        },
+        hackWidth() {
+            this.hack++
+        },
+        setComponentObject() {
+            if (this.likedObj.typeOfLike === 'Post') {
+                this.comp = PostReplyComp
+            } else {
+                this.comp = CommentComp
+            }
+        },
+        componentArgument() {
+            this.reply = this.likedObj.likeReply
+            if (this.likedObj.typeOfLike === 'Post') {
+                return {
+                    post: this.reply
+                }
+            } else {
+                return {
+                    comment: this.reply,
+                    isReply: true
+                }
+            }
+        }
     }
 }
 </script>
 
 <style scoped>
 
-.post {
-    border: 2px white solid;
+.reply {
+    border: 1px white solid;
 }
 </style>

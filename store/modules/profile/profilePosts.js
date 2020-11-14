@@ -1,8 +1,9 @@
-import axious from 'axios'
+import axios from 'axios'
 import { Post } from './classes/post'
 
 const state = () => ({
-    posts: [new Post(), ]
+    isReqSended: false,
+    posts: []
 })
   
 const getters = {
@@ -12,11 +13,34 @@ const getters = {
 }
   
 const mutations = {
-
+    parsePostAndAppend(state, postJsonArray) {
+        console.log(postJsonArray)
+        postJsonArray.forEach(postJson => {
+            let post = new Post()
+            post.parsePostFromJson(postJson)
+            console.log(post)
+            state.posts.push(post)
+        });
+    },
+    sendedReq(state) {
+        state.isReqSended = true
+    }
 }
   
 const actions = {
-
+    getProfilePosts({ commit, state }, username) {
+        if (state.isReqSended) {
+            return
+        }
+        this.$axios.get('api/posts/get_user_posts?username=' + username)
+        .then(function ({ data }) {
+            commit('sendedReq')
+            commit('parsePostAndAppend', data.all_user_posts)
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+    }
 }
 
 
