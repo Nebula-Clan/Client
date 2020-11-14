@@ -1,47 +1,22 @@
 <template>
     <v-container fluid>
-        <v-card elevation="2">
+        <v-card elevation="2" max-width="400">
             <v-row justify="center" align="center">
-                    <v-card-title class="text-center">
-                            12K People Liked this Post
-                    </v-card-title>
+                <v-card-title class="text-center">
+                        Liked By:
+                </v-card-title>
                 <v-card-text>
                     <v-divider></v-divider>
                     <v-virtual-scroll
                         :bench="10"
-                        :items="items"
+                        :items="profiles"
+                        width="400"
                         max-height="450"
                         item-height="90"
                         class="px-15"
                     >
                             <template v-slot:default="{ item }">
-                                <v-container>
-                                    <v-list-item :class="{ followers: item.isFollower }">
-                                        <v-list-item-avatar size="50">
-                                            <v-img src="/images/LL1.jpg" >
-                                            <template v-slot:placeholder>
-                                                <v-row
-                                                class="fill-height ma-0"
-                                                align="center"
-                                                justify="center"
-                                                >
-                                                <v-progress-circular
-                                                    indeterminate
-                                                    color="grey lighten-5"
-                                                ></v-progress-circular>
-                                                </v-row>
-                                            </template>
-                                            </v-img>
-                                        </v-list-item-avatar>
-                                        <v-list-item-content class="ml-1">
-                                            <v-list-item-title v-text="item.name"></v-list-item-title>
-                                        </v-list-item-content>
-                                        <v-list-item-action>
-                                            <v-btn v-if="!item.isFollower" class="px-5" color="primary" small> Follow </v-btn>
-                                            <v-btn v-else color="error" small outlined> Unfollow </v-btn>
-                                        </v-list-item-action>
-                                    </v-list-item>
-                                </v-container>
+                                <ProfileCard :profile="item" />
                             </template>
                     </v-virtual-scroll>
                 </v-card-text>
@@ -51,36 +26,68 @@
 </template>
 
 <script>
+import ProfileCard from './ProfileCard'
+
   export default {
+    props: {
+        profiles: {
+            type: Array,
+            required: true
+        }
+    },
     data: () => ({
-      isLoading: false,
-      items: [],
-      model: null,
-      search: null,
-      tab: null,
-      index: 0,
-      isActive: false
+        isLoading: false,
+        model: null,
+        search: null,
+        tab: null,
+        index: 0,
+        isActive: false,
+        hasError: false,
+        isImageLoaded: false,
+        errorTime: null
     }),
     computed: {
         length () {
             return 7000
+        },
+        textClassForError() {
+            if (this.hasError && (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
+                return 'text-h6'
+            }
+            return 'text-h5'
+        },
+        classForImageError() {
+            if (this.hasError) {
+                return {
+                    'background-color': '#0D47A1'
+                }
+            }
+            return ''
         }
     },
     methods: {
-        increase() {
-            for (let i = 0; i < 2; i++) {
-                if (i < 3){
-                this.items.push({'name' : 'per' + i, 'isFollower' : true})
-                } else {
-                    this.items.push({'name' : 'per' + i, 'isFollower' : false})
-                }
+        getProfileImageUrl(item) {
+            return this.$axios.defaults.baseURL + item.profileImageUrl
+        },
+        handleImagError(event) {
+            console.log('error')
+            if (!this.errorTime) {
+                this.errorTime = setTimeout(() => {
+                    this.hasError = true
+                }, 6000)
+            }
+        },
+        imageLoaded(event) {
+            console.log('image loaded')
+            this.isImageLoaded = true
+            if (this.errorTime) {
+                clearTimeout(this.errorTime)
+                this.errorTime = null
             }
         }
     },
     mounted() {
         this.isLoading = true
-
-        this.increase()
 
         this.isLoading = false
     },

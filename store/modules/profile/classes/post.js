@@ -11,7 +11,10 @@ class Post {
     }
 
     set postHashtags(hashtags) {
-        this._hashtags = hashtags
+        if (!this._hashtags) {
+            this._hashtags = []
+        }
+        this._hashtags.push(hashtags)
     }
 
     set postImageURL(postImgUrl) {
@@ -39,8 +42,7 @@ class Post {
     }
 
     get postHashtags() {
-        return ['pe1', 'no_more', 'yeeeeeees', 'i_know', 'idk', ':D']
-        // return this._hashtags
+        return this._hashtags
     }
 
     get postImageURL() {
@@ -66,7 +68,10 @@ class Post {
         this.postDescription = json.description
         this.postAuthor = json.author.first_name
         this.postDescription = json.description
-        this.isLiked = json.liked_by_viewer
+        this.isLiked = json.is_liked
+        json.hashtags.forEach((item) => {
+            this.postHashtags = item.text
+        })
     }
 }
 

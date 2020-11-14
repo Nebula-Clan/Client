@@ -31,7 +31,7 @@
                                 <v-icon>mdi-flag</v-icon>
                             </v-list-item>
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="likesOverlay = !likesOverlay">ListOfLikes</v-list-item-title >
+                                <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
                                 <v-icon>mdi-heart</v-icon>
                             </v-list-item>
                             <v-list-item>
@@ -56,7 +56,7 @@
                     :value="likesOverlay"
                     opacity="0.8"
                     >
-                        <ProfileListOfPostLikes @cancel="likesOverlay = !likesOverlay" />
+                        <ProfileListOfPostLikes @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
                     </v-overlay>
                 </v-card-title>
                 <PostComp :post="post" />
@@ -78,6 +78,8 @@
 
 
 <script>
+import { mapActions } from 'vuex'
+
 import ProfileReport from './ProfileReport'
 import ProfileListOfPostLikes from './ProfileListOfPostLikes'
 import PostComp from './PostComp'
@@ -97,12 +99,13 @@ export default {
             likesOverlay: false,
             zIndex: 1,
             isMounted: false,
-            hack: 0
+            hack: 0,
+            listOfProfileLikedPost: []
         }
     },
     computed: {
         likedPost() {
-            if (this.post.isLiked || !this.dislike && (this.liked || this.like)) {
+            if (!this.dislike && (this.post.isLiked || this.like)) {
                 return 'pink'
             } else {
                 return ''
@@ -128,6 +131,9 @@ export default {
     mounted() {
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
         this.isMounted = true
+        if (this.post.isLiked) {
+            this.like = true
+        }
         window.addEventListener('resize', this.hackWidth, { passive: true })
         this.hackWidth()
     },
@@ -135,13 +141,38 @@ export default {
         window.removeEventListener('resize', this.hackWidth, { passive: true })
     },
     methods: {
+        ...mapActions('modules/profile/profileLikes', ['getProfilesThatLikedPostByID']),
+        ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
+        showListOfLikes() {
+            this.getProfilesThatLikedPostByID(this.postID)
+            .then((res) => {
+                console.log(res)
+                this.listOfProfileLikedPost = res
+                this.likesOverlay = !this.likesOverlay
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
         likePost() {
             if (!this.like) {
-                this.like = true
-                this.dislike = false
+                this.submitLikeAtPostWithID(this.postID)
+                .then(({ data }) => {
+                    this.like = true
+                    this.dislike = false
+                })
+                .catch((error) => {
+
+                })
             } else {
-                this.like = false
-                this.dislike = true
+                this.deleteLikeAtPostWithID(this.postID)
+                .then(({ data }) => {
+                    this.like = false
+                    this.dislike = true
+                })
+                .catch((error) => {
+
+                })
             }
         },
         hackWidth() {

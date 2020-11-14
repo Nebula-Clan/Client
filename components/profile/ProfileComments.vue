@@ -57,6 +57,8 @@
 import CommentComp from './CommentComp'
 import PostReplyComp from './PostReplyComp'
 
+import { mapActions } from 'vuex'
+
 export default {
     props: {
         comment: {
@@ -79,7 +81,7 @@ export default {
     },
     computed: {
         likedComment() {
-            if (this.comment.isLiked || !this.dislike && (this.comment.liked || this.like)) {
+            if (!this.dislike && (this.comment.isLiked || this.like)) {
                 return 'pink'
             } else {
                 return ''
@@ -116,19 +118,35 @@ export default {
         this.setComponentObject()
     },
     mounted() {
+        if (this.comment.isLiked) {
+            this.like = this.comment.isLiked
+        }
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
         this.isMounted = true
         window.addEventListener('resize', this.hackWidth, { passive: true })
         this.hackWidth()
     },
     methods: {
+        ...mapActions('modules/profile/profileLikes', ['submitLikeAtCommentWithID', 'deleteLikeAtCommentWithID']),
         likeComment() {
             if (!this.like) {
-                this.like = true
-                this.dislike = false
+                this.submitLikeAtCommentWithID(this.comment.commentID)
+                .then(({ data }) => {
+                    this.like = true
+                    this.dislike = false
+                })
+                .catch((error) => {
+
+                })
             } else {
-                this.like = false
-                this.dislike = true
+                this.deleteLikeAtCommentWithID(this.comment.commentID)
+                .then(({ data }) => {
+                    this.like = false
+                    this.dislike = true
+                })
+                .catch((error) => {
+
+                })
             }
         },
         hackWidth() {

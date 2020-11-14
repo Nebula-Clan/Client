@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-img :src="getProfileBanner" :eager="true" @error="defaultBanner" max-height="450">
+            <v-img :src="getProfileBanner" :lazy-src="'/images/login-background.jpg'" :eager="true" @error="defaultBanner" max-height="450">
                 <template v-slot:placeholder>
                     <v-row
                     class="fill-height ma-0"
@@ -100,20 +100,26 @@ export default {
         },
         watchReqUntilCompleted() {
             if (this.getStatusOfReq) {
+                console.log('req competed')
                 this.isCompleted = true
             }
+            console.log('outside of req')
             return this.isCompleted
         },
         getProfileBanner() {
             if (this.watchReqUntilCompleted && this.hasError) {
+                console.log('banner error')
                 return this.bannerImageForError
             }
+            console.log('good')
             return this.$axios.defaults.baseURL + this.profile.profileBannerUrl
         }
     },
     methods: {
         defaultBanner() {
+            console.log('bad')
             if (this.isCompleted) {
+                console.log('we fucked up')
                 this.hasError = true
             }
         }

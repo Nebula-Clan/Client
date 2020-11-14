@@ -1,7 +1,7 @@
 <template>
     <v-row :class="[marginSize, avatar]" max-width="250">
         <v-col cols="12" >
-            <v-avatar :size="avatarSize" class="avatar-border">
+            <v-avatar :size="avatarSize" class='avatar-border' :eager="true" :style="classForImageError">
                 <v-img v-if="!showImageByName" :src="getProfileImage" @error="defaultImage">
                     <template v-slot:placeholder>
                         <v-row
@@ -16,8 +16,8 @@
                         </v-row>
                     </template>
                 </v-img>
-                <p v-else>
-                    sdf
+                <p :class="[textClassForError, 'mt-3']" v-else>
+                    {{ firstCharOfProfileNickname }}
                 </p>
             </v-avatar>
         </v-col>
@@ -95,6 +95,23 @@ export default {
             } else if (this.$vuetify.breakpoint.xs) {
                 return 'ml-2'
             }
+        },
+        classForImageError() {
+            if (this.showImageByName) {
+                return {
+                    'background-color': '#0D47A1'
+                }
+            }
+            return ''
+        },
+        textClassForError() {
+            if (this.showImageByName && (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
+                return 'text-h3'
+            }
+            return 'text-h2'
+        },
+        firstCharOfProfileNickname() {
+            return this.profile.nickname.slice(0, 1).toUpperCase()
         },
         followStatus() {
             if (this.follow) {

@@ -32,7 +32,6 @@ const actions = {
         .then(({ data }) => {
             commit('parseReq', data)
             commit('sendedReq', true)
-            console.log(data)
         })
         .catch((error) => {
             console.log(error)

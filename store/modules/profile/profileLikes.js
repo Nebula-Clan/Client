@@ -1,6 +1,7 @@
 import axious from 'axios'
 import { Like } from './classes/like'
 import { Post } from './classes/post'
+import { Profile } from './classes/profile'
 import { Comment } from './classes/comment'
 
 const state = () => ({
@@ -60,6 +61,55 @@ const actions = {
         })
         .catch(function (error) {
             console.log(error)
+        })
+    },
+    getProfilesThatLikedPostByID({ commit }, postID) {
+        return this.$axios.get('api/likes/post/get', {
+            params: {
+                'id': postID
+            }
+        })
+        .then(({ data }) => {
+            let users = data.liked_users
+            let profiles = []
+            users.forEach((profileJson) => {
+                let profile = new Profile()
+                profile.parseFromJson(profileJson)
+                profiles.push(profile)
+            })
+            return profiles
+        })
+        .catch((error) => {
+            throw error
+        })
+    },
+    getProfilesThatLikedCommentByID({ commit }, commentID) {
+
+    },
+    submitLikeAtPostWithID({ commit }, postID) {
+        return this.$axios.post('api/likes/post/submit', {
+            'post_id' : postID
+        })
+    },
+    deleteLikeAtPostWithID({ commit }, postID) {
+        let data = {"id" : postID}
+        return this.$axios.$request({
+            url: 'api/likes/post/delete',
+            method: 'delete',
+            data: data
+        })
+    },
+    submitLikeAtCommentWithID({ commit }, commentID) {
+        return this.$axios.post('api/likes/comment/submit', {
+            "comment_id": commentID
+        })
+    },
+    deleteLikeAtCommentWithID({ commit }, commentID) {
+        let data = {"id" : commentID}
+        return this.$axios.$request({
+            url: 'api/likes/comment/delete',
+            method: 'delete',
+            data: data
         })
     }
 }

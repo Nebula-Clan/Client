@@ -76,6 +76,8 @@ class Profile {
         this.profileID = json.id
         this.nickname = json.nickname
         this.username = json.username
+        this.firstname = json.first_name
+        this.lastname = json.last_name
         this.description = json.biology
         this.profileImageUrl = json.profile_picture
         this.profileBannerUrl = json.banner_picture

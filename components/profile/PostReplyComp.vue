@@ -30,12 +30,12 @@
                         nuxt
                         :key="i"
                         v-for="(tag, i) in post.postHashtags"
-                        :to="'/search/hashtag?keyword=' + tag.replace('#', '') + '&sort=latest'"
+                        :to="'/search/hashtag?keyword=' + tag + '&sort=latest'"
                         outlined
                         class="my-1 mr-2"
                         :color="chipsColors[i]"
                         >
-                        {{tag}}
+                        {{ '#' + tag }}
                         </v-chip>
                     </div>
                 </v-list-item-subtitle>
