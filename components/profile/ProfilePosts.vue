@@ -56,7 +56,7 @@
                     :value="likesOverlay"
                     opacity="0.8"
                     >
-                        <ProfileListOfPostLikes @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+                        <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
                     </v-overlay>
                 </v-card-title>
                 <PostComp :post="post" />
@@ -81,7 +81,7 @@
 import { mapActions } from 'vuex'
 
 import ProfileReport from './ProfileReport'
-import ProfileListOfPostLikes from './ProfileListOfPostLikes'
+import OverlayListOfProfile from './OverlayListOfProfile'
 import PostComp from './PostComp'
 
 export default {
@@ -97,7 +97,7 @@ export default {
             dislike: false,
             reportOverlay: false,
             likesOverlay: false,
-            zIndex: 1,
+            zIndex: 99,
             isMounted: false,
             hack: 0,
             listOfProfileLikedPost: []

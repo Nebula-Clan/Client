@@ -11,8 +11,12 @@
                         </template>
                         <v-list elevation="24">
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="overlay = !overlay">Report</v-list-item-title >
+                                <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
                                 <v-icon style="cursor: pointer">mdi-flag</v-icon>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
+                                <v-icon>mdi-heart</v-icon>
                             </v-list-item>
                             <v-list-item>
                                 <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
@@ -23,10 +27,18 @@
 
                     <v-overlay
                     :z-index="zIndex"
-                    :value="overlay"
+                    :value="reportOverlay"
                     opacity="0.8"
                     >
-                        <ProfileReport @cancel="overlay = !overlay" />
+                        <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                    </v-overlay>
+
+                    <v-overlay
+                    :z-index="zIndex"
+                    :value="likesOverlay"
+                    opacity="0.8"
+                    >
+                        <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
                     </v-overlay>
                 </v-card-title>
                 <v-container>
@@ -56,6 +68,7 @@
 <script>
 import CommentComp from './CommentComp'
 import PostReplyComp from './PostReplyComp'
+import OverlayListOfProfile from './OverlayListOfProfile'
 
 import { mapActions } from 'vuex'
 
@@ -70,13 +83,15 @@ export default {
         return {
             like: false,
             dislike: false,
-            overlay: false,
-            zIndex: 1,
+            reportOverlay: false,
+            likesOverlay: false,
+            zIndex: 99,
             vCardWidth: '0',
             isMounted: false,
             hack: 0,
             comp: CommentComp,
-            reply: ''
+            reply: '',
+            listOfProfileLikedPost: []
         }
     },
     computed: {
@@ -128,6 +143,18 @@ export default {
     },
     methods: {
         ...mapActions('modules/profile/profileLikes', ['submitLikeAtCommentWithID', 'deleteLikeAtCommentWithID']),
+        ...mapActions('modules/profile/profileLikes', ['getProfilesThatLikedCommentByID']),
+        showListOfLikes() {
+            this.getProfilesThatLikedCommentByID(this.comment.commentID)
+            .then((res) => {
+                console.log(res)
+                this.listOfProfileLikedPost = res
+                this.likesOverlay = !this.likesOverlay
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
         likeComment() {
             if (!this.like) {
                 this.submitLikeAtCommentWithID(this.comment.commentID)

@@ -1,6 +1,11 @@
 <template>
     <v-container fluid>
         <v-card elevation="2" max-width="400">
+            <v-container class="py-0">
+                <v-row justify="end" align="end">
+                    <v-icon class="ml-auto" @click="cancel">mdi-close</v-icon>
+                </v-row>
+            </v-container>
             <v-row justify="center" align="center">
                 <v-card-title class="text-center">
                         Liked By:
@@ -66,6 +71,9 @@ import ProfileCard from './ProfileCard'
         }
     },
     methods: {
+        cancel() {
+            this.$emit('cancel')
+        },
         getProfileImageUrl(item) {
             return this.$axios.defaults.baseURL + item.profileImageUrl
         },

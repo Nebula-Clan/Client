@@ -84,7 +84,24 @@ const actions = {
         })
     },
     getProfilesThatLikedCommentByID({ commit }, commentID) {
-
+        return this.$axios.get('api/likes/comment/get', {
+            params: {
+                'id': commentID
+            }
+        })
+        .then(({ data }) => {
+            let users = data.liked_users
+            let profiles = []
+            users.forEach((profileJson) => {
+                let profile = new Profile()
+                profile.parseFromJson(profileJson)
+                profiles.push(profile)
+            })
+            return profiles
+        })
+        .catch((error) => {
+            throw error
+        })
     },
     submitLikeAtPostWithID({ commit }, postID) {
         return this.$axios.post('api/likes/post/submit', {
