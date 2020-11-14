@@ -1,7 +1,8 @@
 <template>
     <v-container fluid>
         <v-row>
-            <v-img :src="getProfileBanner" :lazy-src="'/images/login-background.jpg'" :eager="true" @error="defaultBanner" max-height="450">
+            <v-img :src="getProfileBanner" :lazy-src="'/images/login-background.jpg'"
+             :eager="true" @load="imageLoaded" max-height="450">
                 <template v-slot:placeholder>
                     <v-row
                     class="fill-height ma-0"
@@ -77,7 +78,8 @@ export default {
         return {
             bannerImageForError: '/images/login-background.jpg',
             hasError: false,
-            isCompleted: false
+            isCompleted: false,
+            errorTime: null
         }
     },
     computed: {
@@ -100,27 +102,26 @@ export default {
         },
         watchReqUntilCompleted() {
             if (this.getStatusOfReq) {
-                console.log('req competed')
+                this.errorTime = setTimeout(() => {
+                    this.hasError = true
+                }, 10000)
                 this.isCompleted = true
             }
-            console.log('outside of req')
             return this.isCompleted
         },
         getProfileBanner() {
-            if (this.watchReqUntilCompleted && this.hasError) {
-                console.log('banner error')
+            this.watchReqUntilCompleted
+            if (this.hasError) {
                 return this.bannerImageForError
             }
-            console.log('good')
             return this.$axios.defaults.baseURL + this.profile.profileBannerUrl
         }
     },
     methods: {
-        defaultBanner() {
-            console.log('bad')
-            if (this.isCompleted) {
-                console.log('we fucked up')
-                this.hasError = true
+        imageLoaded(event) {
+            if (this.errorTime) {
+                clearTimeout(this.errorTime)
+                this.errorTime = null
             }
         }
     }

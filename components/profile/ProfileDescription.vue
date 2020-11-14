@@ -2,7 +2,7 @@
     <v-row :class="[marginSize, avatar]" max-width="250">
         <v-col cols="12" >
             <v-avatar :size="avatarSize" class='avatar-border' :eager="true" :style="classForImageError">
-                <v-img v-if="!showImageByName" :src="getProfileImage" @error="defaultImage">
+                <v-img v-if="!showImageByName" :src="getProfileImage" @load="imageLoaded">
                     <template v-slot:placeholder>
                         <v-row
                         class="fill-height ma-0"
@@ -55,7 +55,8 @@ export default {
             followLoading: false,
             isCompleted: false,
             hasError: false,
-            showImageByName: false
+            showImageByName: false,
+            errorTime: null
         }
     },
     computed: {
@@ -129,13 +130,17 @@ export default {
         },
         watchReqUntilCompleted() {
             if (this.getStatusOfReq) {
+                console.log('done')
+                this.errorTime = setTimeout(() => {
+                    this.hasError = true
+                }, 8000)
                 this.isCompleted = true
             }
             return this.isCompleted
         },
         getProfileImage() {
-            console.log(this.profile.profileImageUrl)
-            if (this.watchReqUntilCompleted && this.hasError) {
+            this.watchReqUntilCompleted
+            if (this.hasError) {
                 this.showImageByName = true
                 return ''
             }
@@ -150,9 +155,10 @@ export default {
                 this.followLoading = false
             }, 2000)
         },
-        defaultImage() {
-            if (this.isCompleted) {
-                this.hasError = true
+        imageLoaded(event) {
+            if (this.errorTime) {
+                clearTimeout(this.errorTime)
+                this.errorTime = null
             }
         }
     }

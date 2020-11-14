@@ -51,47 +51,9 @@ import ProfileCard from './ProfileCard'
         isImageLoaded: false,
         errorTime: null
     }),
-    computed: {
-        length () {
-            return 7000
-        },
-        textClassForError() {
-            if (this.hasError && (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
-                return 'text-h6'
-            }
-            return 'text-h5'
-        },
-        classForImageError() {
-            if (this.hasError) {
-                return {
-                    'background-color': '#0D47A1'
-                }
-            }
-            return ''
-        }
-    },
     methods: {
         cancel() {
             this.$emit('cancel')
-        },
-        getProfileImageUrl(item) {
-            return this.$axios.defaults.baseURL + item.profileImageUrl
-        },
-        handleImagError(event) {
-            console.log('error')
-            if (!this.errorTime) {
-                this.errorTime = setTimeout(() => {
-                    this.hasError = true
-                }, 6000)
-            }
-        },
-        imageLoaded(event) {
-            console.log('image loaded')
-            this.isImageLoaded = true
-            if (this.errorTime) {
-                clearTimeout(this.errorTime)
-                this.errorTime = null
-            }
         }
     },
     mounted() {
