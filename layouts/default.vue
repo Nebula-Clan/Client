@@ -28,7 +28,8 @@
             <v-btn
               @click="logout"
               color="error"
-              class="mt-5">logout</v-btn>
+              class="mt-5">logout
+            </v-btn>
           </v-row>
         </div>
       </v-list>
@@ -69,7 +70,8 @@
     <v-main>
       <nuxt>
       </nuxt>
-      <Snackbar></Snackbar>
+      <Snackbar/>
+      <GoUpFAB/>
     </v-main>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -93,9 +95,11 @@
 
 <script>
 import Snackbar from '~/components/shared/Snackbar.vue'
+import GoUpFAB from "@/components/shared/GoUpFAB";
+
 export default {
-  components: {Snackbar},
-  data () {
+  components: {GoUpFAB, Snackbar},
+  data() {
     return {
       clipped: false,
       drawer: false,
@@ -144,7 +148,7 @@ export default {
     }
   },
   methods: {
-    logout(){
+    logout() {
       this.$auth.logout();
       this.$auth.redirect('login')
     }
