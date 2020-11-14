@@ -133,7 +133,7 @@ export default {
                 console.log('done')
                 this.errorTime = setTimeout(() => {
                     this.hasError = true
-                }, 8000)
+                }, 12000)
                 this.isCompleted = true
             }
             return this.isCompleted

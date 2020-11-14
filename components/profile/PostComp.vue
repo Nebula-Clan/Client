@@ -1,19 +1,19 @@
 <template>
-    <v-card class="my-2 pa-1" elevation="2">
-      <v-row>
+    <v-container>
+      <v-row v-if="hasImage">
         <v-col class="mx-5 header-image">
           <img alt="image"
-              :src="getPostImage">
+              :src="getPostImage" @error="handleImageError">
         </v-col>
       </v-row>
 
       <v-row>
-        <v-col class="mx-5">
-          <p>{{ post.postDescription }}</p>
+        <v-col class="mx-5 pb-1">
+          <p class="mb-1">{{ post.postDescription }}</p>
         </v-col>
       </v-row>
 
-      <v-row>
+      <v-row v-if="hasHashtag">
         <v-col class="d-flex justify-center">
           <v-chip
             nuxt
@@ -28,7 +28,7 @@
           </v-chip>
         </v-col>
       </v-row>
-    </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -41,13 +41,25 @@ export default {
     },
     data() {
         return {
-            chipsColors: ['blue', 'red', 'green', 'purple', 'orange']
+            chipsColors: ['blue', 'red', 'green', 'purple', 'orange'],
+            hasImage: true
         }
     },
     computed: {
         getPostImage() {
             return this.$axios.defaults.baseURL + this.post.postImageURL
+        },
+        hasHashtag() {
+          if (!this.post.postHashtags || this.post.postHashtags.length == 0) {
+            return false
+          }
+          return true
         }
+    },
+    methods: {
+      handleImageError() {
+        this.hasImage = false
+      }
     }
 }
 </script>

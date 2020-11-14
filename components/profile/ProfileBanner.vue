@@ -104,7 +104,7 @@ export default {
             if (this.getStatusOfReq) {
                 this.errorTime = setTimeout(() => {
                     this.hasError = true
-                }, 10000)
+                }, 12000)
                 this.isCompleted = true
             }
             return this.isCompleted
