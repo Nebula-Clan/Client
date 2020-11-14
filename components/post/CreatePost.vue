@@ -60,6 +60,14 @@
                       ></v-file-input>
                     </v-col>
                     <v-col cols="12">
+                      <v-select
+                        v-model="post.community"
+                        :items="communities"
+                        label="Community"
+                        outlined
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="12">
                       <v-text-field outlined
                                     @input="recommend"
                                     v-model="hashtag"
@@ -88,7 +96,7 @@
                           :key="i"
                           :color="chipsColors[i]"
                           v-for="(tag, i) in this.post.hashtags">
-                          #{{tag}}
+                          #{{ tag }}
                         </v-chip>
                       </div>
                     </v-col>
@@ -106,6 +114,7 @@
                 Close
               </v-btn>
               <v-btn
+                :loading="isPostPublishing"
                 outlined
                 :disabled="!formValid"
                 color="primary"
@@ -124,6 +133,7 @@
 <script>
 import Editor from '@/components/post/Editor'
 import {mapActions} from 'vuex'
+import community from "@/store/modules/community/community";
 
 export default {
   name: 'CreatePost',
@@ -139,8 +149,12 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: null,
+      community: '',
       hashtags: []
     },
+    isPostPublishing: false,
+    communities: [],
+
     titleRules: [
       t => !!t || 'Title is required',
       t => t.length <= 50 || 'Max length is 50 characters'
@@ -156,9 +170,14 @@ export default {
   components: {
     Editor
   },
+  mounted() {
+    this.fetchCommunities();
+  },
   methods: {
     ...mapActions('modules/post', ['createPost']),
+    ...mapActions('modules/community/community', ['getAllUserCommunities']),
     publish() {
+      this.isPostPublishing = true;
       this.createPost(this.post).then((response) => {
         console.log(response)
         this.$auth.redirect('home')
@@ -166,6 +185,7 @@ export default {
         console.error(e)
       })
     },
+    // Hashtag
     addHashtags() {
       const hashtagStr = this.hashtag.replace(/ /g, '');
       if (this.post.hashtags.length < 5) {
@@ -189,6 +209,14 @@ export default {
     },
     deleteHashtag(index) {
       this.post.hashtags.splice(index, 1);
+    },
+    // Communities
+    fetchCommunities() {
+      this.getAllUserCommunities().then(({data}) => {
+        this.communities = data.communities.map((community) => community.name);
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   }
 }
