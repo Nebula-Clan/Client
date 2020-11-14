@@ -2,16 +2,16 @@
   <v-row class="px-10 py-5">
     <v-col
       cols="12"
-      lg="2"
-      md="3"
-      sm="3">
+      lg="1"
+      md="1"
+      sm="2">
 <!--      <Categories/>-->
     </v-col>
     <v-col
       cols="12"
-      lg="8"
-      md="6"
-      sm="6">
+      lg="10"
+      md="10"
+      sm="8">
       <PostView
         :post="post"
         :author="author"
@@ -22,9 +22,9 @@
     </v-col>
     <v-col
       cols="12"
-      lg="2"
-      md="3"
-      sm="3">
+      lg="1"
+      md="1"
+      sm="2">
 <!--      <User :user="this.$auth.user"/>-->
       <br>
 <!--      <Communities/>-->
