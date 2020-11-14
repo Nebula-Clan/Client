@@ -71,7 +71,11 @@ export default {
             url: '/api/auth/user',
             method: 'get',
             propertyName: 'user'
-          }
+          },
+          logout: {
+            url: '/api/auth/logout',
+            method: 'post'
+          },
         },
       },
       github: {
@@ -90,7 +94,8 @@ export default {
     },
     redirect: {
       home: '/feed',
-      login: '/login'
+      login: '/login',
+      logout: '/login'
     }
   },
 

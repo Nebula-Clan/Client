@@ -22,6 +22,15 @@
             <v-list-item-title v-text="item.title"/>
           </v-list-item-content>
         </v-list-item>
+        <div v-if="this.$auth.user" class="d-flex align-center">
+          <v-row align="center"
+                 justify="center">
+            <v-btn
+              @click="logout"
+              color="error"
+              class="mt-5">logout</v-btn>
+          </v-row>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -81,8 +90,10 @@
 </template>
 
 <script>
+import * as storage from "core-js";
+
 export default {
-  data () {
+  data() {
     return {
       clipped: false,
       drawer: false,
@@ -122,12 +133,18 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Django Community',
           to: '/community/Django'
-        }
+        },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
       title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    logout(){
+      this.$auth.logout();
+      this.$auth.redirect('login')
     }
   }
 }

@@ -107,11 +107,10 @@ export default {
       }).then((response) => {
         this.$auth.redirect('home')
       }).catch((error) => {
+        console.log(error.response);
         if (error.response) {
-          if (error.response.status === 403) {
-            this.errorHandling.hasError = true
-            this.errorHandling.msg = "Incorrect username or password."
-          }
+            this.errorHandling.hasError = true;
+            this.errorHandling.msg = error.response.data.error.message;
         }
       })
     },

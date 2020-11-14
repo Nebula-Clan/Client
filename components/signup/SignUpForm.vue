@@ -135,7 +135,7 @@ export default {
       }).catch((error) => {
         if (error.response) {
           this.errorHandling.hasError = true
-          this.errorHandling.msg = error.response.data.message
+          this.errorHandling.msg = error.response.data.error.message
         }
       })
     }
