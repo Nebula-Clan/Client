@@ -42,8 +42,8 @@
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
-    <v-row justify="center" align="center" v-if="hasButtonForClamp">
-        <p class="text-subtitle-2 blue--text text--darken-1 mb-0 more-cursor" @click="changeExpand">
+    <v-row justify="end" align="end" v-if="hasButtonForClamp">
+        <p class="text-subtitle-2 blue--text text--darken-1 mb-0 mr-2 more-cursor" @click="changeExpand">
             {{ seeString }} <v-icon color="blue darken-1" size="21">{{ arrow }}</v-icon>
         </p>
     </v-row>
