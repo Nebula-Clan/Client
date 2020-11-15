@@ -32,6 +32,10 @@ class Comment {
         this._reply = reply
     }
 
+    set commentDate(date) {
+        this._commentdate = date
+    }
+
     set isLiked(isLiked) {
         this._isLiked = isLiked
     }
@@ -43,6 +47,7 @@ class Comment {
         this.commentOwnerUsername = json.author.username
         this.commentOwnerNickname = json.author.first_name
         this.commentOwnerImageUrl = json.author.profile_picture
+        this.commentDate = json.create_date
         this.isLiked = json.is_liked
     }
 
@@ -80,6 +85,10 @@ class Comment {
 
     get commentReply() {
         return this._reply
+    }
+
+    get commentDate() {
+        return this._commentdate
     }
 
     get isReply() {

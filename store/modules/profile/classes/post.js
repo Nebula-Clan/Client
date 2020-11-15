@@ -33,6 +33,10 @@ class Post {
         this._isLiked = liked
     }
 
+    set postDate(date) {
+        this._date = date
+    }
+
     get postID() {
         return this._id
     }
@@ -57,6 +61,10 @@ class Post {
         return this._author
     }
 
+    get postDate() {
+        return this._date
+    }
+
     get isLiked() {
         return this._isLiked
     }
@@ -68,6 +76,7 @@ class Post {
         this.postDescription = json.description
         this.postAuthor = json.author.first_name
         this.postDescription = json.description
+        this.postDate = json.date_created
         this.isLiked = json.is_liked
         json.hashtags.forEach((item) => {
             this.postHashtags = item.text
