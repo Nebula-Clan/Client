@@ -91,14 +91,23 @@ export default {
         },
         switchToPosts() {
             this.getProfilePosts(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfilePosts
         },
         switchToComments() {
             this.getProfileComments(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfileComments
         },
         switchToLikes() {
             this.getProfileLikes(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfileLikes
         },
         componentArgs(index) {
@@ -140,6 +149,9 @@ export default {
             if (this.numberOfChildRendred == this.componentObjects.length) {
                 setTimeout(() => {this.setHash(this.hash)}, 1)
             }
+        },
+        showErrorWithMessage(message) {
+            this.$notifier.showMessage({content: message, color: 'error'});
         }
     }
 }
