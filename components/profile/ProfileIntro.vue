@@ -119,7 +119,8 @@ export default {
         },
         setHash(hash) {
             if (hash) {
-                location.href = hash
+                let element_to_scroll_to = document.getElementById(hash.slice(1));
+                element_to_scroll_to.scrollIntoView();
             }
         },
         countChild() {
