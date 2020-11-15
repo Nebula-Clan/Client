@@ -49,6 +49,7 @@ export default {
         ...mapGetters('modules/profile/profilePosts', ['getPosts']),
         ...mapGetters('modules/profile/profileComments', ['getComments']),
         ...mapGetters('modules/profile/profileLikes', ['getLikes']),
+        ...mapGetters('modules/profile/profileInfo',['getProfile']),
         getComponentObjects() {
             if (this.comp == ProfilePosts) {
                 this.componentObjects = this.getPosts
@@ -111,7 +112,8 @@ export default {
                 }
             } else {
                 return {
-                    likedObj: this.getComponentObjectById(index)
+                    likedObj: this.getComponentObjectById(index),
+                    nickname: this.getProfile.nickname
                 }
             }
         },
