@@ -24,6 +24,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import anime from 'animejs/lib/anime.es.js'
 
 import ProfileBanner from './ProfileBanner'
 import ProfileDescription from './ProfileDescription'
@@ -121,6 +122,15 @@ export default {
             if (hash) {
                 let element_to_scroll_to = document.getElementById(hash.slice(1));
                 element_to_scroll_to.scrollIntoView();
+                setTimeout(() => {
+                    anime({
+                        targets: element_to_scroll_to,
+                        opacity: 0.3,
+                        direction: 'alternate',
+                        duration: 1000,
+                        easing: 'easeInOutSine'
+                    });
+                }, 500)
             }
         },
         countChild() {
