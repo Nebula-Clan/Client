@@ -99,26 +99,33 @@ import GoUpFAB from "@/components/shared/GoUpFAB";
 
 export default {
   components: {GoUpFAB, Snackbar},
+   created() {
+    this.updateMenu();
+  },
   data() {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
+      items: [],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout();
+      this.$notifier.showMessage({content: "Logout", color: 'error'});
+      this.$auth.redirect('login')
+    },
+    updateMenu() {
+      this.items = this.$auth.user !== null ? [
         {
           icon: 'mdi-apps',
           title: 'Feed',
           to: '/feed'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign In',
-          to: '/login'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign Up',
-          to: '/signup'
         },
         {
           icon: 'mdi-chart-bubble',
@@ -140,17 +147,18 @@ export default {
           title: 'Django Community',
           to: '/community/Django'
         },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
-  },
-  methods: {
-    logout() {
-      this.$auth.logout();
-      this.$auth.redirect('login')
+      ] : [
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Sign In',
+          to: '/login'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Sign Up',
+          to: '/signup'
+        },
+      ]
     }
   }
 }

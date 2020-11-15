@@ -116,8 +116,8 @@ export default {
           secondary: '#03dac6',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: '#CF6679',
-          success: colors.green.accent3
+          error: '#B71C1C',
+          success: colors.green.accent4
         }
       }
     }

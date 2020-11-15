@@ -61,7 +61,7 @@
                     </v-col>
                     <v-col cols="12">
                       <v-select
-                        v-model="post.community"
+                        v-model="post.communityName"
                         :items="communities"
                         label="Community"
                         outlined
@@ -149,7 +149,7 @@ export default {
       category: 'OTHER',
       content: '',
       headerImage: null,
-      community: '',
+      communityName: '',
       hashtags: []
     },
     isPostPublishing: false,
@@ -177,6 +177,7 @@ export default {
     ...mapActions('modules/post', ['createPost']),
     ...mapActions('modules/community/community', ['getAllUserCommunities']),
     publish() {
+      console.log(this.post)
       this.isPostPublishing = true;
       this.createPost(this.post).then((response) => {
         console.log(response)

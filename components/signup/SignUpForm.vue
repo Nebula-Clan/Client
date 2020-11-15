@@ -51,6 +51,8 @@
         class="mt-5"
         color="primary"
         type="submit"
+        :loading="isSigningUp"
+        outlined
         block>
         Sign Up
       </v-btn>
@@ -121,6 +123,7 @@ export default {
         p => p === this.userInfo.password || 'Password\'s not match'
       ],
 
+      isSigningUp: false,
       errorHandling: {
         hasError: false,
         msg: '',
@@ -130,9 +133,12 @@ export default {
   methods: {
     ...mapActions('modules/authentication', ['registerUser']),
     onSubmit() {
+      this.isSigningUp = true;
       this.registerUser(this.userInfo).then((response) => {
-        this.$auth.redirect('login')
+        this.$notifier.showMessage({content: "Registration has been completed", color: 'success'});
+        this.$auth.redirect('login');
       }).catch((error) => {
+        this.isSigningUp = false;
         if (error.response) {
           this.errorHandling.hasError = true
           this.errorHandling.msg = error.response.data.error.message
