@@ -56,9 +56,13 @@ export default {
       this.$axios.get('api/posts/home_posts?order_key=new')
         .then((res) => {
           this.posts = res.data.posts
-        }).catch();
+        }).catch(
+          e => this.$notifier.showMessage({content: e.message, color: 'error'})
+      );
       this.$axios.get('api/community/user_communities').then(
         response => this.communities = response.data.communities
+      ).catch(
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
     }
   },

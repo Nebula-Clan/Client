@@ -103,7 +103,7 @@ export default {
           this.$notifier.showMessage({content: 'Posted, hurray!', color: 'success'});
           this.$emit('posted');
         }).catch((e) => {
-        this.$notifier.showMessage({content: e.message, color: 'success'});
+        this.$notifier.showMessage({content: e.message, color: 'error'});
       });
     },
   }
