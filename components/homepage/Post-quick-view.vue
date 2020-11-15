@@ -85,7 +85,8 @@
             <v-btn
               v-bind="attrs"
               v-on="on"
-              :color="post.liked_by_viewer? 'red':'white'"
+              :color="likedPost"
+              @click="likePost"
               icon>
               <v-icon>mdi-heart</v-icon>
             </v-btn>
@@ -113,6 +114,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'Post-quick-view',
   props: ['post'],
@@ -120,11 +123,20 @@ export default {
     return {
       chipsColors: [
         'blue', 'red', 'green', 'purple', 'orange'
-      ]
+      ],
+      like: false,
+      dislike: false
     }
   },
   methods: {},
   computed: {
+    likedPost() {
+        if (!this.dislike && (this.post.is_liked || this.like)) {
+            return 'pink'
+        } else {
+            return ''
+        }
+    },
     dateDuration: {
       get: function () {
         const unixTime = new Date(this.post.date_created).getTime()
@@ -137,7 +149,38 @@ export default {
           return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
         }
       }
-    }
+    },
+  },
+    methods: {
+      ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
+      likePost() {
+        if (!this.like) {
+          this.submitLikeAtPostWithID(this.post.id)
+          .then(({ data }) => {
+              this.like = true
+              this.dislike = false
+          })
+          .catch((error) => {
+              if (error.response.status == 403) {
+                  this.showErrorWithMessage('Please Login in or Sign Up')
+              }
+          })
+        } else {
+          this.deleteLikeAtPostWithID(this.post.id)
+          .then(({ data }) => {
+              this.like = false
+              this.dislike = true
+          })
+          .catch((error) => {
+              if (error.response.status == 403) {
+                  this.showErrorWithMessage('Please Login in or Sign Up')
+              }
+          })
+        }
+      },
+      showErrorWithMessage(message) {
+        this.$notifier.showMessage({content: message, color: 'error'});
+      }
   }
 }
 </script>
