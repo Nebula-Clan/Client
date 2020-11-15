@@ -3,19 +3,29 @@ import { Doughnut, Bar } from "vue-chartjs";
 import Chart from "chart.js";
 
 export default {
-    extends: Bar,
+    props: {
+        postCount : {
+            type: Number
+        },
+        commentCount : {
+            type: Number
+        },
+        likeCount : {
+            type: Number
+        }
+    },
+    extends: Doughnut,
     data: () => ({
         chartdata: {
-        labels: ["Posts", "Comments", "Likes"],
         datasets: [
                     {
                         label: "Profile Status",
-                        backgroundColor: ["#303F9F", "#00838F", "#D32F2F"],
-                        data: [150, 121, 140]
+                        backgroundColor: ["#303F9F", "#00796B", "#C62828"],
                     }
                 ]
             },
         options: {
+            cutoutPercentage: 80,
             legend: {
                 display: false
             },
@@ -39,6 +49,7 @@ export default {
         }
     }),
     mounted() {
+        this.chartdata.datasets[0].data = [this.postCount, this.commentCount, this.likeCount]
         this.renderChart(this.chartdata, this.options);
     },
 }

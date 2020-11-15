@@ -16,7 +16,7 @@
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
-                <ProfileStatusChart :height="200" />
+                <ProfileStatusChart :height="200" :commentCount="20" :likeCount="30" :postCount="10" />
             </v-col>
         </v-row>
     </v-container>
