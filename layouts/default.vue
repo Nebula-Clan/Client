@@ -22,6 +22,16 @@
             <v-list-item-title v-text="item.title"/>
           </v-list-item-content>
         </v-list-item>
+        <div v-if="this.$auth.user" class="d-flex align-center">
+          <v-row align="center"
+                 justify="center">
+            <v-btn
+              @click="logout"
+              color="error"
+              class="mt-5">logout
+            </v-btn>
+          </v-row>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -58,7 +68,10 @@
       </v-btn>
     </v-app-bar>
     <v-main>
-      <nuxt/>
+      <nuxt>
+      </nuxt>
+      <Snackbar/>
+      <GoUpFAB/>
     </v-main>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -81,27 +94,38 @@
 </template>
 
 <script>
+import Snackbar from '~/components/shared/Snackbar.vue'
+import GoUpFAB from "@/components/shared/GoUpFAB";
+
 export default {
-  data () {
+  components: {GoUpFAB, Snackbar},
+   created() {
+    this.updateMenu();
+  },
+  data() {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
+      items: [],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout();
+      this.$notifier.showMessage({content: "Logout", color: 'error'});
+      this.$auth.redirect('login')
+    },
+    updateMenu() {
+      this.items = this.$auth.user !== null ? [
         {
           icon: 'mdi-apps',
           title: 'Feed',
           to: '/feed'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign In',
-          to: '/login'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign Up',
-          to: '/signup'
         },
         {
           icon: 'mdi-chart-bubble',
@@ -117,12 +141,24 @@ export default {
           icon: 'mdi-chart-bubble',
           title: 'Complete PostView',
           to: '/posts/1/'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Django Community',
+          to: '/community/Django'
+        },
+      ] : [
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Sign In',
+          to: '/login'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Sign Up',
+          to: '/signup'
+        },
+      ]
     }
   }
 }

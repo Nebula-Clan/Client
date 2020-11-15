@@ -5,6 +5,7 @@
       Create a post
     </v-card-title>
     <v-textarea
+      v-model="text"
       auto-grow
       class="px-2"
       clearable
@@ -29,10 +30,10 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              to="/new-post"
               v-bind="attrs"
               v-on="on"
-              icon>
+              icon
+              to="/new-post">
               <v-icon>mdi-newspaper</v-icon>
             </v-btn>
           </template>
@@ -56,7 +57,8 @@
             <v-btn
               v-bind="attrs"
               v-on="on"
-              icon>
+              icon
+              @click="publish">
               <v-icon>mdi-send</v-icon>
             </v-btn>
           </template>
@@ -68,8 +70,43 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
-  name: 'Write'
+  name: 'Write',
+  props: ['community'],
+  data() {
+    return {
+      text: null,
+      post: {
+        title: '',
+        description: '',
+        contentType: 'OT',
+        category: 'OTHER',
+        content: '',
+        headerImage: null,
+        hashtags: [],
+        communityName: null
+      },
+    }
+  },
+  methods: {
+    ...mapActions('modules/post', ['createPost']),
+    publish() {
+      if (this.community) {
+        this.post.communityName = this.community;
+      }
+      this.post.description = this.text;
+      this.post.content = this.text;
+      this.createPost(this.post).then(
+        () => {
+          this.$notifier.showMessage({content: 'Posted, hurray!', color: 'success'});
+          this.$emit('posted');
+        }).catch((e) => {
+        this.$notifier.showMessage({content: e.message, color: 'success'});
+      });
+    },
+  }
 }
 </script>
 

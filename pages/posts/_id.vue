@@ -2,16 +2,16 @@
   <v-row class="px-10 py-5">
     <v-col
       cols="12"
-      lg="2"
-      md="3"
-      sm="3">
-      <Categories/>
+      lg="1"
+      md="1"
+      sm="2">
+<!--      <Categories/>-->
     </v-col>
     <v-col
       cols="12"
-      lg="8"
-      md="6"
-      sm="6">
+      lg="10"
+      md="10"
+      sm="8">
       <PostView
         :post="post"
         :author="author"
@@ -22,12 +22,12 @@
     </v-col>
     <v-col
       cols="12"
-      lg="2"
-      md="3"
-      sm="3">
-      <User/>
+      lg="1"
+      md="1"
+      sm="2">
+<!--      <User :user="this.$auth.user"/>-->
       <br>
-      <Communities/>
+<!--      <Communities/>-->
     </v-col>
   </v-row>
 </template>
@@ -56,13 +56,7 @@ export default {
   data: () => ({
     post: '',
     author: '',
-    postContent: `
-    <style>
-    img {
-    width: 100%;
-    }
-    </style>
-    `,
+    postContent: `<style>img{width: 100%;}</style>`,
     comments: [],
   }),
   mounted() {
@@ -87,7 +81,7 @@ export default {
         console.log(data)
         this.post = data.post;
         this.author = data.post.author;
-        this.postContent+= data.post.post_content.content_text;
+        this.postContent += data.post.post_content.content_text;
       }).catch((error) => {
         console.log(error);
       });

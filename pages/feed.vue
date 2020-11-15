@@ -12,19 +12,19 @@
       lg="8"
       md="6"
       sm="6">
-      <Write/>
+      <Write @posted="getPosts"/>
       <br>
       <PostQuickView
-        v-for="(post, i) in posts" :key="i" :post="post" :author="author"/>
+        v-for="(post, i) in posts" :key="i" :post="post"/>
     </v-col>
     <v-col
       cols="12"
       lg="2"
       md="3"
       sm="3">
-      <User :user="currentUser"/>
+      <User :user="this.$auth.user"/>
       <br>
-      <Communities/>
+      <Communities v-if="communities" :communities="communities"/>
     </v-col>
   </v-row>
 </template>
@@ -48,16 +48,22 @@ export default {
   data() {
     return {
       posts: null,
-      author: null,
-      currentUser: this.$auth.user
+      communities: []
+    }
+  },
+  methods: {
+    getPosts() {
+      this.$axios.get('api/posts/home_posts?order_key=new')
+        .then((res) => {
+          this.posts = res.data.posts
+        }).catch();
+      this.$axios.get('api/community/user_communities').then(
+        response => this.communities = response.data.communities
+      );
     }
   },
   mounted() {
-    this.$axios.get('/api/posts/get_user_posts?'+'username='+'had0007')
-      .then((res) => {
-          this.posts = res.data.all_user_posts
-          this.author = res.data.author
-        }).catch();
+    this.getPosts();
   }
 }
 </script>

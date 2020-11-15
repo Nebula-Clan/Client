@@ -31,7 +31,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    { src: '~plugins/quill', ssr: false }
+    { src: '~plugins/quill', ssr: false },
+    { src: '~plugins/notifier', ssr: false}
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -71,7 +72,11 @@ export default {
             url: '/api/auth/user',
             method: 'get',
             propertyName: 'user'
-          }
+          },
+          logout: {
+            url: '/api/auth/logout',
+            method: 'post'
+          },
         },
       },
       github: {
@@ -90,7 +95,8 @@ export default {
     },
     redirect: {
       home: '/feed',
-      login: '/login'
+      login: '/login',
+      logout: '/login'
     }
   },
 
@@ -110,8 +116,8 @@ export default {
           secondary: '#03dac6',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: '#CF6679',
-          success: colors.green.accent3
+          error: '#B71C1C',
+          success: colors.green.accent4
         }
       }
     }

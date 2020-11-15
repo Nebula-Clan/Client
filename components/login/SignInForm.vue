@@ -23,6 +23,8 @@
       <v-btn
         class="mt-5"
         color="primary"
+        outlined
+        :loading="isLoggingIn"
         :disabled="!formValid"
         type="submit"
         block>
@@ -92,6 +94,7 @@ export default {
         }
       },
 
+      isLoggingIn: false,
       errorHandling: {
         hasError: false,
         msg: '',
@@ -101,17 +104,19 @@ export default {
   methods: {
     ...mapActions('modules/authentication', ['login']),
     onSubmit() {
+      this.isLoggingIn = true;
       this.login({
         username: this.username,
         password: this.password
       }).then((response) => {
-        this.$auth.redirect('home')
+        this.$notifier.showMessage({content: "Logged in Successfully", color: 'success'});
+        this.$auth.redirect('home');
       }).catch((error) => {
+        this.isLoggingIn = false;
+        console.log(error.response);
         if (error.response) {
-          if (error.response.status === 403) {
-            this.errorHandling.hasError = true
-            this.errorHandling.msg = "Incorrect username or password."
-          }
+            this.errorHandling.hasError = true;
+            this.errorHandling.msg = error.response.data.error.message;
         }
       })
     },

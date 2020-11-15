@@ -18,7 +18,11 @@
       <v-row
         class="actions justify-content"
         no-gutters>
-        <v-col class="my-auto" cols="1">
+        <v-col class="my-auto"
+               sm="3"
+               md="3"
+               lg="2"
+               xl="1">
           <a
             v-if="isReplyTextAreaExpanded"
             class="reply"
@@ -34,7 +38,11 @@
             Reply
           </a>
         </v-col>
-        <v-col class="my-auto" cols="2">
+        <v-col class="my-auto"
+               sm="5"
+               md="5"
+               lg="3"
+               xl="2">
           <a
             v-if="replies.length !== 0 && isRepliesExpanded"
             class="reply"
@@ -50,8 +58,17 @@
             Show replies ({{ replies.length }})
           </a>
         </v-col>
-        <v-col cols="8"></v-col>
-        <v-col cols="1">
+        <v-col
+          sm="1"
+          md="1"
+          lg="5"
+          xl="8">
+        </v-col>
+        <v-col
+          sm="3"
+          md="3"
+          lg="2"
+          xl="1">
           <v-btn icon>
             <v-icon small>mdi-heart</v-icon>
           </v-btn>
@@ -129,6 +146,20 @@ export default {
         } else {
           return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
         }
+      }
+    },
+    height() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 220
+        case 'sm':
+          return 400
+        case 'md':
+          return 500
+        case 'lg':
+          return 600
+        case 'xl':
+          return 800
       }
     }
   },
