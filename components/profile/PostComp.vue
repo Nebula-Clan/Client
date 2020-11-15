@@ -14,7 +14,7 @@
       </v-row>
 
       <v-row v-if="hasHashtag">
-        <v-col class="d-flex justify-center">
+        <v-col class="d-flex justify-right ml-4">
           <v-chip
             nuxt
             :key="i"

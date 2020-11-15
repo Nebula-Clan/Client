@@ -38,6 +38,11 @@ const mutations = {
     },
     reqSended(state, status) {
         state.isReqSended = status
+    },
+    sortCommentsBasedOnDate(state) {
+        state.comments.sort((a, b) => {
+            return new Date(b.commentDate) - new Date(a.commentDate);
+        })
     }
 }
 
@@ -51,9 +56,11 @@ const actions = {
             commit('parseCommentReplyJsonReqAndAppend', data.comment_replies)
             commit('parsePostReplyJsonReqAndAppend', data.post_replies)
             commit('reqSended', true)
+            commit('sortCommentsBasedOnDate')
         })
         .catch(function (error) {
             console.log(error)
+            throw error
         })
     }
 }

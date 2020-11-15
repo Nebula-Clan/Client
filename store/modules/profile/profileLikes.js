@@ -61,6 +61,7 @@ const actions = {
         })
         .catch(function (error) {
             console.log(error)
+            throw error
         })
     },
     getProfilesThatLikedPostByID({ commit }, postID) {
@@ -80,6 +81,7 @@ const actions = {
             return profiles
         })
         .catch((error) => {
+            console.log(error)
             throw error
         })
     },
@@ -100,6 +102,7 @@ const actions = {
             return profiles
         })
         .catch((error) => {
+            console.log(error)
             throw error
         })
     },

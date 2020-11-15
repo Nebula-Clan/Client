@@ -4,8 +4,7 @@
             <v-card elevation="24" :min-width="postWidth">
                 <v-container>
                     <v-card-title>
-                        <!-- {{ likedObj.getLikeOwnerUsername() }} -->
-                        Hadi Sheikhi Liked post Amir
+                        {{ nickname + ' Liked ' +  replyType + ' ' + replyObjectOwnerNickname}}
                     </v-card-title>
                     <v-container>
                         <component :is="comp" v-bind="componentArgument()" class="reply"> </component>
@@ -27,6 +26,10 @@ export default {
             required: true,
             type: Object,
             comp: PostReplyComp
+        },
+        nickname: {
+            required: true,
+            type: String
         }
     },
     data: () => {
@@ -54,6 +57,21 @@ export default {
                 return;
             }
             return this.$refs.VCardParent.clientWidth
+        },
+        replyType() {
+            if (this.likedObj.typeOfLike === 'Post') {
+                return 'Post'
+            } else {
+                return 'Comment'
+            }
+        },
+        replyObjectOwnerNickname() {
+            this.reply = this.likedObj.likeReply
+            if (this.likedObj.typeOfLike === 'Post') {
+                return this.reply.postAuthor
+            } else {
+                return this.reply.commentOwnerNickname
+            }
         }
     },
     created() {

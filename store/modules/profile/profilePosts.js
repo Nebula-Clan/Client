@@ -24,6 +24,11 @@ const mutations = {
     },
     sendedReq(state) {
         state.isReqSended = true
+    },
+    sortPostBasedOnDate(state) {
+        state.posts.sort((a, b) => {
+            return new Date(b.postDate) - new Date(a.postDate);
+        })
     }
 }
   
@@ -32,13 +37,15 @@ const actions = {
         if (state.isReqSended) {
             return
         }
-        this.$axios.get('api/posts/get_user_posts?username=' + username)
+        return this.$axios.get('api/posts/get_user_posts?username=' + username)
         .then(function ({ data }) {
             commit('sendedReq')
             commit('parsePostAndAppend', data.all_user_posts)
+            commit('sortPostBasedOnDate')
         })
         .catch(function (error) {
             console.log(error)
+            throw error
         })
     }
 }

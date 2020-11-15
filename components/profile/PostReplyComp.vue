@@ -1,8 +1,8 @@
 <template>
     <v-container @click="oneClick" class="post-cursor py-3">
         <v-list-item three-line>
-            <v-list-item-avatar tile size="80" color="grey">
-                <v-img :src="getPostImage">
+            <v-list-item-avatar tile size="80" :color="color">
+                <v-img v-if="!hasError" :src="getPostImage" @error="handleImagError" @load="imageLoaded">
                     <template v-slot:placeholder>
                         <v-row
                         class="fill-height ma-0"
@@ -16,8 +16,9 @@
                         </v-row>
                     </template>
                 </v-img>
+                <v-icon v-else>mdi-post</v-icon>
             </v-list-item-avatar>
-            <v-list-item-content>
+            <v-list-item-content class="align-list-item">
                 <div class="overline mb-3">
                     {{ post.postTitle }}
                 </div>
@@ -41,8 +42,8 @@
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
-    <v-row justify="center" align="center" v-if="hasButtonForClamp">
-        <p class="text-subtitle-2 blue--text text--darken-1 mb-0 more-cursor" @click="changeExpand">
+    <v-row justify="end" align="end" v-if="hasButtonForClamp">
+        <p class="text-subtitle-2 blue--text text--darken-1 mb-0 mr-2 more-cursor" @click="changeExpand">
             {{ seeString }} <v-icon color="blue darken-1" size="21">{{ arrow }}</v-icon>
         </p>
     </v-row>
@@ -73,15 +74,36 @@ export default {
             seeString: 'More',
             arrow: 'mdi-arrow-down-drop-circle-outline',
             hasButtonForClamp: false,
-            isTrigger: false
+            isTrigger: false,
+            errorTime: null,
+            hasError: false
         }
     },
     computed: {
         getPostImage() {
             return this.$axios.defaults.baseURL + this.post.postImageURL
+        },
+        color() {
+            if (!this.hasError) {
+                return 'grey'
+            }
+            return 'blue-grey lighten-1'
         }
     },
     methods: {
+        handleImagError(event) {
+            if (!this.errorTime) {
+                this.errorTime = setTimeout(() => {
+                    this.hasError = true
+                }, 8000)
+            }
+        },
+        imageLoaded(event) {
+            if (this.errorTime) {
+                clearTimeout(this.errorTime)
+                this.errorTime = null
+            }
+        },
         changeExpand() {
             this.isTrigger = true
             if (this.lines == 2) {
@@ -126,6 +148,10 @@ export default {
 </script>
 
 <style scoped>
+
+.align-list-item {
+    align-self: auto;
+}
 
 .post-cursor {
     cursor: context-menu;

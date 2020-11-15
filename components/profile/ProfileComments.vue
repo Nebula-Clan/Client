@@ -163,7 +163,9 @@ export default {
                     this.dislike = false
                 })
                 .catch((error) => {
-
+                    if (error.response.status == 403) {
+                        this.showErrorWithMessage('Please Login in or Sign Up')
+                    }
                 })
             } else {
                 this.deleteLikeAtCommentWithID(this.comment.commentID)
@@ -172,7 +174,9 @@ export default {
                     this.dislike = true
                 })
                 .catch((error) => {
-
+                    if (error.response.status == 403) {
+                        this.showErrorWithMessage('Please Login in or Sign Up')
+                    }
                 })
             }
         },
@@ -197,6 +201,9 @@ export default {
                     comment: this.reply
                 }
             }
+        },
+        showErrorWithMessage(message) {
+            this.$notifier.showMessage({content: message, color: 'error'});
         }
     }
 }

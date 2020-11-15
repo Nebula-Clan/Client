@@ -6,13 +6,13 @@
                     <v-row>
                         <v-col class="ml-5">
                             <nuxt-link class="text-decoration-none white--text" to="#">
-                            <h2>{{ post.postTitle }}</h2>
+                                <h2>{{ post.postTitle }}</h2>
                             </nuxt-link>
                             <div class="mr-2">
-                            <v-icon size="15">
-                                mdi-clock
-                            </v-icon>
-                            <span style="font-size: smaller">5</span>
+                                <v-icon size="15">
+                                    mdi-clock
+                                </v-icon>
+                                <span style="font-size: smaller"> {{ getTimeElapse }}</span>
                             </div>
                         </v-col>
 
@@ -20,48 +20,48 @@
                             class="text-right"
                             cols="2">
                             <v-menu>
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                        </template>
-                        <v-list elevation="24">
-                            <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
-                                <v-icon>mdi-flag</v-icon>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
-                                <v-icon>mdi-heart</v-icon>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
-                                <v-icon>mdi-share-variant</v-icon>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-list elevation="24">
+                                    <v-list-item>
+                                        <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
+                                        <v-icon>mdi-flag</v-icon>
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
+                                        <v-icon>mdi-heart</v-icon>
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
+                                        <v-icon>mdi-share-variant</v-icon>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
                         </v-col>
                     </v-row>
 
-                    <v-overlay
-                    :z-index="zIndex"
-                    :value="reportOverlay"
-                    opacity="0.8"
-                    >
-                        <ProfileReport @cancel="reportOverlay = !reportOverlay" />
-                    </v-overlay>
+                        <v-overlay
+                        :z-index="zIndex"
+                        :value="reportOverlay"
+                        opacity="0.8"
+                        >
+                            <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                        </v-overlay>
 
-                    <v-overlay
-                    :z-index="zIndex"
-                    :value="likesOverlay"
-                    opacity="0.8"
-                    >
-                        <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
-                    </v-overlay>
-                </v-card-title>
-                <PostComp :post="post" />
-                <v-divider></v-divider>
-                <v-card-actions>
+                        <v-overlay
+                        :z-index="zIndex"
+                        :value="likesOverlay"
+                        opacity="0.8"
+                        >
+                            <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+                        </v-overlay>
+                    </v-card-title>
+                    <PostComp :post="post" />
+                    <v-divider></v-divider>
+                    <v-card-actions>
 
                     <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
                         <v-icon style="cursor: pointer">mdi-heart</v-icon>
@@ -126,6 +126,17 @@ export default {
                 return this.post.postID
             }
             return 1
+        },
+        getTimeElapse() {
+            const unixTime = new Date(this.post.postDate).getTime()
+            const now = new Date().getTime()
+            if (now - unixTime < 36e+5) {
+            return Math.floor((now - unixTime) / 60000) + ' m'
+            } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
+            return Math.floor((now - unixTime) / 36e+5) + ' h'
+            } else {
+            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+            }
         }
     },
     mounted() {
@@ -162,7 +173,9 @@ export default {
                     this.dislike = false
                 })
                 .catch((error) => {
-
+                    if (error.response.status == 403) {
+                        this.showErrorWithMessage('Please Login in or Sign Up')
+                    }
                 })
             } else {
                 this.deleteLikeAtPostWithID(this.postID)
@@ -171,12 +184,17 @@ export default {
                     this.dislike = true
                 })
                 .catch((error) => {
-
+                    if (error.response.status == 403) {
+                        this.showErrorWithMessage('Please Login in or Sign Up')
+                    }
                 })
             }
         },
         hackWidth() {
             this.hack++
+        },
+        showErrorWithMessage(message) {
+            this.$notifier.showMessage({content: message, color: 'error'});
         }
     }
 }

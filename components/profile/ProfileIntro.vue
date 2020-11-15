@@ -16,7 +16,7 @@
                 </v-container>
             </v-col>
             <v-col cols="12" lg="3" sm="12">
-                <ProfileStatusChart :height="200" />
+                <ProfileStatusChart :height="200" :commentCount="20" :likeCount="30" :postCount="10" />
             </v-col>
         </v-row>
     </v-container>
@@ -24,6 +24,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import anime from 'animejs/lib/anime.es.js'
 
 import ProfileBanner from './ProfileBanner'
 import ProfileDescription from './ProfileDescription'
@@ -48,6 +49,7 @@ export default {
         ...mapGetters('modules/profile/profilePosts', ['getPosts']),
         ...mapGetters('modules/profile/profileComments', ['getComments']),
         ...mapGetters('modules/profile/profileLikes', ['getLikes']),
+        ...mapGetters('modules/profile/profileInfo',['getProfile']),
         getComponentObjects() {
             if (this.comp == ProfilePosts) {
                 this.componentObjects = this.getPosts
@@ -89,14 +91,23 @@ export default {
         },
         switchToPosts() {
             this.getProfilePosts(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfilePosts
         },
         switchToComments() {
             this.getProfileComments(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfileComments
         },
         switchToLikes() {
             this.getProfileLikes(this.username)
+            .catch((error) => {
+                this.showErrorWithMessage('Something went wrong')
+            })
             this.comp = ProfileLikes
         },
         componentArgs(index) {
@@ -110,7 +121,8 @@ export default {
                 }
             } else {
                 return {
-                    likedObj: this.getComponentObjectById(index)
+                    likedObj: this.getComponentObjectById(index),
+                    nickname: this.getProfile.nickname
                 }
             }
         },
@@ -119,7 +131,17 @@ export default {
         },
         setHash(hash) {
             if (hash) {
-                location.href = hash
+                let element_to_scroll_to = document.getElementById(hash.slice(1));
+                element_to_scroll_to.scrollIntoView();
+                setTimeout(() => {
+                    anime({
+                        targets: element_to_scroll_to,
+                        opacity: 0.3,
+                        direction: 'alternate',
+                        duration: 1000,
+                        easing: 'easeInOutSine'
+                    });
+                }, 500)
             }
         },
         countChild() {
@@ -127,6 +149,9 @@ export default {
             if (this.numberOfChildRendred == this.componentObjects.length) {
                 setTimeout(() => {this.setHash(this.hash)}, 1)
             }
+        },
+        showErrorWithMessage(message) {
+            this.$notifier.showMessage({content: message, color: 'error'});
         }
     }
 }
