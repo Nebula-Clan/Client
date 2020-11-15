@@ -215,9 +215,9 @@ export default {
     fetchCommunities() {
       this.getAllUserCommunities().then(({data}) => {
         this.communities = data.communities.map((community) => community.name);
-      }).catch((error) => {
-        console.log(error);
-      });
+      }).catch(
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
+      );
     }
   }
 }

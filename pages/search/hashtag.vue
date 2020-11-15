@@ -44,7 +44,7 @@ export default {
         response =>
           this.posts = response.data.posts
       ).catch(
-        error => console.log(error)
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
     }
   },

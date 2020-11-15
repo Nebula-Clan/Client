@@ -99,12 +99,12 @@ export default {
       formData.append('picture', this.body.picture);
       formData.append('banner_picture', this.body.banner_picture);
       this.$axios.post('api/community/create_community', formData).then(
-        response => {
-          console.log(response);
+        () => {
+          this.$notifier.showMessage({content: `${this.body.name} Created! Happy writing`, color: 'success'});
           this.$emit('close');
         }
       ).catch(
-        error => console.log(error)
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
     },
     close() {

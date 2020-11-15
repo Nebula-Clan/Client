@@ -70,14 +70,14 @@ export default {
           // this.posts = response.data.community.posts
         }
       ).catch(
-        error => console.log(error)
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
     },
     getPosts() {
       this.$axios.get(`api/community/community_posts?name=${this.name}`).then(
         response => this.posts = response.data.posts
       ).catch(
-        error => console.log(error)
+        e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
     }
   }
