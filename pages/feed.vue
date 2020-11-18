@@ -24,7 +24,7 @@
       sm="3">
       <User :user="this.$auth.user"/>
       <br>
-      <Communities v-if="communities" :communities="communities"/>
+      <Communities v-if="communities" :communities="communities" @refresh="refresh"/>
     </v-col>
   </v-row>
 </template>
@@ -64,6 +64,10 @@ export default {
       ).catch(
         e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
+    },
+    refresh() {
+      console.log('refresh');
+      this.getPosts();
     }
   },
   mounted() {

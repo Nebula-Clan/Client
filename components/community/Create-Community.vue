@@ -101,10 +101,22 @@ export default {
       this.$axios.post('api/community/create_community', formData).then(
         () => {
           this.$notifier.showMessage({content: `${this.body.name} Created! Happy writing`, color: 'success'});
-          this.$emit('close');
+          this.$axios.post(`api/community/join_community?name=${this.body.name}`).then(
+            () => {
+              this.$emit('userState');
+              this.loading = !this.loading;
+            }
+          ).catch(
+            error => this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})
+          ).finally(
+            () => this.$emit('close')
+          );
         }
       ).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'})
+        error => {
+          this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})
+          console.log(error.response.data);
+        }
       );
     },
     close() {
