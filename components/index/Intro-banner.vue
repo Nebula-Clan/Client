@@ -1,7 +1,7 @@
 <template>
-  <div class="banner">
-    <div class="overlay">
-      <div class="content">
+  <v-container class="banner pa-0" fluid>
+    <v-container class="overlay pa-0" fluid>
+      <v-container class="content" fluid>
         <h1 class="primary--text">Huddle</h1>
         <h2>You're in the right place</h2>
         <div class="actions mt-10">
@@ -19,9 +19,9 @@
             Sign in
           </v-btn>
         </div>
-      </div>
-    </div>
-  </div>
+      </v-container>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
@@ -56,6 +56,20 @@ export default {
           letter-spacing: 4px;
           font-size: 60px;
           font-weight: 100;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 576px) {
+    .banner {
+      .overlay {
+        .content {
+          h1 {
+            font-size: xx-large;
+          }
+          h2 {
+            font-size: x-large;
+          }
         }
       }
     }

@@ -9,10 +9,11 @@
       </v-icon>
       <span class="mx-2">3h</span>
     </v-card-subtitle>
-    <img alt="port"
+    <v-img alt="port"
          class="post-image"
          height="350"
-         src="../../static/images/Back2.jpg"/>
+         :src="require('../../static/images/Back2.jpg')"/>
+    <v-img/>
     <v-card-text>
       <p>
         A lake is an area filled with water, localized in a basin, surrounded by land, apart from any river or other
@@ -40,6 +41,7 @@ export default {
 
 <style lang="scss" scoped>
   .card {
-    width: min-content;
+    width: 500px;
+    margin: 2rem 0;
   }
 </style>
