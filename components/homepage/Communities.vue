@@ -16,7 +16,7 @@
             </v-icon>
           </v-btn>
         </template>
-        <CreateCommunity @close="dialog = false"/>
+        <CreateCommunity @close="close"/>
       </v-dialog>
     </v-card-subtitle>
     <v-divider class="primary"></v-divider>
@@ -56,6 +56,13 @@ export default {
   data: () => {
     return {
       dialog: false,
+    }
+  },
+  methods: {
+    close() {
+      this.dialog = false;
+      console.log('closed-community');
+      this.$emit('refresh');
     }
   }
 }
