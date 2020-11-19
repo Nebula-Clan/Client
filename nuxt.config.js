@@ -26,15 +26,19 @@ export default {
   css: [
     '@/assets/quill/quill.core.css',
     '@/assets/quill/quill.snow.css',
-    '@/assets/quill/quill.bubble.css'
-  ],
+    '@/assets/quill/quill.bubble.css',
+],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~plugins/quill', ssr: false },
-    { src: '~plugins/notifier', ssr: false}
+    { src: '~plugins/notifier', ssr: false},
+    { src: "@/plugins/aos", mode: "client" },
   ],
 
+  purgeCSS: {
+    whitelist: ["aos-init", "aos-animate", "data-aos-delay", "data-aos-duration", "fade-up", "zoom-in"],
+  },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 

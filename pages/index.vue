@@ -12,6 +12,9 @@
     <v-container  fluid>
       <Row4 />
     </v-container>
+    <v-container  fluid>
+      <Row5 />
+    </v-container>
   </v-container>
 </template>
 
@@ -20,13 +23,17 @@ import IntroBanner from "@/components/index/Intro-banner"
 import Row2 from "@/components/index/Row-2"
 import Row3 from "@/components/index/Row-3"
 import Row4 from "@/components/index/Row-4"
+import Row5 from "@/components/index/Row-5"
+import Feature from "@/components/index/Feature";
 export default {
   name: "index",
   components: {
     IntroBanner,
     Row2,
     Row3,
-    Row4
+    Row4,
+    Row5,
+    Feature
   }
 }
 </script>

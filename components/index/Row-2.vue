@@ -7,9 +7,11 @@
     <v-row class="pa-4">
       <v-col
         cols="12"
-        md="4"
+        md="5"
         class="description">
-        <p>
+        <p
+          class="elevation-2"
+          data-aos="fade-up">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
           industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
           scrambled it to make a type specimen book.
@@ -17,7 +19,7 @@
       </v-col>
       <v-col
         cols="12"
-        md="8"
+        md="7"
         class="d-flex justify-center align-center">
         <SamplePost />
       </v-col>

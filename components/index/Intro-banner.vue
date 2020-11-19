@@ -2,8 +2,12 @@
   <v-container class="banner pa-0" fluid>
     <v-container class="overlay pa-0" fluid>
       <v-container class="content" fluid>
-        <h1 class="primary--text">Huddle</h1>
-        <h2>You're in the right place</h2>
+        <h1
+          data-aos="zoom-in"
+          class="primary--text">Huddle</h1>
+        <h2
+          data-aos="zoom-in">
+          You're in the right place</h2>
         <div class="actions mt-10">
           <v-btn outlined
                  to="/signup"
