@@ -17,7 +17,8 @@
         type="image"/>
       <v-skeleton-loader
         class="mt-10"
-        type="text"/>
+        type="table-thead"
+        :types="{ 'table-thead': 'heading@3' }"/>
     </v-card>
   </div>
 </template>

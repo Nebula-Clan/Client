@@ -13,7 +13,7 @@
       name="input-7-4"
       outlined>
     </v-textarea>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-row class="px-4">
       <v-col cols="6">
         <v-tooltip bottom>

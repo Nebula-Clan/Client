@@ -3,7 +3,7 @@
     <v-card-subtitle>
       Explore Categories
     </v-card-subtitle>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-list dense>
       <v-list-item-group>
         <nuxt-link
@@ -13,10 +13,10 @@
           to="/feed/">
           <v-list-item>
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon v-text="item.icon"/>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.label"></v-list-item-title>
+              <v-list-item-title v-text="item.label"/>
             </v-list-item-content>
           </v-list-item>
         </nuxt-link>
