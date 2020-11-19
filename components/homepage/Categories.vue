@@ -31,11 +31,23 @@ export default {
   data: ()=> {
     return {
       categories: [
-        {label: 'Sport', icon: 'mdi-basketball'},
-        {label: 'Politics', icon: 'mdi-flag'},
-        {label: 'Tech', icon: 'mdi-wifi'},
+        {label: 'Art', icon: 'mdi-camera'},
+        {label: 'Books', icon: 'mdi-book'},
+        {label: 'Computers', icon: 'mdi-memory'},
         {label: 'Fashion', icon: 'mdi-hanger'},
-        {label: 'Food', icon: 'mdi-food'},
+        {label: 'Films', icon: 'mdi-video-vintage'},
+        {label: 'Food', icon: 'mdi-silverware-variant'},
+        {label: 'Fun', icon: 'mdi-emoticon'},
+        {label: 'Games', icon: 'mdi-gamepad-variant'},
+        {label: 'TV Series', icon: 'mdi-filmstrip'},
+        {label: 'Health', icon: 'mdi-hospital'},
+        {label: 'Music', icon: 'mdi-headphones'},
+        {label: 'News', icon: 'mdi-newspaper'},
+        {label: 'Nature', icon: 'mdi-pine-tree'},
+        {label: 'Politics', icon: 'mdi-bank'},
+        {label: 'Psychology', icon: 'mdi-brain'},
+        {label: 'Science', icon: 'mdi-sigma'},
+        {label: 'Technology', icon: 'mdi-laptop'},
         {label: 'Travel', icon: 'mdi-train-car'}
       ],
     }
