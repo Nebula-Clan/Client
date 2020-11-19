@@ -30,17 +30,17 @@
     <v-divider class="primary"></v-divider>
     <v-row class="text-center pa-2 justify-space-around">
       <div>
-        <b>{{ '-' }}</b>
+        <b>{{ numberOfFollowings }}</b>
         <br>
         <span>Followings</span>
       </div>
       <div>
-        <b>{{ '-' }}</b>
+        <b>{{ numberOfPosts }}</b>
         <br>
         <span>Posts</span>
       </div>
       <div>
-        <b>{{ '-' }}</b>
+        <b>{{ numberOfFollowers }}</b>
         <br>
         <span>Followers</span>
       </div>
@@ -49,11 +49,31 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: "user.component",
   props: ['user'],
   data: () => {
-    return {}
+    return {
+      numberOfPosts: 0,
+      numberOfFollowers: 0,
+      numberOfFollowings: 0,
+    }
+  },
+  mounted() {
+    this.getProfileInfo(this.user.username)
+    .then((profile) => {
+      this.numberOfPosts = profile.numberOfPosts
+      this.numberOfFollowers = profile.numberOfFollowers
+      this.numberOfFollowings = profile.numberOfFollowing
+    })
+    .catch((error) => {
+
+    })
+  },
+  methods: {
+    ...mapActions('modules/profile/profileInfo', ['getProfileInfo'])
   }
 }
 </script>
