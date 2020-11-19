@@ -5,36 +5,36 @@
       lg="2"
       md="3"
       sm="3">
-<!--      <Categories v-show="!isCommunitiesLoading"/>-->
-      <MenuIconLoader v-show="true"/>
+      <Categories v-show="!isPageLoading"/>
+      <MenuIconLoader v-show="isPageLoading"/>
     </v-col>
     <v-col
       cols="12"
       lg="8"
       md="6"
       sm="6">
-      <Write @posted="getPosts" v-show="false"/>
-      <WriteLoader v-show="true"/>
+      <Write @posted="getPosts" v-show="!isPageLoading"/>
+      <WriteLoader v-show="isPageLoading"/>
       <br>
       <PostQuickView
-        v-show="false"
+        v-show="!isPageLoading"
         v-for="(post, i) in posts" :key="i" :post="post"/>
-      <PostQuickViewLoader v-show="true" v-for="i in 5"/>
+      <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5"/>
     </v-col>
     <v-col
       cols="12"
       lg="2"
       md="3"
       sm="3">
-      <!--      <User :user="this.$auth.user"/>-->
-      <UserLoader v-show="true"/>
+            <User v-show="!isPageLoading" :user="this.$auth.user"/>
+      <UserLoader v-show="isPageLoading"/>
 
       <br>
-<!--      <Communities-->
-<!--        v-show="!isCommunitiesLoading"-->
-<!--        :communities="communities"-->
-<!--        @refresh="refresh"/>-->
-      <MenuIconLoader v-show="true"/>
+      <Communities
+        v-show="!isPageLoading"
+        :communities="communities"
+        @refresh="refresh"/>
+      <MenuIconLoader v-show="isPageLoading"/>
     </v-col>
   </v-row>
 </template>
@@ -68,8 +68,24 @@
         posts: null,
         communities: [],
 
-        isPostLoading: true,
-        isCommunitiesLoading: true
+        loading: {
+          isPostLoading: true,
+          isCategoryLoading: true,
+          isCommunitiesLoading: true
+        },
+      }
+    },
+    mounted() {
+      this.getPosts();
+    },
+    computed: {
+      isPageLoading() {
+        for (const [key, value] of Object.entries(this.loading)) {
+          if (value) {
+            return true;
+          }
+        }
+        return false
       }
     },
     methods: {
@@ -78,14 +94,15 @@
         this.$axios.get('api/posts/home_posts?order_key=new')
           .then((res) => {
             this.posts = res.data.posts;
-            this.isPostLoading = false;
+            this.loading.isPostLoading = false;
+            this.loading.isCategoryLoading = false;
           })
           .catch(e => this.$notifier.showMessage({content: e.message, color: 'error'}));
         // Communities
         this.$axios.get('api/community/user_communities').then(
           ({data}) => {
             this.communities = data.communities;
-            this.isCommunitiesLoading = false;
+            this.loading.isCommunitiesLoading = false;
           }
         ).catch(e => this.$notifier.showMessage({content: e.message, color: 'error'}));
       },
@@ -94,9 +111,6 @@
         this.getPosts();
       }
     },
-    mounted() {
-      this.getPosts();
-    }
   }
 </script>
 

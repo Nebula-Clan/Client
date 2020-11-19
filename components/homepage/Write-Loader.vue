@@ -6,6 +6,7 @@
     </v-card-title>
     <v-skeleton-loader
       v-show="true"
+      height="150"
       class="mb-2 pa-1"
       elevation="2"
       type="image"/>
