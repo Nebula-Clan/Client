@@ -17,15 +17,30 @@
         :post="post"
         :author="author"
         :content="postContent"/>
-      <v-card v-show="isPostContentLoading">
-        <div class="ma-2">
+      <v-card v-show="isPostContentLoading" class="pa-2">
+        <div class="mx-2  my-6">
           <v-skeleton-loader
             type="card-heading, image"/>
         </div>
         <div
-          class="ma-2">
+          class="mx-2  my-4">
           <v-skeleton-loader
-            type="paragraph, paragraph, paragraph, paragraph"/>
+            type="paragraph"/>
+        </div>
+        <div
+          class="mx-2  my-4">
+          <v-skeleton-loader
+            type="paragraph"/>
+        </div>
+        <div
+          class="mx-2  my-4">
+          <v-skeleton-loader
+            type="paragraph"/>
+        </div>
+        <div
+          class="mx-2  my-4">
+          <v-skeleton-loader
+            type="paragraph"/>
         </div>
         <div
           class="ma-2">
@@ -35,7 +50,7 @@
       </v-card>
       <div>
         <NestedComments v-show="!isCommentLoading" :postId="$route.params.id" :root="comments"/>
-        <v-card v-show="isCommentLoading">
+        <v-card v-show="isCommentLoading" class="mt-3">
           <div
             class="ma-2">
             <v-skeleton-loader
@@ -65,64 +80,64 @@
 </template>
 
 <script>
-import User from "@/components/homepage/User";
-import Categories from "@/components/homepage/Categories";
-import Communities from "@/components/homepage/Communities";
-import Write from "@/components/homepage/Write";
-import PostQuickView from "@/components/homepage/Post-quick-view";
-import PostView from "@/components/post/PostView";
-import NestedComments from "@/components/comment/NestedComments";
-import {mapActions} from "vuex";
+  import User from "@/components/homepage/User";
+  import Categories from "@/components/homepage/Categories";
+  import Communities from "@/components/homepage/Communities";
+  import Write from "@/components/homepage/Write";
+  import PostQuickView from "@/components/homepage/Post-quick-view";
+  import PostView from "@/components/post/PostView";
+  import NestedComments from "@/components/comment/NestedComments";
+  import {mapActions} from "vuex";
 
-export default {
-  name: "_id",
-  components: {
-    NestedComments,
-    PostView,
-    User,
-    Categories,
-    Communities,
-    Write,
-    PostQuickView
-  },
-  data: () => ({
-    post: '',
-    author: '',
-    postContent: `<style>img{width: 100%;}</style>`,
-    comments: [],
-
-    isPostContentLoading: true,
-    isCommentLoading: true
-  }),
-  mounted() {
-    this.fetchComments();
-    this.fetchPostContent();
-  },
-  methods: {
-    ...mapActions('modules/post', ['getFullPost']),
-    ...mapActions('modules/comment/post_comment', ['getComments']),
-    fetchComments() {
-      this.getComments({postId: this.$route.params.id}).then(({data}) => {
-        this.comments = data.comments;
-        this.isCommentLoading = false;
-      }).catch((error) => {
-        console.log(error)
-      })
+  export default {
+    name: "_id",
+    components: {
+      NestedComments,
+      PostView,
+      User,
+      Categories,
+      Communities,
+      Write,
+      PostQuickView
     },
-    fetchPostContent() {
-      this.getFullPost({
-        id: this.$route.params.id,
-      }).then(({data}) => {
-        this.post = data.post;
-        this.author = data.post.author;
-        this.postContent += data.post.post_content.content_text;
-        this.isPostContentLoading = false;
-      }).catch((error) => {
-        console.log(error);
-      });
+    data: () => ({
+      post: '',
+      author: '',
+      postContent: `<style>img{width: 100%;}</style>`,
+      comments: [],
+
+      isPostContentLoading: true,
+      isCommentLoading: true
+    }),
+    mounted() {
+      this.fetchComments();
+      this.fetchPostContent();
+    },
+    methods: {
+      ...mapActions('modules/post', ['getFullPost']),
+      ...mapActions('modules/comment/post_comment', ['getComments']),
+      fetchComments() {
+        this.getComments({postId: this.$route.params.id}).then(({data}) => {
+          this.comments = data.comments;
+          this.isCommentLoading = false;
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
+      fetchPostContent() {
+        this.getFullPost({
+          id: this.$route.params.id,
+        }).then(({data}) => {
+          this.post = data.post;
+          this.author = data.post.author;
+          this.postContent += data.post.post_content.content_text;
+          this.isPostContentLoading = false;
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
     }
   }
-}
 </script>
 
 <style scoped>

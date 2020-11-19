@@ -1,16 +1,17 @@
 <template>
   <div>
-    <!--    <Intro-->
-    <!--      @userState="getInfo"-->
-    <!--      v-if="introData"-->
-    <!--      :data="introData"-->
-    <!--      :userJoined="isUserJoined"/>-->
-    <HeaderLoader v-show="true"/>
+    <Intro
+      @userState="getInfo"
+      v-show="!isPageLoading"
+      v-if="introData"
+      :data="introData"
+      :userJoined="isUserJoined"/>
+    <HeaderLoader v-show="isPageLoading"/>
 
     <v-row class="pa-5">
       <v-col cols="3">
-        <!--        <About v-if="introData" :name="introData.name" :about="introData.about"/>-->
-        <v-card v-show="true" class="pa-2">
+        <About v-show="!isPageLoading" v-if="introData" :name="introData.name" :about="introData.about"/>
+        <v-card v-show="isPageLoading" class="pa-2">
           <div class="ma-2">
             <v-skeleton-loader
               type="heading"/>
@@ -23,15 +24,15 @@
         </v-card>
       </v-col>
       <v-col>
-        <!--        <Write v-if="name" :community="name" @posted="getPosts"/>-->
-        <WriteLoader/>
+        <Write v-show="!isPageLoading" v-if="name" :community="name" @posted="getPosts"/>
+        <WriteLoader v-show="isPageLoading"/>
 
-        <!--        <PostQuickView v-if="posts" :key="post.id" v-for="post in posts" :post="post"/>-->
-        <PostQuickViewLoader v-show="true" v-for="i in 5"/>
+        <PostQuickView v-show="!isPageLoading" v-if="posts" :key="post.id" v-for="post in posts" :post="post"/>
+        <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5"/>
       </v-col>
       <v-col cols="3">
-        <!--        <People v-if="members" :people="members" />-->
-        <v-card v-show="true" class="pa-2">
+        <People v-show="!isPageLoading" v-if="members" :people="members"/>
+        <v-card v-show="isPageLoading" class="pa-2">
           <div class="ma-2">
             <v-skeleton-loader
               type="heading"/>
@@ -76,32 +77,49 @@
         isUserJoined: false,
         members: null,
         posts: null,
-        name: null
+        name: null,
+
+        loading: {
+          isPostLoading: true,
+          isCommunityLoading: true
+        }
       }
     },
     mounted() {
       this.getInfo();
       this.getPosts();
     },
+    computed: {
+      isPageLoading() {
+        for (const [key, value] of Object.entries(this.loading)) {
+          if (value) {
+            return true;
+          }
+        }
+        return false
+      }
+    },
     methods: {
       getInfo() {
         this.name = this.$route.params.community_name;
         this.$axios.get(`api/community/get_community?name=${this.name}&summery=f`)
           .then(
-            response => {
+            ({data}) => {
               this.introData = {
-                id: response.data.community.id,
-                name: response.data.community.name,
-                logo: response.data.community.picture,
-                banner: response.data.community.banner_picture,
-                members: response.data.community.members_number,
-                since: response.data.community.date_created,
-                about: response.data.community.about
+                id: data.community.id,
+                name: data.community.name,
+                logo: data.community.picture,
+                banner: data.community.banner_picture,
+                members: data.community.members_number,
+                since: data.community.date_created,
+                about: data.community.about
               };
-              this.members = response.data.community.members;
+              this.members = data.community.members;
               const user = this.members.filter(u => u.username === this.$auth.user.username);
               this.isUserJoined = user.length === 1;
-              // this.posts = response.data.community.posts
+              // this.posts = data.community.posts
+
+              this.loading.isCommunityLoading = false
             }
           ).catch(
           e => this.$notifier.showMessage({content: e.message, color: 'error'})
@@ -109,7 +127,10 @@
       },
       getPosts() {
         this.$axios.get(`api/community/community_posts?name=${this.name}`).then(
-          response => this.posts = response.data.posts
+          ({data}) => {
+            this.posts = data.posts;
+            this.loading.isPostLoading = false;
+          }
         ).catch(
           e => this.$notifier.showMessage({content: e.message, color: 'error'})
         );
