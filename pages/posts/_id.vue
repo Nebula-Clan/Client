@@ -5,7 +5,7 @@
       lg="1"
       md="1"
       sm="2">
-<!--      <Categories/>-->
+      <!--      <Categories/>-->
     </v-col>
     <v-col
       cols="12"
@@ -13,11 +13,45 @@
       md="10"
       sm="8">
       <PostView
+        v-show="!isPostContentLoading"
         :post="post"
         :author="author"
         :content="postContent"/>
+      <v-card v-show="isPostContentLoading">
+        <div class="ma-2">
+          <v-skeleton-loader
+            type="card-heading, image"/>
+        </div>
+        <div
+          class="ma-2">
+          <v-skeleton-loader
+            type="paragraph, paragraph, paragraph, paragraph"/>
+        </div>
+        <div
+          class="ma-2">
+          <v-skeleton-loader
+            type="list-item-avatar"/>
+        </div>
+      </v-card>
       <div>
-        <NestedComments :postId="$route.params.id" :root="comments"/>
+        <NestedComments v-show="!isCommentLoading" :postId="$route.params.id" :root="comments"/>
+        <v-card v-show="isCommentLoading">
+          <div
+            class="ma-2">
+            <v-skeleton-loader
+              type="list-item-avatar-two-line"/>
+          </div>
+          <div
+            class="ma-2">
+            <v-skeleton-loader
+              type="list-item-avatar-two-line"/>
+          </div>
+          <div
+            class="ma-2">
+            <v-skeleton-loader
+              type="list-item-avatar-two-line"/>
+          </div>
+        </v-card>
       </div>
     </v-col>
     <v-col
@@ -25,9 +59,7 @@
       lg="1"
       md="1"
       sm="2">
-<!--      <User :user="this.$auth.user"/>-->
       <br>
-<!--      <Communities/>-->
     </v-col>
   </v-row>
 </template>
@@ -58,6 +90,9 @@ export default {
     author: '',
     postContent: `<style>img{width: 100%;}</style>`,
     comments: [],
+
+    isPostContentLoading: true,
+    isCommentLoading: true
   }),
   mounted() {
     this.fetchComments();
@@ -68,8 +103,8 @@ export default {
     ...mapActions('modules/comment/post_comment', ['getComments']),
     fetchComments() {
       this.getComments({postId: this.$route.params.id}).then(({data}) => {
-        console.log(data)
-        this.comments = data.comments
+        this.comments = data.comments;
+        this.isCommentLoading = false;
       }).catch((error) => {
         console.log(error)
       })
@@ -78,10 +113,10 @@ export default {
       this.getFullPost({
         id: this.$route.params.id,
       }).then(({data}) => {
-        console.log(data)
         this.post = data.post;
         this.author = data.post.author;
         this.postContent += data.post.post_content.content_text;
+        this.isPostContentLoading = false;
       }).catch((error) => {
         console.log(error);
       });
