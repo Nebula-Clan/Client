@@ -1,8 +1,8 @@
 <template>
-    <carousel class="slider" :perPageCustom="[[480,4]]">
+    <carousel class="slider mt-4" :perPageCustom="[[480,4]]">
       <Slide class="pa-2" :key="i" v-for="i in [1,2,3,4,5,6,7]">
         <v-card
-          class="secondary"
+          class="purple darken-2"
           style="height: 200px;">
           <v-card-text>
             {{data[0]}}

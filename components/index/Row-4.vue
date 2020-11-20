@@ -8,7 +8,6 @@
              cols="12"
              md="5">
         <p
-          class="elevation-2"
           data-aos="fade-up">
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
           industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
@@ -40,6 +39,9 @@ export default {
 <style lang="scss" scoped>
 .row4 {
   background-color: #343434;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   h2 {
     font-weight: 100;

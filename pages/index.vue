@@ -15,6 +15,9 @@
     <v-container  fluid>
       <Row5 />
     </v-container>
+    <v-container  fluid>
+      <SignUpRow />
+    </v-container>
   </v-container>
 </template>
 
@@ -25,6 +28,7 @@ import Row3 from "@/components/index/Row-3"
 import Row4 from "@/components/index/Row-4"
 import Row5 from "@/components/index/Row-5"
 import Feature from "@/components/index/Feature";
+import SignUpRow from "@/components/index/SignUpRow";
 export default {
   name: "index",
   components: {
@@ -33,7 +37,8 @@ export default {
     Row3,
     Row4,
     Row5,
-    Feature
+    Feature,
+    SignUpRow
   }
 }
 </script>

@@ -5,10 +5,10 @@
     </v-container>
     <v-row class="px-4 pt-4 community" fluid>
       <v-col
+        class="img"
         cols="12"
         md="7">
         <v-img
-          data-aos="fade-in"
           :src="require('../../static/landing/row-3.png')"
           alt="community"
           class="com-img"
@@ -18,13 +18,11 @@
         class="d-flex justify-center align-center description"
         cols="12"
         md="5">
-        <div data-aos="fade-up" >
-          <p class="elevation-2">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.
-          </p>
-        </div>
+        <p data-aos="fade-up">
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book.
+        </p>
       </v-col>
     </v-row>
   </v-container>
@@ -48,7 +46,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 100%;
-
+  min-height: 100vh;
   h2 {
     font-weight: 100;
   }
@@ -58,9 +56,13 @@ export default {
     padding-bottom: 0;
     margin-bottom: 0;
 
-    .com-img {
-      padding: 0;
-      margin-bottom: -10px;
+    .img {
+      position: relative;
+      .com-img {
+        position: absolute;
+        padding: 0;
+        bottom: 0;
+      }
     }
 
     .description {
