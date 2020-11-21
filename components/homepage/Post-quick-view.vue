@@ -114,85 +114,84 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+  import {mapActions} from 'vuex'
 
-export default {
-  name: 'Post-quick-view',
-  props: ['post'],
-  data: () => {
-    return {
-      chipsColors: [
-        'blue', 'red', 'green', 'purple', 'orange'
-      ],
-      like: false,
-      dislike: false
-    }
-  },
-  methods: {},
-  computed: {
-    likedPost() {
-        if (!this.dislike && (this.post.is_liked || this.like)) {
-            return 'pink'
-        } else {
-            return ''
-        }
-    },
-    dateDuration: {
-      get: function () {
-        const unixTime = new Date(this.post.date_created).getTime()
-        const now = new Date().getTime()
-        if (now - unixTime < 36e+5) {
-          return Math.floor((now - unixTime) / 60000) + ' m'
-        } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
-          return Math.floor((now - unixTime) / 36e+5) + ' h'
-        } else {
-          return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
-        }
+  export default {
+    name: 'Post-quick-view',
+    props: ['post'],
+    data: () => {
+      return {
+        chipsColors: [
+          'blue', 'red', 'green', 'purple', 'orange'
+        ],
+        like: false,
+        dislike: false
       }
     },
-  },
+    computed: {
+      likedPost() {
+        if (!this.dislike && (this.post.is_liked || this.like)) {
+          return 'pink'
+        } else {
+          return ''
+        }
+      },
+      dateDuration: {
+        get: function () {
+          const unixTime = new Date(this.post.date_created).getTime()
+          const now = new Date().getTime()
+          if (now - unixTime < 36e+5) {
+            return Math.floor((now - unixTime) / 60000) + ' m'
+          } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
+            return Math.floor((now - unixTime) / 36e+5) + ' h'
+          } else {
+            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+          }
+        }
+      },
+    },
     methods: {
       ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
       likePost() {
         if (!this.like) {
           this.submitLikeAtPostWithID(this.post.id)
-          .then(({ data }) => {
+            .then(({data}) => {
               this.like = true
               this.dislike = false
-          })
-          .catch((error) => {
+            })
+            .catch((error) => {
               if (error.response.status == 403) {
-                  this.showErrorWithMessage('Please Login in or Sign Up')
+                this.showErrorWithMessage('Please Login in or Sign Up')
               }
-          })
+            })
         } else {
           this.deleteLikeAtPostWithID(this.post.id)
-          .then(({ data }) => {
+            .then(({data}) => {
               this.like = false
               this.dislike = true
-          })
-          .catch((error) => {
+            })
+            .catch((error) => {
               if (error.response.status == 403) {
-                  this.showErrorWithMessage('Please Login in or Sign Up')
+                this.showErrorWithMessage('Please Login in or Sign Up')
               }
-          })
+            })
         }
       },
       showErrorWithMessage(message) {
         this.$notifier.showMessage({content: message, color: 'error'});
       }
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.header-image {
-  text-align: center;
+  .header-image {
+    text-align: center;
 
-  img {
-    width: 90%;
-    height: 250px;
-    border-radius: 5px;
+    img {
+      width: 90%;
+      height: 250px;
+      border-radius: 5px;
+    }
   }
-}
 </style>

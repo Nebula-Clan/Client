@@ -2,11 +2,11 @@ import axios from 'axios'
 
 const state = {
   isCommentToPostExpanded: false,
-}
+};
 
 const getters = {
   isCommentToPostExpanded: state => state.isCommentToPostExpanded
-}
+};
 
 const actions = {
   // Requests
@@ -34,11 +34,11 @@ const actions = {
   setCommentToPost({commit}, status) {
     commit('setIsCommentToPostExpanded', !status);
   }
-}
+};
 
 const mutations = {
   setIsCommentToPostExpanded: (state, status) => (state.isCommentToPostExpanded = status),
-}
+};
 
 export default {
   state,

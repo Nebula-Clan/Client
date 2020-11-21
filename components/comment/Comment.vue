@@ -69,13 +69,16 @@
           md="3"
           lg="2"
           xl="1">
-          <v-btn icon>
+          <v-btn
+            :color="isLiked"
+            @click="onLikeCommentClicked"
+            icon>
             <v-icon small>mdi-heart</v-icon>
           </v-btn>
           <a
             class="reply"
             @click="openLikeDialog">
-            ({{ 12 }})
+            {{ comment.total_likes_count }}
           </a>
         </v-col>
       </v-row>
@@ -122,13 +125,12 @@
 
   export default {
     name: "Comment",
-    components: {Comments: () => import('@/components/comment/Comments')},
+    components: { Comments: () => import('@/components/comment/Comments') },
     data: () => ({
       author: "",
       avatar: "",
       date: new Date(),
       textComment: "",
-      likes: 0,
 
       isReplyTextAreaExpanded: false,
       isLoadingToSend: false,
@@ -163,45 +165,81 @@
       height() {
         switch (this.$vuetify.breakpoint.name) {
           case 'xs':
-            return 220
+            return 220;
           case 'sm':
-            return 400
+            return 400;
           case 'md':
-            return 500
+            return 500;
           case 'lg':
-            return 600
+            return 600;
           case 'xl':
-            return 800
+            return 800;
+        }
+      },
+      isLiked() {
+        if (this.comment.is_liked) {
+          return 'pink'
+        } else {
+          return ''
         }
       },
     },
     methods: {
       ...mapActions('modules/comment/post_comment', ['replyToComment']),
       ...mapActions('modules/comment/post_comment', ['getRepliesComments']),
+      ...mapActions('modules/comment/post_comment', ['likeComment']),
+      ...mapActions('modules/comment/post_comment', ['dislikeComment']),
       openLikeDialog() {
 
+      },
+      onLikeCommentClicked() {
+        let liked = !this.comment.is_liked;
+        this.comment.is_liked = !this.comment.is_liked;
+        if (!liked) {
+          this.dislikeComment({
+            commentId: this.comment.id
+          }).then(({ data }) => {
+            this.is_liked = false;
+            this.comment.total_likes_count--;
+          }).catch((error) => {
+            this.is_liked = true;
+            this.comment.total_likes_count++;
+            this.$notifier.showMessage({ content: error.message, color: 'error' })
+          });
+        } else {
+          this.likeComment({
+            commentId: this.comment.id
+          }).then(({ data }) => {
+            this.is_liked = true;
+            this.comment.total_likes_count++;
+          }).catch((error) => {
+            this.is_liked = false;
+            this.comment.total_likes_count--;
+            this.$notifier.showMessage({ content: error.message, color: 'error' })
+          });
+        }
       },
       replyComment() {
         this.isLoadingToSend = true;
         this.replyToComment({
           commentId: this.comment.id,
           content: this.replayText,
-        }).then(({data}) => {
+        }).then(({ data }) => {
           this.fetchRepliesToComment()
         }).catch((error) => {
-          console.log(error);
+          this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
       },
       fetchRepliesToComment() {
         this.getRepliesComments({
           commentId: this.comment.id
-        }).then(({data}) => {
+        }).then(({ data }) => {
           this.replies = data.replies;
           this.isLoadingToSend = false;
           this.isReplyTextAreaExpanded = false;
           this.replayText = "";
         }).catch((error) => {
-          console.log(error);
+          this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
       }
     }
