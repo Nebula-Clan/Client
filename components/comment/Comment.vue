@@ -1,8 +1,8 @@
 <template>
   <v-card
-    class="comment pa-2 mt-1"
+    class="comment px-2 py-4 mt-1"
     :color="depth % 2 === 1 ? '#2a2a2a' : '#1e1e1e'">
-    <a class="avatar">
+    <a class="avatar ml-1">
       <img :src="$axios.defaults.baseURL + comment.author.profile_picture" :alt="comment.author.username">
     </a>
     <div class="content">
@@ -199,22 +199,20 @@
           this.dislikeComment({
             commentId: this.comment.id
           }).then(({ data }) => {
-            this.is_liked = false;
+            this.comment.is_liked = false;
             this.comment.total_likes_count--;
           }).catch((error) => {
-            this.is_liked = true;
-            this.comment.total_likes_count++;
+            this.comment.is_liked = true;
             this.$notifier.showMessage({ content: error.message, color: 'error' })
           });
         } else {
           this.likeComment({
             commentId: this.comment.id
           }).then(({ data }) => {
-            this.is_liked = true;
+            this.comment.is_liked = true;
             this.comment.total_likes_count++;
           }).catch((error) => {
-            this.is_liked = false;
-            this.comment.total_likes_count--;
+            this.comment.is_liked = false;
             this.$notifier.showMessage({ content: error.message, color: 'error' })
           });
         }
@@ -290,7 +288,7 @@
     margin: 0em auto;
     width: 100%;
     height: 100%;
-    border-radius: 0.25rem;
+    border-radius: 2rem;
   }
 
   /*--------------
