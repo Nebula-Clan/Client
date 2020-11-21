@@ -6,7 +6,7 @@
       md="3"
       sm="3">
       <Categories v-show="!isPageLoading"/>
-      <MenuIconLoader v-show="isPageLoading"/>
+      <MenuIconLoader v-show="isPageLoading" :number-of-items="10"/>
     </v-col>
     <v-col
       cols="12"
@@ -34,7 +34,7 @@
         v-show="!isPageLoading"
         :communities="communities"
         @refresh="refresh"/>
-      <MenuIconLoader v-show="isPageLoading"/>
+      <MenuIconLoader v-show="isPageLoading" :number-of-items="5"/>
     </v-col>
   </v-row>
 </template>
