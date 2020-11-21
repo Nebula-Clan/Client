@@ -33,7 +33,20 @@ const actions = {
   // Post view management
   setCommentToPost({commit}, status) {
     commit('setIsCommentToPostExpanded', !status);
-  }
+  },
+  // Likes
+  likePost({ commit }, data) {
+    return this.$axios.post('api/likes/post/submit', {
+      'post_id' : data.postId
+    })
+  },
+  dislikePost({ commit }, data) {
+    return this.$axios.$request({
+      url: 'api/likes/post/delete',
+      method: 'delete',
+      data: {"id" : data.postId}
+    })
+  },
 };
 
 const mutations = {
