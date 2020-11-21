@@ -83,23 +83,28 @@
     <!-- Replay  -->
     <v-expand-transition>
       <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
-        <v-textarea
-          outlined
-          auto-grow
-          v-model="replayText"
-          :label="`Reply ${comment.author.username}`"
-        ></v-textarea>
-        <div class="pb-2 d-flex flex-row-reverse">
-          <v-btn
-            @click="replyComment"
-            depressed
+        <v-form v-model="isFormValid" @submit.prevent="onSubmit">
+          <v-textarea
+            :rules="commentRules"
             outlined
-            color="primary"
-            :loading="isLoadingToSend"
-            elevation="2">
-            Send
-          </v-btn>
-        </div>
+            auto-grow
+            v-model="replayText"
+            counter="100"
+            :label="`Reply ${comment.author.username}`"/>
+          <div class="pb-2 d-flex flex-row-reverse">
+            <v-btn
+              @click="replyComment"
+              depressed
+              outlined
+              class="mt-2"
+              color="primary"
+              :loading="isLoadingToSend"
+              :disabled="!isFormValid"
+              elevation="2">
+              Send
+            </v-btn>
+          </div>
+        </v-form>
       </div>
     </v-expand-transition>
     <v-expand-transition v-if="replies.length !== 0">
@@ -113,230 +118,237 @@
 
 <script>
 
-import {mapActions} from "vuex";
+  import {mapActions} from "vuex";
 
-export default {
-  name: "Comment",
-  components: {Comments: () => import('@/components/comment/Comments')},
-  data: () => ({
-    author: "",
-    avatar: "",
-    date: new Date(),
-    textComment: "",
-    likes: 0,
+  export default {
+    name: "Comment",
+    components: {Comments: () => import('@/components/comment/Comments')},
+    data: () => ({
+      author: "",
+      avatar: "",
+      date: new Date(),
+      textComment: "",
+      likes: 0,
 
-    isReplyTextAreaExpanded: false,
-    isLoadingToSend: false,
-    replayText: "",
+      isReplyTextAreaExpanded: false,
+      isLoadingToSend: false,
+      replayText: "",
 
-    isRepliesExpanded: false,
-  }),
-  props: ['comment', 'replies', 'depth'],
-  computed: {
-    dateDuration: {
-      get: function () {
-        const unixTime = new Date(this.comment.create_date).getTime()
-        const now = new Date().getTime()
-        if (now - unixTime < 180000) {
-          return 'Just now'
-        } else if (now - unixTime < 36e+5) {
-          return Math.floor((now - unixTime) / 60000) + ' m'
-        } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
-          return Math.floor((now - unixTime) / 36e+5) + ' h'
-        } else {
-          return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+      isRepliesExpanded: false,
+      isFormValid: false,
+
+      commentRules: [
+        p => !!p || 'Type Something',
+        p => p.length >= 3 || 'Must be at least 3 characters',
+        p => p.length <= 100 || 'Must be lower than 100 characters',
+      ],
+    }),
+    props: ['comment', 'replies', 'depth'],
+    computed: {
+      dateDuration: {
+        get: function () {
+          const unixTime = new Date(this.comment.create_date).getTime()
+          const now = new Date().getTime()
+          if (now - unixTime < 180000) {
+            return 'Just now'
+          } else if (now - unixTime < 36e+5) {
+            return Math.floor((now - unixTime) / 60000) + ' m'
+          } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
+            return Math.floor((now - unixTime) / 36e+5) + ' h'
+          } else {
+            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+          }
         }
-      }
+      },
+      height() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs':
+            return 220
+          case 'sm':
+            return 400
+          case 'md':
+            return 500
+          case 'lg':
+            return 600
+          case 'xl':
+            return 800
+        }
+      },
     },
-    height() {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 220
-        case 'sm':
-          return 400
-        case 'md':
-          return 500
-        case 'lg':
-          return 600
-        case 'xl':
-          return 800
-      }
-    }
-  },
-  methods: {
-    ...mapActions('modules/comment/post_comment', ['replyToComment']),
-    ...mapActions('modules/comment/post_comment', ['getRepliesComments']),
-    openLikeDialog() {
+    methods: {
+      ...mapActions('modules/comment/post_comment', ['replyToComment']),
+      ...mapActions('modules/comment/post_comment', ['getRepliesComments']),
+      openLikeDialog() {
 
-    },
-    replyComment() {
-      this.isLoadingToSend = true;
-      this.replyToComment({
-        commentId: this.comment.id,
-        content: this.replayText,
-      }).then(({data}) => {
-        this.fetchRepliesToComment()
-      }).catch((error) => {
-        console.log(error);
-      })
-    },
-    fetchRepliesToComment() {
-      this.getRepliesComments({
-        commentId: this.comment.id
-      }).then(({data}) => {
-        this.replies = data.replies;
-        this.isLoadingToSend = false;
-        this.isReplyTextAreaExpanded = false;
-        this.replayText = "";
-      }).catch((error) => {
-        console.log(error);
-      })
+      },
+      replyComment() {
+        this.isLoadingToSend = true;
+        this.replyToComment({
+          commentId: this.comment.id,
+          content: this.replayText,
+        }).then(({data}) => {
+          this.fetchRepliesToComment()
+        }).catch((error) => {
+          console.log(error);
+        })
+      },
+      fetchRepliesToComment() {
+        this.getRepliesComments({
+          commentId: this.comment.id
+        }).then(({data}) => {
+          this.replies = data.replies;
+          this.isLoadingToSend = false;
+          this.isReplyTextAreaExpanded = false;
+          this.replayText = "";
+        }).catch((error) => {
+          console.log(error);
+        })
+      }
     }
   }
-}
 </script>
 
 <style scoped lang="scss">
 
-/*--------------
-     Comment
----------------*/
-.comment {
-  position: relative;
-  background: none;
-  border: none;
-  border-top: none;
-  line-height: 1.2;
-}
+  /*--------------
+       Comment
+  ---------------*/
+  .comment {
+    position: relative;
+    background: none;
+    border: none;
+    border-top: none;
+    line-height: 1.2;
+  }
 
-.comment:first-child {
-  margin-top: 0em;
-  padding-top: 0em;
-}
+  .comment:first-child {
+    margin-top: 0em;
+    padding-top: 0em;
+  }
 
-/*--------------------
-    Nested Comments
----------------------*/
-.comment {
-  border: none;
-  border-top: none;
-  background: none;
-}
+  /*--------------------
+      Nested Comments
+  ---------------------*/
+  .comment {
+    border: none;
+    border-top: none;
+    background: none;
+  }
 
-/*--------------
-     Avatar
----------------*/
-.comment .avatar {
-  display: block;
-  width: 2.5em;
-  height: auto;
-  float: left;
-  margin: 0.2em 0em 0em;
-}
+  /*--------------
+       Avatar
+  ---------------*/
+  .comment .avatar {
+    display: block;
+    width: 2.5em;
+    height: auto;
+    float: left;
+    margin: 0.2em 0em 0em;
+  }
 
-.comment img.avatar,
-.comment .avatar img {
-  display: block;
-  margin: 0em auto;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.25rem;
-}
+  .comment img.avatar,
+  .comment .avatar img {
+    display: block;
+    margin: 0em auto;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25rem;
+  }
 
-/*--------------
-     Content
----------------*/
-.comment > .content {
-  display: block;
-}
+  /*--------------
+       Content
+  ---------------*/
+  .comment > .content {
+    display: block;
+  }
 
-/* If there is an avatar move content over */
-.comment > .avatar ~ .content {
-  margin-left: 3.5em;
-}
+  /* If there is an avatar move content over */
+  .comment > .avatar ~ .content {
+    margin-left: 3.5em;
+  }
 
-/*--------------
-     Author
----------------*/
-.comment .author {
-  font-size: 1em;
-  color: $color-comment-username;
-  font-weight: bold;
-}
+  /*--------------
+       Author
+  ---------------*/
+  .comment .author {
+    font-size: 1em;
+    color: $color-comment-username;
+    font-weight: bold;
+  }
 
-.comment a.author {
-  cursor: pointer;
-}
+  .comment a.author {
+    cursor: pointer;
+  }
 
-.comment a.author:hover {
-  color: $color-comment-hover;
-}
+  .comment a.author:hover {
+    color: $color-comment-hover;
+  }
 
-/*--------------
-     Metadata
----------------*/
-.comment .metadata {
-  display: inline-block;
-  margin-left: 0.5em;
-  color: $color-comment-metadata;
-  font-size: 0.875em;
-}
+  /*--------------
+       Metadata
+  ---------------*/
+  .comment .metadata {
+    display: inline-block;
+    margin-left: 0.5em;
+    color: $color-comment-metadata;
+    font-size: 0.875em;
+  }
 
-.comment .metadata > * {
-  display: inline-block;
-  margin: 0em 0.5em 0em 0em;
-}
+  .comment .metadata > * {
+    display: inline-block;
+    margin: 0em 0.5em 0em 0em;
+  }
 
-.comment .metadata > :last-child {
-  margin-right: 0em;
-}
+  .comment .metadata > :last-child {
+    margin-right: 0em;
+  }
 
-/*--------------------
-     Comment Text
----------------------*/
-.comment .text {
-  margin: 0.25em 0em 0.5em;
-  font-size: 1em;
-  word-wrap: break-word;
-  color: $color-comment-content;
-  line-height: 1.3;
-}
+  /*--------------------
+       Comment Text
+  ---------------------*/
+  .comment .text {
+    margin: 0.25em 0em 0.5em;
+    font-size: 1em;
+    word-wrap: break-word;
+    color: $color-comment-content;
+    line-height: 1.3;
+  }
 
-/*--------------------
-     User Actions
----------------------*/
-.comment .actions {
-  font-size: 0.875em;
-}
+  /*--------------------
+       User Actions
+  ---------------------*/
+  .comment .actions {
+    font-size: 0.875em;
+  }
 
-.comment .actions a {
-  cursor: pointer;
-  display: inline-block;
-  margin: 0em 0.75em 0em 0em;
-  color: $color-comment-actions;
-}
+  .comment .actions a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0em 0.75em 0em 0em;
+    color: $color-comment-actions;
+  }
 
-.comment .actions a:last-child {
-  margin-right: 0em;
-}
+  .comment .actions a:last-child {
+    margin-right: 0em;
+  }
 
-.comment .actions a.active,
-.comment .actions a:hover {
-  color: $color-comment-actions-hover;
-}
+  .comment .actions a.active,
+  .comment .actions a:hover {
+    color: $color-comment-actions-hover;
+  }
 
-.ui.minimal.comments .comment .actions {
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  left: auto;
-  transition: opacity 0.2s ease;
-  transition-delay: 0.1s;
-}
+  .ui.minimal.comments .comment .actions {
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: auto;
+    transition: opacity 0.2s ease;
+    transition-delay: 0.1s;
+  }
 
-.ui.minimal.comments .comment > .content:hover > .actions {
-  opacity: 1;
-}
+  .ui.minimal.comments .comment > .content:hover > .actions {
+    opacity: 1;
+  }
 
 </style>

@@ -4,7 +4,7 @@
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Signup now!</div>
-    <v-divider class="my-6"></v-divider>
+    <v-divider class="my-6"/>
     <v-form v-model="valid" @submit.prevent="onSubmit">
       <v-text-field
         label="Username"
@@ -57,7 +57,7 @@
         Sign Up
       </v-btn>
     </v-form>
-    <v-divider class="my-6"></v-divider>
+    <v-divider class="my-6"/>
     <nuxt-link class="white--text" to="/login">I have account!</nuxt-link>
 
     <v-snackbar

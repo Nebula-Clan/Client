@@ -31,12 +31,12 @@
         Sign In
       </v-btn>
     </v-form>
-    <v-divider class="my-6"></v-divider>
+    <v-divider class="my-6"/>
     <div>
       <SocialButton :uiData="socialAccounts.github" :on-click="loginGithub"/>
       <SocialButton :uiData="socialAccounts.google" :on-click="loginGoogle"/>
       <SocialButton :uiData="socialAccounts.facebook" :on-click="loginFacebook"/>
-      <v-divider class="my-6"></v-divider>
+      <v-divider class="my-6"/>
       <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     </div>
     <v-snackbar
