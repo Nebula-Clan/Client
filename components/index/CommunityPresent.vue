@@ -8,20 +8,20 @@
         class="img"
         cols="12"
         md="7">
-        <v-img
-          :src="require('../../static/landing/row-3.png')"
+        <img
+          :src="require('../../static/landing/row3.svg')"
           alt="community"
           class="com-img"
-          style="width: 700px"></v-img>
+          style="width: 700px"/>
       </v-col>
       <v-col
         class="d-flex justify-center align-center description"
         cols="12"
         md="5">
         <p data-aos="fade-up">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          You should definitely see the communities, it's like a big society you can share your ideas,
+          amazing art works and so much more. Find the coolest things there, get updated about your passion
+          and meet new people.
         </p>
       </v-col>
     </v-row>
@@ -32,7 +32,7 @@
 import VueAos from "vue-aos"
 
 export default {
-  name: "Row-3",
+  name: "CommunityPresent",
   components: {
     VueAos
   }
@@ -52,7 +52,7 @@ export default {
   }
 
   .community {
-    background-color: #23241f;
+    background-color: #212121;
     padding-bottom: 0;
     margin-bottom: 0;
 

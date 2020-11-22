@@ -7,10 +7,16 @@
       <Row2 />
     </v-container>
     <v-container  fluid>
-      <Row3 />
+      <CommunityPresent />
     </v-container>
     <v-container  fluid>
-      <Row4 />
+      <DirectChatPresent />
+    </v-container>
+    <v-container  fluid>
+      <ChatRoomPresent />
+    </v-container>
+    <v-container  fluid>
+      <CategoryPresent />
     </v-container>
     <v-container  fluid>
       <Row5 />
@@ -24,21 +30,25 @@
 <script>
 import IntroBanner from "@/components/index/Intro-banner"
 import Row2 from "@/components/index/Row-2"
-import Row3 from "@/components/index/Row-3"
-import Row4 from "@/components/index/Row-4"
+import CommunityPresent from "@/components/index/CommunityPresent"
+import DirectChatPresent from "@/components/index/DirectChatPresent"
 import Row5 from "@/components/index/Row-5"
 import Feature from "@/components/index/Feature";
 import SignUpRow from "@/components/index/SignUpRow";
+import ChatRoomPresent from "@/components/index/ChatRoomPresent";
+import CategoryPresent from "@/components/index/CategoryPresent";
 export default {
   name: "index",
   components: {
     IntroBanner,
     Row2,
-    Row3,
-    Row4,
+    CommunityPresent,
+    DirectChatPresent,
     Row5,
     Feature,
-    SignUpRow
+    SignUpRow,
+    ChatRoomPresent,
+    CategoryPresent
   }
 }
 </script>

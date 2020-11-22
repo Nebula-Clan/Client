@@ -4,7 +4,7 @@
       <div class="data">
         <h1
           data-aos="fade-in"
-          class="primary--text">So, what are you waiting for ?</h1>
+          class="">So, what are you waiting for ?</h1>
         <v-btn x-large
                data-aos="fade-up"
                color="accent"

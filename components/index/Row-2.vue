@@ -11,9 +11,9 @@
         class="description">
         <p
           data-aos="fade-up">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-          industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
+          Hey there, we have a cool editor, you can write absolutely anything from simple daily
+          memories to scientific articles, new festival report with colorful photos and videos
+          and even your questions you are looking for the answer. Get likes and comments, that's the fun part!
         </p>
       </v-col>
       <v-col

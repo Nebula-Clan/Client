@@ -1,11 +1,9 @@
 <template>
-    <carousel class="slider mt-4" :perPageCustom="[[480,4]]">
-      <Slide class="pa-2" :key="i" v-for="i in [1,2,3,4,5,6,7]">
-        <v-card
-          class="purple darken-2"
-          style="height: 200px;">
+    <carousel class="slider mt-4" :perPageCustom="[[480,3]]">
+      <Slide :key="i" v-for="(item, i) in data">
+        <v-card class="item">
           <v-card-text>
-            {{data[0]}}
+            {{item}}
           </v-card-text>
         </v-card>
       </Slide>
@@ -23,7 +21,9 @@ export default {
   data() {
     return {
       data: [
-        'By this feature you can connect with your friends and do a lot of fun.'
+        `Add hashtags to your posts, search hashtags and let them grow`,
+        `Create polls, and see what people are thinking`,
+        `Create questions, and choose the best answer`
       ]
     }
   }
@@ -32,6 +32,15 @@ export default {
 
 <style lang="scss" scoped>
 .slider {
-  width: 70%;
+  text-align: center;
+  width: 60%;
+  .item {
+    background-color: #3E2723;
+    height: 150px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>
