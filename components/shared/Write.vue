@@ -82,7 +82,7 @@ export default {
         title: '',
         description: '',
         contentType: 'OT',
-        category: 'OTHER',
+        category: '',
         content: '',
         headerImage: null,
         hashtags: [],

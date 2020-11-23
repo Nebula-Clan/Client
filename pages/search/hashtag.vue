@@ -21,7 +21,7 @@
 
 <script>
 import Settings from "@/components/search/Settings";
-import PostQuickView from '@/components/homepage/Post-quick-view'
+import PostQuickView from '@/components/shared/Post-quick-view'
 export default {
   name: "hashtag",
   components: {

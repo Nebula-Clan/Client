@@ -57,11 +57,8 @@ export default {
     margin-bottom: 0;
 
     .img {
-      position: relative;
       .com-img {
-        position: absolute;
         padding: 0;
-        bottom: 0;
       }
     }
 

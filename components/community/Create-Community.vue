@@ -7,66 +7,66 @@
       Create Community
     </v-card-title>
     <v-card-text>
-        <v-row>
-          <v-form style="width: 100%"
-                  v-model="formValid"
-                  @submit.prevent="submit">
-            <v-col cols="12">
-              <v-text-field
-                outlined
-                v-model="body.name"
-                :rules="nameRules"
-                counter
-                label="Name">
-              </v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                outlined
-                v-model="body.about"
-                counter
-                auto-grow
-                label="Description"
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12">
-              <v-file-input
-                outlined
-                accept="image/png, image/jpeg, image/bmp"
-                v-model="body.picture"
-                show-size
-                prepend-icon="mdi-camera"
-                label="Select logo"
-                truncate-length="30">
-              </v-file-input>
-              <v-file-input
-                outlined
-                accept="image/png, image/jpeg, image/bmp"
-                v-model="body.banner_picture"
-                show-size
-                prepend-icon="mdi-camera"
-                label="Select banner"
-                truncate-length="30">
-              </v-file-input>
-            </v-col>
-          </v-form>
-        </v-row>
+      <v-row>
+        <v-form v-model="formValid"
+                style="width: 100%"
+                @submit.prevent="submit">
+          <v-col cols="12">
+            <v-text-field
+              v-model="body.name"
+              :rules="nameRules"
+              counter
+              label="Name"
+              outlined>
+            </v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-textarea
+              v-model="body.about"
+              auto-grow
+              counter
+              label="Description"
+              outlined
+            ></v-textarea>
+          </v-col>
+          <v-col cols="12">
+            <v-file-input
+              v-model="body.picture"
+              accept="image/png, image/jpeg, image/bmp"
+              label="Select logo"
+              outlined
+              prepend-icon="mdi-camera"
+              show-size
+              truncate-length="30">
+            </v-file-input>
+            <v-file-input
+              v-model="body.banner_picture"
+              accept="image/png, image/jpeg, image/bmp"
+              label="Select banner"
+              outlined
+              prepend-icon="mdi-camera"
+              show-size
+              truncate-length="30">
+            </v-file-input>
+          </v-col>
+        </v-form>
+      </v-row>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn
-        outlined
         color="error"
+        outlined
         text
         @click="close()">
         Close
       </v-btn>
       <v-btn
-        outlined
         color="primary"
+        outlined
         text
-        @click="submit"
-        type="submit">
+        type="submit"
+        @click="submit">
         Create
       </v-btn>
     </v-card-actions>
@@ -105,19 +105,15 @@ export default {
             () => {
               this.$emit('userState');
               this.loading = !this.loading;
-            }
-          ).catch(
-            error => this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})
-          ).finally(
-            () => this.$emit('close')
-          );
-        }
-      ).catch(
+            }).catch(
+            error => this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'}))
+            .finally(
+            () => this.$emit('close'));
+        }).catch(
         error => {
           this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})
           console.log(error.response.data);
-        }
-      );
+        });
     },
     close() {
       this.$emit('close');

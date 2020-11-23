@@ -66,7 +66,7 @@ export default {
     p {
       font-size: x-large;
       font-weight: 100;
-      border: 1px solid #444444;
+      border: 1px solid #636363;
       padding: 20px;
       border-radius: 5px;
       width: 70%;

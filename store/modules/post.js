@@ -1,11 +1,9 @@
-import axios from 'axios'
-
 const state = {
   isCommentToPostExpanded: false,
 }
 
 const getters = {
-  isCommentToPostExpanded: state => state.isCommentToPostExpanded
+  isCommentToPostExpanded: state => state.isCommentToPostExpanded,
 }
 
 const actions = {

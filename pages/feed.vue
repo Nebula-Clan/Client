@@ -33,8 +33,9 @@
 import User from '@/components/homepage/User'
 import Categories from '@/components/homepage/Categories'
 import Communities from '@/components/homepage/Communities'
-import Write from '@/components/homepage/Write'
-import PostQuickView from '@/components/homepage/Post-quick-view'
+import Write from '@/components/shared/Write'
+import PostQuickView from '@/components/shared/Post-quick-view'
+import {mapGetters} from "vuex";
 
 export default {
   name: 'feed',
@@ -72,7 +73,7 @@ export default {
   },
   mounted() {
     this.getPosts();
-  }
+  },
 }
 </script>
 
