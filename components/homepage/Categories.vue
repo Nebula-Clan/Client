@@ -10,7 +10,7 @@
           v-for="(category, i) in categories"
           :key="i"
           class="text-decoration-none"
-          to="/feed/">
+          :to="`/explore/category?category=${category.title}&sort=new`">
           <v-list-item>
             <v-list-item-icon>
               <v-icon v-text="category.icon"/>

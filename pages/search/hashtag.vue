@@ -50,11 +50,11 @@ export default {
   },
   watch: {
     '$route.query.keyword': function () {
-      this.hashtag = this.$route.query.keyword
+      this.hashtag = this.$route.query.keyword;
       this.getPosts();
     },
     '$route.query.sort': function () {
-      this.sort = this.$route.query.sort
+      this.sort = this.$route.query.sort;
       this.getPosts();
     }
   }
