@@ -9,6 +9,7 @@
 <script>
 import Chat from '~/components/chat/Chat'
 export default {
+    layout: 'chat',
     components: {
         Chat
     }
