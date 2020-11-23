@@ -17,32 +17,32 @@
                                 </div>
                             </v-col>
 
-                        <v-col
-                            class="text-right"
-                            cols="2">
-                            <v-menu>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
-                                        <v-icon>mdi-dots-vertical</v-icon>
-                                    </v-btn>
-                                </template>
-                                <v-list elevation="24">
-                                    <v-list-item>
-                                        <v-icon>mdi-flag</v-icon>
-                                        <v-list-item-title class="ml-1" style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
-                                    </v-list-item>
-                                    <v-list-item>
-                                        <v-icon>mdi-heart</v-icon>
-                                        <v-list-item-title class="ml-1" style="cursor: pointer" @click="showListOfLikes">List of likes</v-list-item-title >
-                                    </v-list-item>
-                                    <v-list-item>
-                                        <v-icon>mdi-share-variant</v-icon>
-                                        <v-list-item-title class="ml-1" style="cursor: pointer" >Share</v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                        </v-col>
-                    </v-row>
+                            <v-col
+                                class="text-right"
+                                cols="2">
+                                <v-menu>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
+                                            <v-icon>mdi-dots-vertical</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <v-list elevation="24">
+                                        <v-list-item>
+                                            <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
+                                            <v-icon>mdi-flag</v-icon>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
+                                            <v-icon>mdi-heart</v-icon>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
+                                            <v-icon>mdi-share-variant</v-icon>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </v-col>
+                        </v-row>
 
                             <v-overlay
                             :z-index="zIndex"
