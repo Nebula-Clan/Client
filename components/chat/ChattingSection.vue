@@ -1,12 +1,17 @@
 <template>
-    <v-container fluid class="fill-height pa-0 back">
-        <v-row no-gutters>
-            <v-col cols="12" class="overflow-y-auto">
-
-            </v-col>
+    <v-content style="height:100vh">
+      <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height">
+        <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
+          <v-col cols="12" class="scrollable">
+	            <v-row v-for="i in 40" :key="i">
+                    <v-col cols="12">
+                        <Message />
+                    </v-col>
+                </v-row>
+          </v-col>
         </v-row>
-        <v-row no-gutters class="mt-auto">
-            <v-col cols="12">
+        <v-row no-gutters class="flex-grow-0 flex-shrink-0">
+          <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
                     <UserInput
                     :show-emoji="true"
@@ -21,11 +26,13 @@
                 </v-container>
             </v-col>
         </v-row>
-    </v-container>
+      </v-container>
+    </v-content>
 </template>
 
 <script>
-import UserInput from './UserInput'
+import UserInput from './UserInput/UserInput'
+import Message from './Message/Message'
 export default {
     data() {
         return {
@@ -91,9 +98,46 @@ export default {
 
 
 <style scoped>
+.grid-item-blue {
+  background-color: lightblue;
+}
+
+.grid-item-green {
+  background-color: lightgreen;
+  overflow-y: scroll;
+}
+
+.grid-item-pink {
+  background-color: pink;
+  height: 100px;
+}
+.grid-item-green>p{
+	height:9000px;
+	border:10px solid;
+	margin:20px;
+}
+
+.fill-parent-height {
+  height: 100%;
+}
+
+.top-row{
+	min-height: 0;
+}
 
 .back {
   background-color: #1E1E1E;
 }
 
+.scrollable {
+    overflow-y: auto;
+    height: 90vh;
+  }
+
+.tab-stick {
+    top: 0px;
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 5;
+}
 </style>
