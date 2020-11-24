@@ -2,32 +2,13 @@
     <v-container fluid>
         <v-list-item two-line>
             <v-list-item-avatar size="50" :style="classForImageError">
-                <v-img v-if="!hasError" :src="getProfileImageUrl" @error="handleImagError" @load="imageLoaded">
-                    <template v-slot:placeholder>
-                        <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                        >
-                        <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                        ></v-progress-circular>
-                        </v-row>
-                    </template>
-                </v-img>
-                <p :class="[textClassForError, 'mt-4']" v-else>
-                    {{ profile.firstname.slice(0, 1).toUpperCase() }}
-                </p>
+                <Avatar :substituteChar="firstChar" :avatarUrl="getProfileImageUrl"
+                :timeOut="12000" :avatarSize="50" :textSize="textClassForError" />
             </v-list-item-avatar>
             <v-list-item-content class="ml-1">
                 <v-list-item-title v-text="profile.firstname + profile.lastname"></v-list-item-title>
                 <v-list-item-subtitle v-text="profile.username"></v-list-item-subtitle>
             </v-list-item-content>
-            <!-- <v-list-item-action>
-                <v-btn v-if="!item.isFollower" class="px-5" color="primary" small> Follow </v-btn>
-                <v-btn v-else color="error" small outlined> Unfollow </v-btn>
-            </v-list-item-action> -->
         </v-list-item>
     </v-container>
 </template>
@@ -49,10 +30,10 @@ export default {
     },
     computed: {
         textClassForError() {
-            if (this.hasError && (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
-                return 'text-h6'
+            if ((this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
+                return 6
             }
-            return 'text-h5'
+            return 5
         },
         classForImageError() {
             if (this.hasError) {
@@ -64,6 +45,9 @@ export default {
         },
         getProfileImageUrl() {
             return this.$axios.defaults.baseURL + this.profile.profileImageUrl
+        },
+        firstChar() {
+            return this.profile.firstname.slice(0, 1).toUpperCase()
         }
     },
     methods: {
