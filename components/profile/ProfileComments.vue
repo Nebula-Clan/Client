@@ -11,16 +11,16 @@
                         </template>
                         <v-list elevation="24">
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
                                 <v-icon style="cursor: pointer">mdi-flag</v-icon>
+                                <v-list-item-title class="ml-1" style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
                             </v-list-item>
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
                                 <v-icon>mdi-heart</v-icon>
+                                <v-list-item-title class="ml-1" style="cursor: pointer" @click="showListOfLikes">List of likes</v-list-item-title >
                             </v-list-item>
                             <v-list-item>
-                                <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
                                 <v-icon style="cursor: pointer">mdi-share-variant</v-icon>
+                                <v-list-item-title class="ml-1" style="cursor: pointer" >Share</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>

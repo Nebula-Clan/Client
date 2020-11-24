@@ -1,6 +1,6 @@
 <template>
     <v-avatar :eager="true" :size="avatarSize"
-    :style="classForImageError">
+    :style="classForImageError" v-bind="avatarProperty">
         <v-img v-if="!showImageByName" :src="avatarSrc"
          :eager="true" @load="imageLoaded" @error="emitError">
             <template v-slot:placeholder>
@@ -24,35 +24,46 @@
 
 
 <script>
-export default {
+//this is component is present avatar logics and functionality
+//read each property for learn about detail
+//for better understanding i will present example
+//example:
+// <Avatar :substituteChar="{ K }" :avatarProperty={'tile': true} :avatarUrl="www.site.com/image.jpg" :substituteColor="#000000"
+//  :timeOut="12000" :avatarSize="50" :textSize="2" :avatarProperty=""/>
+//
+// in this example if avatarUrl is valid url and has image then this Avatar component trying to load image for 12 second
+// after this time if image not loaded or image or url is broken the char 'K' with text size 'text-h2' will show with
+// background #000000 inside avatar with size 50 and avatar will be tile
+
+export default { //this component is trigger error signal for when image couldnt load
     props: {
-        substituteChar: {
+        substituteChar: { //this char show when image couldnt load
             type: String,
             required: true
         },
-        substituteColor: {
+        substituteColor: { //background color for when image couldnt load
             type: String,
             required: false,
             default: '#0D47A1'
         },
-        avatarUrl: {
+        avatarUrl: { //image url for loading avatar if this url invalid or clouldnt load after given timeOut then substitute char will show
             type: String,
             required: true
         },
-        timeOut: {
+        timeOut: { //after passed timeout and if image couldnt load then show substitute char(Note: beware this prop must be passed as milisecond)
             type: Number,
             required: false,
             default: 30000
         },
-        avatarProperty: {
+        avatarProperty: { //v-avatar property for example {'tile': true}
             type: Object,
             required: false
         },
-        avatarSize: {
+        avatarSize: { //avatar size(Note:if your avatar is so big you should handle avatar size id diffrent breakpoint this component does not handle size)
             type: Number,
             required: true
         },
-        textSize: {
+        textSize: { //test size when image couldnt load(Note: this prop is between 1 and 6)
             type: Number,
             require: false,
             validator: function(value) {
