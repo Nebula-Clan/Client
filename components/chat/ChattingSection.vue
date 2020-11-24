@@ -1,10 +1,10 @@
 <template>
-    <v-content style="height:100vh">
+    <v-content style="height:100vh" class="back">
       <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height">
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
-          <v-col cols="12" class="scrollable">
+          <v-col cols="12" class="scrollable" style="overflow-x: hidden">
 	            <v-row v-for="i in 40" :key="i">
-                    <v-col cols="12">
+                    <v-col cols="12" class="d-inline-flex">
                         <Message />
                     </v-col>
                 </v-row>
@@ -126,7 +126,7 @@ export default {
 }
 
 .back {
-  background-color: #1E1E1E;
+  background-color:#212226;
 }
 
 .scrollable {

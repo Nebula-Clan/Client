@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="back">
     <v-col cols="12" class="px-0">
-      <v-textarea class="mx-0 chat-message-typer-textarea" style="border-top: 1px solid gray;border-radius:0px" auto-grow rows="1"
+      <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" style="border-top: 1px solid gray;border-radius:0px" auto-grow rows="1"
        hide-details flat solo placeholder="Send message ...">
       </v-textarea>
     </v-col>
@@ -202,7 +202,7 @@ export default {
 <style scoped>
 
 .back {
-  background-color: #1E1E1E;
+  background-color: #212226;
 }
 
 .chat-message-typer-textarea {
