@@ -1,25 +1,8 @@
 <template>
     <v-row :class="[marginSize, avatar]" max-width="250">
         <v-col cols="12" >
-            <v-avatar :size="avatarSize" class='avatar-border' :eager="true" :style="classForImageError">
-                <v-img v-if="!showImageByName" :src="getProfileImage" @load="imageLoaded">
-                    <template v-slot:placeholder>
-                        <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                        >
-                        <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                        ></v-progress-circular>
-                        </v-row>
-                    </template>
-                </v-img>
-                <p :class="[textClassForError, 'mt-3']" v-else>
-                    {{ firstCharOfProfileNickname }}
-                </p>
-            </v-avatar>
+            <Avatar class="avatar-border" :substituteChar="firstCharOfProfileNickname" :avatarUrl="getProfileImage"
+                :timeOut="12000" :avatarSize="avatarSize" :textSize="textClassForError" />
         </v-col>
         <v-col cols="12" class="pb-0 ml-5">
             <v-row>
@@ -47,6 +30,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import Avatar from '~/components/shared/Avatar'
 export default {
     data: () => {
         return {
@@ -106,10 +90,10 @@ export default {
             return ''
         },
         textClassForError() {
-            if (this.showImageByName && (this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
-                return 'text-h3'
+            if ((this.$vuetify.breakpoint.md || this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs)) {
+                return 3
             }
-            return 'text-h2'
+            return 2
         },
         firstCharOfProfileNickname() {
             return this.profile.nickname.slice(0, 1).toUpperCase()
@@ -139,11 +123,6 @@ export default {
             return this.isCompleted
         },
         getProfileImage() {
-            this.watchReqUntilCompleted
-            if (this.hasError) {
-                this.showImageByName = true
-                return ''
-            }
             return this.$axios.defaults.baseURL + this.profile.profileImageUrl
         }
     },

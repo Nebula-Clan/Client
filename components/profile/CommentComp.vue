@@ -2,20 +2,8 @@
     <v-container @click="oneClick" class="cursor py-1">
         <v-list-item three-line>
             <v-list-item-avatar v-if="isReply" size="80">
-                <v-img :src="getCommentOwnerImage">
-                    <template v-slot:placeholder>
-                        <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                        >
-                        <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                        ></v-progress-circular>
-                        </v-row>
-                    </template>
-                </v-img>
+                <Avatar :substituteChar="getFirstChar" :avatarUrl="getCommentOwnerImage"
+                :timeOut="12000" :avatarSize="80" :textSize="4" />
             </v-list-item-avatar>
             <v-list-item-content class="align-list-item">
                 <div class="overline mb-0" v-if="isReply">
@@ -77,6 +65,9 @@ export default {
             } else {
                 return 'de-expand'
             }
+        },
+        getFirstChar() {
+            return this.comment.commentOwnerNickname.slice(0, 1).toUpperCase()
         }
     },
     methods: {
