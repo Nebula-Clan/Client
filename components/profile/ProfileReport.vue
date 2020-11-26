@@ -7,11 +7,13 @@
                 </v-row>
             </v-container>
             <v-row justify="center" align="center">
-                <v-card-title class="text-center">
-                    <div>
-                        Report Jhon for:
-                    </div>
-                </v-card-title>
+                <v-col cols="12">
+                    <v-card-title class="text-center">
+                        <div class="ml-auto mr-auto">
+                            Report Jhon for:
+                        </div>
+                    </v-card-title>
+                </v-col>
             </v-row>
             <v-container>
                 <v-checkbox label="Sexual Content" color="pink lighten-2" hide-details></v-checkbox>
@@ -23,17 +25,18 @@
             <v-container>
                 <v-textarea
                 filled
+                outlined
                 name="input-7-4"
                 label="desciption"
                 ></v-textarea>
             </v-container>
             <v-card-actions>
 
-                <v-btn color="red lighten-1 ml-3" @click="cancel">
+                <v-btn color="red lighten-1 ml-3" @click="cancel" outlined>
                     Cancel
                 </v-btn>
 
-                <v-btn class="ml-auto mr-3" color="teal accent-3">
+                <v-btn class="ml-auto mr-3" color="teal accent-3" outlined>
                     Report
                 </v-btn>
             </v-card-actions>

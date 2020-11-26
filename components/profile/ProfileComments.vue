@@ -1,66 +1,66 @@
 <template>
-    <v-container fluid class="py-2">
-        <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="postWidth" :id="commentID">
-                <v-card-title>
-                    <v-menu>
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
-                                <v-icon>mdi-dots-vertical</v-icon>
-                            </v-btn>
-                        </template>
-                        <v-list elevation="24">
-                            <v-list-item>
-                                <v-icon style="cursor: pointer">mdi-flag</v-icon>
-                                <v-list-item-title class="ml-1" style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
-                            </v-list-item>
-                            <v-list-item>
-                                <v-icon>mdi-heart</v-icon>
-                                <v-list-item-title class="ml-1" style="cursor: pointer" @click="showListOfLikes">List of likes</v-list-item-title >
-                            </v-list-item>
-                            <v-list-item>
-                                <v-icon style="cursor: pointer">mdi-share-variant</v-icon>
-                                <v-list-item-title class="ml-1" style="cursor: pointer" >Share</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
+    <v-container fluid class="py-2 px-0">
+        <v-row no-gutters>
+            <v-col cols="12">
+                <v-card elevation="24" :id="commentID">
+                    <v-card-title>
+                        <v-menu>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-list elevation="24">
+                                <v-list-item>
+                                    <v-list-item-title style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
+                                    <v-icon style="cursor: pointer">mdi-flag</v-icon>
+                                </v-list-item>
+                                <v-list-item>
+                                    <v-list-item-title style="cursor: pointer" @click="showListOfLikes">ListOfLikes</v-list-item-title >
+                                    <v-icon>mdi-heart</v-icon>
+                                </v-list-item>
+                                <v-list-item>
+                                    <v-list-item-title style="cursor: pointer" >Share</v-list-item-title>
+                                    <v-icon style="cursor: pointer">mdi-share-variant</v-icon>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
 
-                    <v-overlay
-                    :z-index="zIndex"
-                    :value="reportOverlay"
-                    opacity="0.8"
-                    >
-                        <ProfileReport @cancel="reportOverlay = !reportOverlay" />
-                    </v-overlay>
+                        <v-overlay
+                        :z-index="zIndex"
+                        :value="reportOverlay"
+                        opacity="0.8"
+                        >
+                            <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                        </v-overlay>
 
-                    <v-overlay
-                    :z-index="zIndex"
-                    :value="likesOverlay"
-                    opacity="0.8"
-                    >
-                        <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
-                    </v-overlay>
-                </v-card-title>
-                <v-container>
-                    <component :is="comp" v-bind="componentArgument()" :isReply="true" class="comment"></component>
-                </v-container>
-                <!-- <CommentComp :comment="comment" :isReply="like" /> -->
-                <v-card-text>
-                    {{ comment.commentBody }}
-                    <!-- Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error repudiandae laborum officiis repellendus dicta delectus minima provident nulla? Omnis, dolor! Voluptatum perferendis quibusdam eaque sed, sit at! Eius adipisci reiciendis in rem placeat veniam at enim, obcaecati ducimus, autem minima cupiditate delectus magnam maiores iste nemo omnis quasi error hic excepturi! Ipsa, earum. Voluptate quisquam ratione suscipit ipsam! Mollitia, voluptate. -->
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-    
-                    <v-btn icon class="ml-auto" :color="likedComment" @click="likeComment">
-                        <v-icon>mdi-heart</v-icon>
-                    </v-btn>
+                        <v-overlay
+                        :z-index="zIndex"
+                        :value="likesOverlay"
+                        opacity="0.8"
+                        >
+                            <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+                        </v-overlay>
+                    </v-card-title>
+                    <v-container>
+                        <component :is="comp" v-bind="componentArgument()" :isReply="true" class="comment"></component>
+                    </v-container>
+                    <v-card-text>
+                        {{ comment.commentBody }}
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+        
+                        <v-btn icon class="ml-auto" :color="likedComment" @click="likeComment">
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
 
-                    <v-btn icon class="mr-5 ml-4">
-                        <v-icon>mdi-comment</v-icon>
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
+                        <v-btn icon class="mr-5 ml-4">
+                            <v-icon>mdi-comment</v-icon>
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -86,9 +86,6 @@ export default {
             reportOverlay: false,
             likesOverlay: false,
             zIndex: 99,
-            vCardWidth: '0',
-            isMounted: false,
-            hack: 0,
             comp: CommentComp,
             reply: '',
             listOfProfileLikedPost: []
@@ -115,13 +112,6 @@ export default {
                 return `${this.comment.commentOwnerUsername} has commented on Post ${this.reply.postAuthor}`
             }
         },
-        postWidth() {
-            this.hack
-            if (!this.isMounted) {
-                return;
-            }
-            return this.$refs.VCardParent.clientWidth
-        },
         commentID() {
             if (this.comment.commentID) {
                 return this.comment.commentID
@@ -136,10 +126,6 @@ export default {
         if (this.comment.isLiked) {
             this.like = this.comment.isLiked
         }
-        this.vCardWidth =  this.$refs.VCardParent.clientWidth
-        this.isMounted = true
-        window.addEventListener('resize', this.hackWidth, { passive: true })
-        this.hackWidth()
     },
     methods: {
         ...mapActions('modules/profile/profileLikes', ['submitLikeAtCommentWithID', 'deleteLikeAtCommentWithID']),
@@ -179,9 +165,6 @@ export default {
                     }
                 })
             }
-        },
-        hackWidth() {
-            this.hack++
         },
         setComponentObject() {
             if (this.comment.commentTypeOfReply === 'Post') {

@@ -1,20 +1,21 @@
 <template>
-     <v-container fluid class="py-2">
-        <v-row ref="VCardParent">
-            <v-card :min-width="postWidth" :id="postID">
-                <v-card-title>
-                    <v-row>
-                        <v-col class="ml-5">
-                            <nuxt-link class="text-decoration-none white--text" to="#">
-                                <h2>{{ post.postTitle }}</h2>
-                            </nuxt-link>
-                            <div class="mr-2">
-                                <v-icon size="15">
-                                    mdi-clock
-                                </v-icon>
-                                <span style="font-size: smaller"> {{ getTimeElapse }}</span>
-                            </div>
-                        </v-col>
+     <v-container fluid class="py-2 px-0">
+        <v-row no-gutters>
+            <v-col cols="12">
+                <v-card :id="postID">
+                    <v-card-title>
+                        <v-row>
+                            <v-col class="ml-5">
+                                <nuxt-link class="text-decoration-none white--text" to="#">
+                                    <h2>{{ post.postTitle }}</h2>
+                                </nuxt-link>
+                                <div class="mr-2">
+                                    <v-icon size="15">
+                                        mdi-clock
+                                    </v-icon>
+                                    <span style="font-size: smaller"> {{ getTimeElapse }}</span>
+                                </div>
+                            </v-col>
 
                         <v-col
                             class="text-right"
@@ -43,35 +44,36 @@
                         </v-col>
                     </v-row>
 
-                        <v-overlay
-                        :z-index="zIndex"
-                        :value="reportOverlay"
-                        opacity="0.8"
-                        >
-                            <ProfileReport @cancel="reportOverlay = !reportOverlay" />
-                        </v-overlay>
+                            <v-overlay
+                            :z-index="zIndex"
+                            :value="reportOverlay"
+                            opacity="0.8"
+                            >
+                                <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                            </v-overlay>
 
-                        <v-overlay
-                        :z-index="zIndex"
-                        :value="likesOverlay"
-                        opacity="0.8"
-                        >
-                            <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
-                        </v-overlay>
-                    </v-card-title>
-                    <PostComp :post="post" />
-                    <v-divider></v-divider>
-                    <v-card-actions>
+                            <v-overlay
+                            :z-index="zIndex"
+                            :value="likesOverlay"
+                            opacity="0.8"
+                            >
+                                <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+                            </v-overlay>
+                        </v-card-title>
+                        <PostComp :post="post" />
+                        <v-divider></v-divider>
+                        <v-card-actions>
 
-                    <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
-                        <v-icon style="cursor: pointer">mdi-heart</v-icon>
-                    </v-btn>
+                        <v-btn icon class="ml-auto" :color="likedPost" @click="likePost">
+                            <v-icon style="cursor: pointer">mdi-heart</v-icon>
+                        </v-btn>
 
-                    <v-btn icon class="mr-2 ml-4">
-                        <v-icon style="cursor: pointer">mdi-comment</v-icon>
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
+                        <v-btn icon class="mr-2 ml-4">
+                            <v-icon style="cursor: pointer">mdi-comment</v-icon>
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -98,8 +100,6 @@ export default {
             reportOverlay: false,
             likesOverlay: false,
             zIndex: 99,
-            isMounted: false,
-            hack: 0,
             listOfProfileLikedPost: []
         }
     },
@@ -110,13 +110,6 @@ export default {
             } else {
                 return ''
             }
-        },
-        postWidth() {
-            this.hack
-            if (!this.isMounted) {
-                return;
-            }
-            return this.$refs.VCardParent.clientWidth
         },
         getPostImage() {
             return this.$axios.defaults.baseURL + this.post.postImageURL
@@ -140,16 +133,9 @@ export default {
         }
     },
     mounted() {
-        this.vCardWidth =  this.$refs.VCardParent.clientWidth
-        this.isMounted = true
         if (this.post.isLiked) {
             this.like = true
         }
-        window.addEventListener('resize', this.hackWidth, { passive: true })
-        this.hackWidth()
-    },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.hackWidth, { passive: true })
     },
     methods: {
         ...mapActions('modules/profile/profileLikes', ['getProfilesThatLikedPostByID']),
@@ -189,9 +175,6 @@ export default {
                     }
                 })
             }
-        },
-        hackWidth() {
-            this.hack++
         },
         showErrorWithMessage(message) {
             this.$notifier.showMessage({content: message, color: 'error'});

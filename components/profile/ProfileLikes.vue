@@ -1,16 +1,18 @@
 <template>
-    <v-container fluid class="py-2">
-        <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="postWidth">
-                <v-container>
-                    <v-card-title>
-                        {{ nickname + ' Liked ' +  replyType + ' ' + replyObjectOwnerNickname}}
-                    </v-card-title>
+    <v-container fluid class="py-2 px-0">
+        <v-row no-gutters>
+            <v-col cols="12">
+                <v-card elevation="24">
                     <v-container>
-                        <component :is="comp" v-bind="componentArgument()" class="reply"> </component>
+                        <v-card-title>
+                            {{ nickname + ' Liked ' +  replyType + ' ' + replyObjectOwnerNickname}}
+                        </v-card-title>
+                        <v-container>
+                            <component :is="comp" v-bind="componentArgument()" class="reply"> </component>
+                        </v-container>
                     </v-container>
-                </v-container>
-            </v-card>
+                </v-card>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -34,7 +36,6 @@ export default {
     },
     data: () => {
         return {
-            vCardWidth: '0',
             hashtags: [
                 "#idk",
                 "#idc",
@@ -45,19 +46,10 @@ export default {
                 "#barbar",
                 "#loca",
                 '#toca'
-            ],
-            isMounted: false,
-            hack: 0
+            ]
         }
     },
     computed: {
-        postWidth() {
-            this.hack
-            if (!this.isMounted) {
-                return;
-            }
-            return this.$refs.VCardParent.clientWidth
-        },
         replyType() {
             if (this.likedObj.typeOfLike === 'Post') {
                 return 'Post'
@@ -77,12 +69,6 @@ export default {
     created() {
         this.setComponentObject()
     },
-    mounted() {
-        this.vCardWidth =  this.$refs.VCardParent.clientWidth
-        this.isMounted = true
-        window.addEventListener('resize', this.hackWidth, { passive: true })
-        this.hackWidth()
-    },
     methods: {
         likeComment() {
             if (!this.like) {
@@ -92,9 +78,6 @@ export default {
                 this.like = false
                 this.dislike = true
             }
-        },
-        hackWidth() {
-            this.hack++
         },
         setComponentObject() {
             if (this.likedObj.typeOfLike === 'Post') {
