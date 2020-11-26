@@ -79,11 +79,6 @@ export default {
       return dateStandard(this.data.since);
     }
   },
-  watch: {
-  },
-  mounted() {
-    console.log(this.data.banner)
-  }
 }
 </script>
 

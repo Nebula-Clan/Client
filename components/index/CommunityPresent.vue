@@ -11,8 +11,7 @@
         <img
           :src="require('../../static/landing/row3.svg')"
           alt="community"
-          class="com-img"
-          style="width: 700px"/>
+          class="com-img"/>
       </v-col>
       <v-col
         class="d-flex justify-center align-center description"
@@ -58,6 +57,7 @@ export default {
 
     .img {
       .com-img {
+        width: 100%;
         padding: 0;
       }
     }

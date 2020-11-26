@@ -26,8 +26,8 @@
               auto-grow
               counter
               label="Description"
-              outlined
-            ></v-textarea>
+              outlined>
+            </v-textarea>
           </v-col>
           <v-col cols="12">
             <v-file-input
@@ -112,7 +112,6 @@ export default {
         }).catch(
         error => {
           this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})
-          console.log(error.response.data);
         });
     },
     close() {

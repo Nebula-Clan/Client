@@ -6,12 +6,14 @@
     <v-row class="pa-4 d-flex justify-center">
       <Feature />
     </v-row>
-    <v-container class="bottom-row">
+    <v-row class="bottom-row">
+      <v-col cols="12">
       <img
         data-aos="fade-up"
         alt="row5"
         src="../../static/landing/readmore.svg">
-    </v-container>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -36,6 +38,7 @@ export default {
     text-align: center;
     img {
       height: 500px;
+      width: 100%;
     }
   }
 }
