@@ -1,22 +1,29 @@
 <template>
   <v-card
-    class="comment px-2 py-4 mt-1"
+    class="comment py-4 mt-1"
     :color="depth % 2 === 1 ? '#2a2a2a' : '#1e1e1e'">
-    <a class="avatar ml-1">
-      <img :src="$axios.defaults.baseURL + comment.author.profile_picture" :alt="comment.author.username">
-    </a>
-    <div class="content">
+
+    <div>
+      <UserAvatar
+        color="primary"
+        :avatar-string="comment.author.username"
+        :avatar-src="comment.author.profile_picture"/>
+    </div>
+
+    <div class="content pl-8">
       <!-- Content  -->
-      <a class="author">{{ comment.author.username }}</a>
-      <div class="metadata">
-        <span class="date">{{ dateDuration }}</span>
-      </div>
-      <div class="text">
-        {{ comment.content }}
+      <div>
+        <a class="author">{{ comment.author.username }}</a>
+        <div class="metadata">
+          <span class="date">{{ dateDuration }}</span>
+        </div>
+        <div class="text">
+          {{ comment.content }}
+        </div>
       </div>
       <!-- Actions  -->
       <v-row
-        class="actions justify-content"
+        class="actions justify-content pl-8"
         no-gutters>
         <v-col class="my-auto"
                sm="3"
@@ -122,10 +129,12 @@
 <script>
 
   import {mapActions} from "vuex";
+  import UserAvatar from "../shared/UserAvatar";
+  import Comments from "./Comments";
 
   export default {
     name: "Comment",
-    components: { Comments: () => import('@/components/comment/Comments') },
+    components: { UserAvatar, Comments },
     data: () => ({
       author: "",
       avatar: "",
@@ -149,16 +158,16 @@
     computed: {
       dateDuration: {
         get: function () {
-          const unixTime = new Date(this.comment.create_date).getTime()
-          const now = new Date().getTime()
+          const unixTime = new Date(this.comment.create_date).getTime();
+          const now = new Date().getTime();
           if (now - unixTime < 180000) {
-            return 'Just now'
+            return 'Just now';
           } else if (now - unixTime < 36e+5) {
-            return Math.floor((now - unixTime) / 60000) + ' m'
+            return Math.floor((now - unixTime) / 60000) + ' m';
           } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
-            return Math.floor((now - unixTime) / 36e+5) + ' h'
+            return Math.floor((now - unixTime) / 36e+5) + ' h';
           } else {
-            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)';
           }
         }
       },
@@ -275,11 +284,7 @@
        Avatar
   ---------------*/
   .comment .avatar {
-    display: block;
-    width: 2.5em;
-    height: auto;
     float: left;
-    margin: 0.2em 0em 0em;
   }
 
   .comment img.avatar,
