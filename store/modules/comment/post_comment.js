@@ -58,8 +58,8 @@ const actions = {
     )
   },
   replyToPost({ commit }, data) {
-    return this.$axios.$post('/api/comments/reply/submit', {
-        reply_to_id: data.commentId,
+    return this.$axios.$post('/api/comments/post/submit', {
+        post: data.postId,
         content: data.content,
       }
     )
