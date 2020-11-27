@@ -5,7 +5,7 @@
       New Post
     </v-card-title>
     <Editor @updateEditorContent="post.content=$event"/>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-row class="px-4">
       <v-col>
         <v-dialog
@@ -45,8 +45,7 @@
                         :rules="descRules"
                         counter
                         auto-grow
-                        label="Description"
-                      ></v-textarea>
+                        label="Description"/>
                     </v-col>
                     <v-col cols="12">
                       <v-file-input
@@ -56,22 +55,27 @@
                         show-size
                         prepend-icon="mdi-camera"
                         label="Select post cover"
-                        truncate-length="30"
-                      ></v-file-input>
+                        truncate-length="30"/>
                     </v-col>
                     <v-col cols="12">
                       <v-select
                         v-model="post.communityName"
                         :items="communities"
                         label="Community"
-                        outlined
-                      ></v-select>
+                        outlined/>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-select
+                        v-model="post.category"
+                        :items="categories"
+                        label="Category"
+                        outlined/>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field outlined
                                     @input="recommend"
                                     v-model="hashtag"
-                                    label="Up to 5 hashtags"
+                                    label="Up to 5 hash tags"
                                     @change="addHashtags">
                       </v-text-field>
                       <div v-if="suggestions.length > 0">
@@ -154,6 +158,7 @@
       },
       isPostPublishing: false,
       communities: [],
+      categories: [],
 
       titleRules: [
         t => !!t || 'Title is required',
@@ -172,10 +177,12 @@
     },
     mounted() {
       this.fetchCommunities();
+      this.fetchCategories();
     },
     methods: {
       ...mapActions('modules/post', ['createPost']),
       ...mapActions('modules/community/community', ['getAllUserCommunities']),
+      ...mapActions('modules/category/category', ['getAllCategories']),
       publish() {
         if (this.post.headerImage === null || this.post.headerImage === undefined) {
           delete this.post.headerImage;
@@ -221,6 +228,14 @@
         }).catch(
           e => this.$notifier.showMessage({ content: e.message, color: 'error' })
         );
+      },
+      // Categories
+      fetchCategories() {
+        this.getAllCategories()
+          .then(({ data }) => {
+            this.categories = data.categories.map((categoryObj) => categoryObj.title);
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       }
     }
   }

@@ -21,7 +21,7 @@ export default {
     return {
       content: '',
       editorOption: {
-        theme: 'bubble',
+        theme: 'snow',
         modules: {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
