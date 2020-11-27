@@ -10,15 +10,16 @@
         </v-row>
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
           <v-col cols="12" class="scrollable" style="overflow-x: hidden">
-	            <v-row v-for="i in 40" :key="i">
-                    <v-col cols="12" class="d-inline-flex py-1">
-                      <Message class="ml-3" 
-                      :previousId="shit()"
-                      :currentId="shit()"
-                      :isSeen="shit() > 3 ? true : false"
-                      :isUser="shit() > 3 ? true : false" />
-                    </v-col>
-                </v-row>
+            <v-row v-for="(message, idx) in messages" :key="idx">
+                <v-col cols="12" class="d-inline-flex py-1">
+                  <Message class="ml-3" 
+                  :previousId="shit()"
+                  :currentId="shit()"
+                  :message="message" 
+                  :isSeen="shit() > 3 ? true : false"
+                  :isUser="shit() > 3 ? true : false" />
+                </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row no-gutters class="flex-grow-0 flex-shrink-0">
@@ -31,6 +32,7 @@
                     :show-file="false"
                     :placeholder="'ssfsdf'"
                     :colors="colors"
+                    @recMessage="recvMessage"
                     />
                 </v-container>
             </v-col>
@@ -47,6 +49,7 @@ import ProfileStatus from './ProfileStatus'
 export default {
     data() {
         return {
+          messages: [],
             participants: [
                 {
                 id: 'user1',
@@ -95,7 +98,15 @@ export default {
             messageStyling: true // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
             }
         },
+        created() {
+          for (let i = 0; i < 40; i++) {
+            this.messages.push('Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore perspiciatis enim similique aspernatur alias dolor tempora voluptatum repudiandae fuga delectus nemo error officiis molestiae saepe sunt mollitia, ipsa laboriosam quam esse ipsum ratione voluptates unde eos libero! Voluptate illum aperiam rem assumenda neque, dolorem enim quae ipsam cumque velit modi?')
+          }
+        },
     methods: {
+      recvMessage(text) {
+        this.messages.push(text)
+      },
         s() {
             console.log('submit')
         },
@@ -110,7 +121,6 @@ export default {
     }
 }
 </script>
-
 
 <style scoped>
 .grid-item-blue {
@@ -146,7 +156,7 @@ export default {
 
 .scrollable {
     overflow-y: auto;
-    height: 90vh;
+    height: 80vh;
   }
 
 .tab-stick {
@@ -160,4 +170,13 @@ export default {
 
 }
 
+::-webkit-scrollbar {
+    width: 4px;
+    height: 10px;
+
+}
+::-webkit-scrollbar-thumb {
+border-radius: 8px;
+background: #c2c9d2;
+}
 </style>

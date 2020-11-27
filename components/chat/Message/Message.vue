@@ -9,7 +9,7 @@
                 :textSize="5" />
         <v-card max-width="350" elevation="3" :class="['card-back', 'text--secondary', 'pa-3', 'card-border', getTriangleClass]">
             <v-card-text :class="getText">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium, explicabo odit esse ea ipsum perspiciatis ut eaque ab, reprehenderit beatae, voluptate vero modi repudiandae et sit aperiam dolorum qui reiciendis!
+                {{ message }}
             </v-card-text>
             <v-card-actions class="pa-0">
             <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
@@ -24,6 +24,10 @@
 <script>
 export default {
     props: {
+        message: {
+            type: String,
+            required: true
+        },
         previousId: {
             type: Number,
             required: true

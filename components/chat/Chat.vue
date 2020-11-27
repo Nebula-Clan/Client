@@ -1,9 +1,9 @@
 <template>
-    <v-row justify="start" align="center" no-gutters class="fill-height">
+    <v-row justify="start" align="center" no-gutters class="fill-height chat-scroll">
         <v-col cols="12" xl="3" lg="3">
             <UserLists />
         </v-col>
-        <v-col cols="12" xl="9" lg="9" class="px-0 fill-height">
+        <v-col cols="12" xl="9" lg="9" class="px-0 fill-height chat-scroll">
             <ChattingSection />
         </v-col>
     </v-row>
@@ -18,6 +18,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
+/* ::-webkit-scrollbar {
+    width: 0px; 
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+} */
 </style>

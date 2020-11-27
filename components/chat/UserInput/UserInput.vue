@@ -1,7 +1,8 @@
 <template>
   <v-row no-gutters class="back">
     <v-col cols="12" class="px-0">
-      <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" style="border-top: 1px solid gray;border-radius:0px" auto-grow rows="1"
+      <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" v-model="text"
+       style="border-top: 1px solid gray;border-radius:0px" auto-grow rows="1"
        hide-details flat solo placeholder="Send message ...">
       </v-textarea>
     </v-col>
@@ -10,27 +11,13 @@
         mdi-attachment
       </v-icon>
       <EmojiIcon slot="append" class="ml-auto" />
-      <v-icon slot="append" class="ml-3" color="green darken-2">
+      <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessage">
         mdi-send-outline
       </v-icon>
     </v-col>
   </v-row>
 </template>
 
-// <v-col cols="12" class="px-0">
-//       <v-textarea class="mx-1" auto-grow rows="1" hide-details>
-
-//       </v-textarea>
-//     </v-col>
-//     <v-col cols="12">
-      // <v-icon slot="prepend-inner" class="mr-auto">
-      //     mdi-attachment
-      // </v-icon>
-      // <EmojiIcon slot="append" class="ml-auto" />
-      // <v-icon slot="append" class="ml-6">
-      //   mdi-send-outline
-      // </v-icon>
-//     </v-col>
 <script>
 import EmojiIcon from './icons-utils/EmojiIcon'
 import FileIcons from './icons-utils/FileIcons'
@@ -58,7 +45,8 @@ export default {
       file: null,
       inputActive: false,
       showEmoji: false,
-      showFile: true
+      showFile: true,
+      text: null
     }
   },
   computed: {
@@ -87,6 +75,12 @@ export default {
     })
   },
   methods: {
+    sendMessage() {
+      if (this.text != '' || this.text != null || this.text != undefined) {
+        this.$emit('recMessage', this.text)
+        this.text = null
+      }
+    },
     cancelFile() {
       this.file = null
     },
@@ -325,5 +319,15 @@ export default {
 
 .icon-file-message {
   margin-right: 5px;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 10px;
+
+}
+::-webkit-scrollbar-thumb {
+border-radius: 8px;
+background: #c2c9d2;
 }
 </style>
