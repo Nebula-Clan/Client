@@ -5,14 +5,14 @@ const DEFAULT_OPTIONS = {
   MAX_LENGTH: 100,
   REPLAY_DEPTH: 100,
   MAX_REPLAY_LENGTH: 100,
-}
+};
 
-const state = {}
+const state = {};
 
-const getters = {}
+const getters = {};
 
 const actions = {
-  getComments({commit}, data) {
+  getComments({ commit }, data) {
     return this.$axios.get('/api/comments/post/get', {
         params: {
           "post_id": data.postId,
@@ -24,7 +24,7 @@ const actions = {
       }
     )
   },
-  getRepliesComments({commit}, data) {
+  getRepliesComments({ commit }, data) {
     return this.$axios.get('/api/comments/reply/get', {
         params: {
           "reply_to": data.commentId,
@@ -36,23 +36,37 @@ const actions = {
       }
     )
   },
-  replyToComment({commit}, data) {
+  replyToComment({ commit }, data) {
     return this.$axios.$post('/api/comments/reply/submit', {
         reply_to_id: data.commentId,
         content: data.content,
       }
     )
   },
-  replyToPost({commit}, data) {
-    return this.$axios.$post('/api/comments/post/submit', {
-        post: data.postId,
-          content: data.content,
+  likeComment({ commit }, data) {
+    return this.$axios.$post('/api/likes/comment/submit', {
+        comment_id: data.commentId
       }
     )
   },
-}
+  dislikeComment({ commit }, data) {
+    return this.$axios.$request({
+        url: 'api/likes/comment/delete',
+        method: 'delete',
+        data: { id: data.commentId }
+      }
+    )
+  },
+  replyToPost({ commit }, data) {
+    return this.$axios.$post('/api/comments/post/submit', {
+        post: data.postId,
+        content: data.content,
+      }
+    )
+  },
+};
 
-const mutations = {}
+const mutations = {};
 
 export default {
   state,
