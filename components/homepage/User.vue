@@ -7,13 +7,12 @@
         height="80px">
       </v-img>
       <nuxt-link :to="'/profile/'+user.username">
-      <v-avatar
-        class="profile-pic"
-        size="80">
-        <img
-          :src="this.$axios.defaults.baseURL + user.profile_picture"
-          alt="John">
-      </v-avatar>
+        <UserAvatar
+          class="profile-pic"
+          color="primary"
+          :size="80"
+          :avatar-string="user.username"
+          :avatar-src="user.profile_picture"/>
       </nuxt-link>
     </div>
     <v-card-title class="justify-center">
@@ -27,7 +26,7 @@
       {{ user.biology }}
       <v-icon>mdi-format-quote-close</v-icon>
     </v-card-text>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-row class="text-center pa-2 justify-space-around">
       <div>
         <b>{{ numberOfFollowings }}</b>
@@ -50,9 +49,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import UserAvatar from "../shared/UserAvatar";
 
 export default {
   name: "user.component",
+  components: { UserAvatar },
   props: ['user'],
   data: () => {
     return {
@@ -64,9 +65,9 @@ export default {
   mounted() {
     this.getProfileInfo(this.user.username)
     .then((profile) => {
-      this.numberOfPosts = profile.numberOfPosts
-      this.numberOfFollowers = profile.numberOfFollowers
-      this.numberOfFollowings = profile.numberOfFollowing
+      this.numberOfPosts = profile.numberOfPosts;
+      this.numberOfFollowers = profile.numberOfFollowers;
+      this.numberOfFollowings = profile.numberOfFollowing;
     })
     .catch((error) => {
 
@@ -85,7 +86,7 @@ export default {
   .profile-pic {
     position: absolute;
     bottom: -40px;
-    left: calc(50% - 40px);
+    left: calc(50% - 56px);
   }
 
   .custom-rounded {

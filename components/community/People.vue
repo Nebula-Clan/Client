@@ -16,9 +16,10 @@
             class="d-flex align-center">
             <v-list-item-content>
               <div class="d-flex align-center">
-                <v-avatar class="mr-2" size="25">
-                  <img :src="$axios.defaults.baseURL + item.profile_picture" alt="">
-                </v-avatar>
+                <UserAvatar
+                  color="primary"
+                  :avatar-string="item.username"
+                  :avatar-src="item.profile_picture"/>
                 <v-list-item-title>
                   <b>{{ item.username }}</b>
                   <br>
@@ -86,8 +87,10 @@
 </template>
 
 <script>
+import UserAvatar from "../shared/UserAvatar";
 export default {
   name: "People",
+  components: { UserAvatar },
   props: ['people'],
   data() {
     return {

@@ -1,9 +1,12 @@
 <template>
-  <v-avatar size="40" class="avatar mx-4" :color="color">
+  <v-avatar
+    :size="size === undefined ? 40 : size"
+    class="avatar mx-4"
+    :color="avatarSrc !== null ? '' : color">
     <img
       v-if="avatarSrc !== null"
       :src="$axios.defaults.baseURL + avatarSrc"
-      alt="John">
+      :alt="avatarString">
     <span v-else class="white--text headline">{{ string }}</span>
   </v-avatar>
 </template>
@@ -20,7 +23,7 @@
         }
       },
     },
-    props: ["avatarString", "avatarSrc", "color"]
+    props: ["avatarString", "avatarSrc", "color", 'size']
   }
 </script>
 

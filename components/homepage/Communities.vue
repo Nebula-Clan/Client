@@ -19,7 +19,7 @@
         <CreateCommunity @close="close"/>
       </v-dialog>
     </v-card-subtitle>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-list dense>
           <v-list-item-group>
           <nuxt-link
@@ -29,9 +29,10 @@
             :to="'/community/'+item.name">
             <v-list-item>
               <v-list-item-avatar>
-                <v-avatar>
-                  <img :src="$axios.defaults.baseURL + item.picture" alt="">
-                </v-avatar>
+                <UserAvatar
+                  color="primary"
+                  :avatar-string="item.name"
+                  :avatar-src="item.picture"/>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
@@ -47,10 +48,12 @@
 
 <script>
 import CreateCommunity from '@/components/community/Create-Community'
+import UserAvatar from "../shared/UserAvatar";
 export default {
   name: 'communities.component',
   props: ['communities'],
   components: {
+    UserAvatar,
     CreateCommunity
   },
   data: () => {

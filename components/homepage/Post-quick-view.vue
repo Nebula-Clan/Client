@@ -64,13 +64,10 @@
         <nuxt-link class="text-decoration-none white--text d-flex"
                    :to="'/profile/'+post.author.username">
           <div>
-            <v-avatar
-              class="profile-pic"
-              size="40">
-              <img
-                alt="John"
-                :src="$axios.defaults.baseURL+post.author.profile_picture">
-            </v-avatar>
+            <UserAvatar
+              color="primary"
+              :avatar-string="post.author.username"
+              :avatar-src="post.author.profile_picture"/>
           </div>
           <div class="d-flex flex-column ml-3">
             <span><b>{{ post.author.username }}</b></span>
@@ -115,9 +112,11 @@
 
 <script>
   import {mapActions} from 'vuex'
+  import UserAvatar from "../shared/UserAvatar";
 
   export default {
     name: 'Post-quick-view',
+    components: { UserAvatar },
     props: ['post'],
     data: () => {
       return {
