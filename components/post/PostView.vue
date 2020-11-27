@@ -3,15 +3,32 @@
 
     <v-row>
       <v-col class="ml-5">
-        <nuxt-link class="text-decoration-none white--text" to="#">
-          <div class="text-h2">{{ post.title }}</div>
-        </nuxt-link>
-        <div class="mr-2 my-2">
-          <v-icon size="15">
-            mdi-clock
-          </v-icon>
-          <span style="font-size: smaller">{{ dateDuration }}</span>
-        </div>
+        <v-row class="pb-1">
+          <nuxt-link class="text-decoration-none white--text" :to="'/posts/' + post.id">
+            <h2>{{ post.title }}</h2>
+          </nuxt-link>
+          <nuxt-link
+            style="text-decoration: none"
+            v-if="post.category !== null"
+            :to="`/explore/category?category=${post.category}&order=new`">
+            <v-sheet
+              outlined
+              elevation="1"
+              color="blue px-3 mt-1 ml-4 rounded-pill">
+                <span>
+                  {{ post.category }}
+                </span>
+            </v-sheet>
+          </nuxt-link>
+        </v-row>
+        <v-row class="pb-1">
+          <div class="mr-2">
+            <v-icon size="15">
+              mdi-clock
+            </v-icon>
+            <span style="font-size: smaller">{{ dateDuration }}</span>
+          </div>
+        </v-row>
       </v-col>
 
       <v-col

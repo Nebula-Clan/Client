@@ -2,17 +2,33 @@
   <v-card class="mb-2 pa-1" elevation="2">
     <v-row>
       <v-col class="ml-5">
-        <nuxt-link class="text-decoration-none white--text" :to="'/posts/' + post.id">
-          <h2>{{ post.title }}</h2>
-        </nuxt-link>
-        <div class="mr-2">
-          <v-icon size="15">
-            mdi-clock
-          </v-icon>
-          <span style="font-size: smaller">{{ dateDuration }}</span>
-        </div>
+        <v-row class="pb-1">
+          <nuxt-link class="text-decoration-none white--text" :to="'/posts/' + post.id">
+            <h2>{{ post.title }}</h2>
+          </nuxt-link>
+          <nuxt-link
+            style="text-decoration: none"
+            v-if="post.category !== null"
+            :to="`/explore/category?category=${post.category}&order=new`">
+            <v-sheet
+              outlined
+              elevation="1"
+              color="blue px-3 mt-1 ml-4 rounded-pill">
+                <span>
+                  {{ post.category }}
+                </span>
+            </v-sheet>
+          </nuxt-link>
+        </v-row>
+        <v-row class="pb-1">
+          <div class="mr-2">
+            <v-icon size="15">
+              mdi-clock
+            </v-icon>
+            <span style="font-size: smaller">{{ dateDuration }}</span>
+          </div>
+        </v-row>
       </v-col>
-
       <v-col
         class="text-right"
         cols="2">
@@ -105,8 +121,6 @@
       </v-col>
     </v-row>
 
-    <v-row>
-    </v-row>
   </v-card>
 </template>
 
@@ -154,7 +168,7 @@
       likePost() {
         if (!this.like) {
           this.submitLikeAtPostWithID(this.post.id)
-            .then(({data}) => {
+            .then(({ data }) => {
               this.like = true
               this.dislike = false
             })
@@ -165,7 +179,7 @@
             })
         } else {
           this.deleteLikeAtPostWithID(this.post.id)
-            .then(({data}) => {
+            .then(({ data }) => {
               this.like = false
               this.dislike = true
             })
@@ -177,7 +191,7 @@
         }
       },
       showErrorWithMessage(message) {
-        this.$notifier.showMessage({content: message, color: 'error'});
+        this.$notifier.showMessage({ content: message, color: 'error' });
       }
     }
   }

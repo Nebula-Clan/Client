@@ -131,101 +131,104 @@
 </template>
 
 <script>
-import Editor from '@/components/post/Editor'
-import {mapActions} from 'vuex'
-import community from "@/store/modules/community/community";
+  import Editor from '@/components/post/Editor'
+  import {mapActions} from 'vuex'
+  import community from "@/store/modules/community/community";
 
-export default {
-  name: 'CreatePost',
-  data: () => ({
-    dialog: false,
-    formValid: false,
-    hashtag: '',
-    suggestions: [],
-    post: {
-      title: '',
-      description: '',
-      contentType: 'OT',
-      category: 'OTHER',
-      content: '',
-      headerImage: null,
-      communityName: '',
-      hashtags: []
-    },
-    isPostPublishing: false,
-    communities: [],
+  export default {
+    name: 'CreatePost',
+    data: () => ({
+      dialog: false,
+      formValid: false,
+      hashtag: '',
+      suggestions: [],
+      post: {
+        title: '',
+        description: '',
+        contentType: 'OT',
+        category: '',
+        content: '',
+        headerImage: null,
+        communityName: '',
+        hashtags: []
+      },
+      isPostPublishing: false,
+      communities: [],
 
-    titleRules: [
-      t => !!t || 'Title is required',
-      t => t.length <= 50 || 'Max length is 50 characters'
-    ],
-    descRules: [
-      t => !!t || 'Description is required',
-      t => t.length <= 750 || 'Max length is 750 characters'
-    ],
-    chipsColors: [
-      'blue', 'red', 'green', 'purple', 'orange'
-    ]
-  }),
-  components: {
-    Editor
-  },
-  mounted() {
-    this.fetchCommunities();
-  },
-  methods: {
-    ...mapActions('modules/post', ['createPost']),
-    ...mapActions('modules/community/community', ['getAllUserCommunities']),
-    publish() {
-      console.log(this.post)
-      this.isPostPublishing = true;
-      this.createPost(this.post).then((response) => {
-        console.log(response)
-        this.$auth.redirect('home')
-      }).catch((e) => {
-        console.error(e)
-      })
+      titleRules: [
+        t => !!t || 'Title is required',
+        t => t.length <= 50 || 'Max length is 50 characters'
+      ],
+      descRules: [
+        t => !!t || 'Description is required',
+        t => t.length <= 750 || 'Max length is 750 characters'
+      ],
+      chipsColors: [
+        'blue', 'red', 'green', 'purple', 'orange'
+      ]
+    }),
+    components: {
+      Editor
     },
-    // Hashtag
-    addHashtags() {
-      const hashtagStr = this.hashtag.replace(/ /g, '');
-      if (this.post.hashtags.length < 5) {
-        this.post.hashtags.push(hashtagStr);
-      }
-      this.hashtag = '';
+    mounted() {
+      this.fetchCommunities();
     },
-    recommend() {
-      const hashtagStr = this.hashtag.replace(/ /g, '');
-      this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
-        response => {
-          this.suggestions = response.hashtags
+    methods: {
+      ...mapActions('modules/post', ['createPost']),
+      ...mapActions('modules/community/community', ['getAllUserCommunities']),
+      publish() {
+        if (this.post.headerImage === null || this.post.headerImage === undefined) {
+          delete this.post.headerImage;
         }
-      ).catch();
-    },
-    setHashtag(item) {
-      this.hashtag = '';
-      this.post.hashtags.pop();
-      this.post.hashtags.push(item);
-      this.suggestions = [];
-    },
-    deleteHashtag(index) {
-      this.post.hashtags.splice(index, 1);
-    },
-    // Communities
-    fetchCommunities() {
-      this.getAllUserCommunities().then(({data}) => {
-        this.communities = data.communities.map((community) => community.name);
-      }).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'})
-      );
+        console.log(this.post);
+        this.isPostPublishing = true;
+        this.createPost(this.post).then((response) => {
+          console.log(response)
+          this.$auth.redirect('home')
+        }).catch((e) => {
+          console.error(e)
+        })
+      },
+      // Hashtag
+      addHashtags() {
+        const hashtagStr = this.hashtag.replace(/ /g, '');
+        if (this.post.hashtags.length < 5) {
+          this.post.hashtags.push(hashtagStr);
+        }
+        this.hashtag = '';
+      },
+      recommend() {
+        const hashtagStr = this.hashtag.replace(/ /g, '');
+        this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
+          response => {
+            this.suggestions = response.hashtags
+          }
+        ).catch();
+      },
+      setHashtag(item) {
+        this.hashtag = '';
+        this.post.hashtags.pop();
+        this.post.hashtags.push(item);
+        this.suggestions = [];
+      },
+      deleteHashtag(index) {
+        this.post.hashtags.splice(index, 1);
+      },
+      // Communities
+      fetchCommunities() {
+        this.getAllUserCommunities().then(({ data }) => {
+          this.communities = data.communities.map((community) => community.name);
+        }).catch(
+          e => this.$notifier.showMessage({ content: e.message, color: 'error' })
+        );
+      }
     }
   }
-}
 </script>
 
 
 <style lang="scss" scoped>
-.publish-form {
-  width: 100%;
-}
+  .publish-form {
+    width: 100%;
+  }
 </style>
