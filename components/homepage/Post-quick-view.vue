@@ -94,6 +94,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              @click="isCommentToPostExpanded = !isCommentToPostExpanded"
               v-bind="attrs"
               v-on="on"
               icon>
@@ -105,21 +106,30 @@
       </v-col>
     </v-row>
 
-    <v-row>
-    </v-row>
+    <!-- Replay  -->
+    <v-expand-transition>
+      <div class="ml-3 mt-3" v-show="isCommentToPostExpanded">
+        <NewComment :is-loading-to-send="isLoadingToSendComment" :submit-comment="replyComment"/>
+      </div>
+    </v-expand-transition>
+
   </v-card>
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
   import UserAvatar from "../shared/UserAvatar";
+  import NewComment from "../comment/NewComment";
 
   export default {
     name: 'Post-quick-view',
-    components: { UserAvatar },
+    components: { NewComment, UserAvatar },
     props: ['post'],
     data: () => {
       return {
+        isCommentToPostExpanded: false,
+        isLoadingToSendComment: false,
+
         chipsColors: [
           'blue', 'red', 'green', 'purple', 'orange'
         ],
@@ -151,10 +161,12 @@
     },
     methods: {
       ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
+      ...mapActions('modules/comment/post_comment', ['replyToPost']),
+
       likePost() {
         if (!this.like) {
           this.submitLikeAtPostWithID(this.post.id)
-            .then(({data}) => {
+            .then(({ data }) => {
               this.like = true
               this.dislike = false
             })
@@ -165,7 +177,7 @@
             })
         } else {
           this.deleteLikeAtPostWithID(this.post.id)
-            .then(({data}) => {
+            .then(({ data }) => {
               this.like = false
               this.dislike = true
             })
@@ -177,8 +189,21 @@
         }
       },
       showErrorWithMessage(message) {
-        this.$notifier.showMessage({content: message, color: 'error'});
-      }
+        this.$notifier.showMessage({ content: message, color: 'error' });
+      },
+      replyComment(newComment) {
+        this.isLoadingToSendComment = true;
+        this.replyToPost({
+          postId: this.post.id,
+          content: newComment.replayText
+        }).then(({ data }) => {
+          this.isLoadingToSendComment = false;
+          this.isCommentToPostExpanded = !this.isCommentToPostExpanded;
+          this.$notifier.showMessage({ content: "Sent", color: 'success' });
+        }).catch((error) => {
+          this.showErrorWithMessage(error);
+        })
+      },
     }
   }
 </script>
