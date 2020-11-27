@@ -93,28 +93,7 @@
     <!-- Replay  -->
     <v-expand-transition>
       <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
-        <v-form v-model="isFormValid" @submit.prevent="onSubmit">
-          <v-textarea
-            :rules="commentRules"
-            outlined
-            auto-grow
-            v-model="replayText"
-            counter="100"
-            :label="`Reply ${comment.author.username}`"/>
-          <div class="pb-2 d-flex flex-row-reverse">
-            <v-btn
-              @click="replyComment"
-              depressed
-              outlined
-              class="mt-2"
-              color="primary"
-              :loading="isLoadingToSend"
-              :disabled="!isFormValid"
-              elevation="2">
-              Send
-            </v-btn>
-          </div>
-        </v-form>
+        <NewComment :is-loading-to-send="isLoadingToSend" :submit-comment="replyComment"/>
       </div>
     </v-expand-transition>
     <v-expand-transition v-if="replies.length !== 0">
@@ -131,10 +110,11 @@
   import {mapActions} from "vuex";
   import UserAvatar from "../shared/UserAvatar";
   import Comments from "./Comments";
+  import NewComment from "./NewComment";
 
   export default {
     name: "Comment",
-    components: { UserAvatar, Comments },
+    components: { NewComment, UserAvatar, Comments },
     data: () => ({
       author: "",
       avatar: "",
@@ -143,16 +123,8 @@
 
       isReplyTextAreaExpanded: false,
       isLoadingToSend: false,
-      replayText: "",
 
       isRepliesExpanded: false,
-      isFormValid: false,
-
-      commentRules: [
-        p => !!p || 'Type Something',
-        p => p.length >= 3 || 'Must be at least 3 characters',
-        p => p.length <= 100 || 'Must be lower than 100 characters',
-      ],
     }),
     props: ['comment', 'replies', 'depth'],
     computed: {
@@ -226,13 +198,14 @@
           });
         }
       },
-      replyComment() {
+      replyComment(newComment) {
+        console.log(newComment);
         this.isLoadingToSend = true;
         this.replyToComment({
           commentId: this.comment.id,
-          content: this.replayText,
+          content: newComment.replayText,
         }).then(({ data }) => {
-          this.fetchRepliesToComment()
+          this.fetchRepliesToComment();
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
@@ -244,7 +217,6 @@
           this.replies = data.replies;
           this.isLoadingToSend = false;
           this.isReplyTextAreaExpanded = false;
-          this.replayText = "";
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
