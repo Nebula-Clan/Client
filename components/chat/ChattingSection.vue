@@ -1,11 +1,22 @@
 <template>
     <v-content style="height:100vh" class="back">
       <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height">
+        <v-row no-gutters class="flex-grow-0 flex-shrink-0">
+          <v-col cols="12" style="position: relative;">
+                <v-container class="pa-0">
+                    <ProfileStatus />
+                </v-container>
+            </v-col>
+        </v-row>
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
           <v-col cols="12" class="scrollable" style="overflow-x: hidden">
 	            <v-row v-for="i in 40" :key="i">
-                    <v-col cols="12" class="d-inline-flex">
-                        <Message />
+                    <v-col cols="12" class="d-inline-flex py-1">
+                      <Message class="ml-3" 
+                      :previousId="shit()"
+                      :currentId="shit()"
+                      :isSeen="shit() > 3 ? true : false"
+                      :isUser="shit() > 3 ? true : false" />
                     </v-col>
                 </v-row>
           </v-col>
@@ -20,8 +31,6 @@
                     :show-file="false"
                     :placeholder="'ssfsdf'"
                     :colors="colors"
-                    @onType="$emit('onType')"
-                    @edit="$emit('edit', $event)"
                     />
                 </v-container>
             </v-col>
@@ -33,6 +42,8 @@
 <script>
 import UserInput from './UserInput/UserInput'
 import Message from './Message/Message'
+import ProfileStatus from './ProfileStatus'
+
 export default {
     data() {
         return {
@@ -91,6 +102,10 @@ export default {
         sug() {
             console.log('sug')
             return []
+        },
+        shit() {
+            let s = Math.floor((Math.random() * 10) + 1) % 7
+            return s
         }
     }
 }
@@ -140,4 +155,9 @@ export default {
     position: -webkit-sticky;
     z-index: 5;
 }
+
+.avatar {
+
+}
+
 </style>

@@ -1,21 +1,22 @@
 <template>
     <v-container class="user-list-color ml-0 overflow-y-auto" :style="userListHeight">
-        <v-row no-gutters>
+        <v-row dense>
             <v-col cols="12">
-                <v-container class="pa-0">
-                    <Profile />
+                <v-container class="py-0 d-inline-flex">
+                    <p class="text-h4 pl-1 mb-0 text--secondary"> Chats </p>
+                    <v-icon class="ml-auto">mdi-dots-vertical</v-icon>
                 </v-container>
             </v-col>
         </v-row>
         <v-row no-gutters>
             <v-col cols="12">
-                <v-container class="py-0">
+                <v-container class="pb-0">
                         <v-text-field
                             hide-details
+                            prepend-inner-icon="mdi-account-search"
                             label="Search pepole"
                             single-line
                             solo
-                            rounded
                             dense
                             class="search-field"
                         ></v-text-field>
@@ -25,20 +26,10 @@
         <v-row>
             <v-col cols="12" class="pb-0">
                 <v-container>
-                <p class="text--secondary mb-0"> Pinned Chats </p>
-                <template v-for="i in 2" class="pl-0">
-                    <Profile :key="i" class="pl-0" />
-                </template>
-                </v-container>
-            </v-col>
-        </v-row>
-        <v-row no-gutters>
-            <v-col cols="12">
-                <v-container>
-                <p class="text--secondary mb-0"> Open Chats </p>
-                <template v-for="i in 20" class="pl-0">
-                    <Profile :key="i" class="pl-0" />
-                </template>
+                    <template v-for="i in 12" class="pl-0">
+                        <Profile :key="i * 23" class="pl-0" />
+                        <v-divider :key="i * 27" class="ml-14 mr-3"></v-divider>
+                    </template>
                 </v-container>
             </v-col>
         </v-row>
@@ -95,6 +86,7 @@ export default {
 
 .search-field {
     background-color:#202023;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar {

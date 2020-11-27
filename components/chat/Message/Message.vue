@@ -1,12 +1,19 @@
 <template>
-    <div :class="getClass">
-        <v-card max-width="350" elevation="3" class="card-back text--secondary pa-2 ">
+    <div :class="[getClass, 'd-inline-flex']">
+        <Avatar v-if="!isUser && previousId != currentId"
+                class="avatar mt-5 ml-4" 
+                :substituteChar="'K'" 
+                :avatarUrl="'/images/LL1.jpg'"
+                :timeOut="12000" 
+                :avatarSize="35" 
+                :textSize="5" />
+        <v-card max-width="350" elevation="3" :class="['card-back', 'text--secondary', 'pa-3', 'card-border', getTriangleClass]">
             <v-card-text :class="getText">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laudantium, explicabo odit esse ea ipsum perspiciatis ut eaque ab, reprehenderit beatae, voluptate vero modi repudiandae et sit aperiam dolorum qui reiciendis!
             </v-card-text>
             <v-card-actions class="pa-0">
-            <v-icon v-if="random" class="ml-auto" size="16" style="filter: contrast(50%);">
-                mdi-email-outline
+            <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
+                {{ getMessgaeStatusicon() }}
             </v-icon>
             </v-card-actions>
         </v-card>
@@ -16,37 +23,67 @@
 
 <script>
 export default {
+    props: {
+        previousId: {
+            type: Number,
+            required: true
+        },
+        currentId: {
+            type: Number,
+            required: true
+        },
+        isUser: {
+            type: Boolean,
+            required: true
+        },
+        isSeen: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
     data() {
         return {
             random: false
         }
     },
-    created() {
-        this.shit()
-    },
     computed: {
         getClass() {
-            if (this.random) {
+            if (this.isUser) {
                 return 'ml-auto mr-2'
             } else {
                 return 'mr-auto ml-2'
             }
         },
         getText() {
-            if (this.random) {
+            if (this.isUser) {
                 return 'pa-0 mr-8 green--text text--lighten-1'
             } else {
                 return 'pa-0 mr-8'
             }
+        },
+        getTriangleClass() {
+            if (this.previousId != this.currentId) {
+                if (this.isUser) {
+                    return 'right mr-7'
+                } else {
+                    return 'left ml-3'
+                }
+            } else {
+                if (this.isUser) {
+                    return 'mr-7'
+                } else {
+                    return 'ml-16'
+                }
+            }
         }
     },
     methods: {
-        shit() {
-            let s = Math.floor((Math.random() * 10) + 1) % 2
-            if (s==0) {
-                this.random = true
+        getMessgaeStatusicon() {
+            if (this.isSeen) {
+                return 'mdi-email'
             } else {
-                this.random = false
+                return 'mdi-email-open'
             }
         }
     }
@@ -55,6 +92,10 @@ export default {
 
 
 <style scoped>
+
+.avatar {
+    border-radius: 5px;
+}
 
 .card-back {
     background-color: #35363a;
@@ -68,5 +109,43 @@ export default {
     margin-right: 10px;
     margin-bottom: 10px;
     padding-left: 5px;
+}
+
+.card-border {
+    border-radius: 11px;
+}
+
+.right {
+  
+}
+
+.right::after {
+  content: '';
+  position: absolute;
+  visibility: visible;
+  top: 30px;
+  right: -8px;
+  margin-right: -10px;
+  border: 10px solid transparent;
+  border-left: 10px solid #35363a;
+  clear: both;
+  /* 35363a */
+}
+
+.left {
+  
+}
+
+.left::after {
+  content: '';
+  position: absolute;
+  visibility: visible;
+  top: 30px;
+  left: -8px;
+  margin-left: -10px;
+  border: 10px solid transparent;
+  border-right: 10px solid #35363a;
+  clear: both;
+  /* 35363a */
 }
 </style>
