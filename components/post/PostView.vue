@@ -31,24 +31,22 @@
       </v-col>
     </v-row>
 
-    <v-divider></v-divider>
+    <v-divider/>
 
     <div class="ma-3" v-html="content"></div>
 
-    <v-divider></v-divider>
+    <v-divider/>
 
     <v-row class="mx-2">
       <v-col>
-        <nuxt-link class="text-decoration-none white--text d-flex"
+        <nuxt-link class="text-decoration-none white--text d-flex py-2"
                    :to="'/profile/'+author.username">
           <div>
-            <v-avatar
+            <UserAvatar
               class="profile-pic"
-              size="40">
-              <img
-                :alt="author.username"
-                :src="$axios.defaults.baseURL + author.profile_picture">
-            </v-avatar>
+              color="primary"
+              :avatar-string="author.username"
+              :avatar-src="author.profile_picture"/>
           </div>
           <div class="d-flex flex-column ml-3">
             <span><b>{{ author.username }}</b></span>
@@ -94,9 +92,11 @@
 
 <script>
   import {mapActions, mapGetters} from "vuex";
+  import UserAvatar from "../shared/UserAvatar";
 
   export default {
     name: 'PostView',
+    components: { UserAvatar },
     data: () => ({}),
     computed: {
       dateDuration: {
