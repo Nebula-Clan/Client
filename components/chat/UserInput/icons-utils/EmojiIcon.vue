@@ -1,6 +1,6 @@
 <template>
   <div class="sc-user-input--picker-wrapper">
-    <EmojiPicker v-if="isActive" :on-blur="_handlePickerBlur" />
+    <EmojiPicker v-if="isActive" :on-blur="_handlePickerBlur" @emojiClicked="nofityClickedEmoji" />
     <v-icon  @click="isActive = !isActive" style="filter: contrast(50%);">
       mdi-emoticon-outline
     </v-icon>
@@ -25,6 +25,9 @@ export default {
     },
     _handlePickerBlur() {
       this.isActive = false
+    },
+    nofityClickedEmoji(emoji) {
+      this.$emit('emoji', emoji)
     }
   }
 }

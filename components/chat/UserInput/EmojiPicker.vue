@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     emojiClicked(emoji) {
-      this.$refs.domNode.blur()
+      this.$emit('emojiClicked', emoji)
     }
   }
 }
@@ -44,7 +44,7 @@ export default {
   width: 330px;
   max-height: 215px;
   box-shadow: 0px 7px 40px 2px rgba(148, 149, 150, 0.3);
-  background: white;
+  background: #222831;
   border-radius: 10px;
   outline: none;
 }

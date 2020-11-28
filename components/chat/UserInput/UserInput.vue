@@ -10,7 +10,7 @@
       <v-icon slot="prepend-inner" class="mr-auto" style="filter: contrast(50%);">
         mdi-attachment
       </v-icon>
-      <EmojiIcon slot="append" class="ml-auto" />
+      <EmojiIcon slot="append" class="ml-auto" @emoji="appendEmoji" />
       <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessage">
         mdi-send-outline
       </v-icon>
@@ -75,6 +75,9 @@ export default {
     })
   },
   methods: {
+    appendEmoji(emoji) {
+      this.text += emoji
+    },
     sendMessage() {
       if (this.text != '' || this.text != null || this.text != undefined) {
         this.$emit('recMessage', this.text)

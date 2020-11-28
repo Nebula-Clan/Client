@@ -127,7 +127,7 @@ export default {
   content: '';
   position: absolute;
   visibility: visible;
-  top: 30px;
+  top: 37px;
   right: -8px;
   margin-right: -10px;
   border: 10px solid transparent;
