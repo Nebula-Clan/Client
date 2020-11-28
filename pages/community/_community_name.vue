@@ -24,9 +24,9 @@
 <script>
 import Intro from "@/components/community/Header";
 import People from "@/components/community/People";
-import PostQuickView from '@/components/homepage/Post-quick-view'
+import PostQuickView from '@/components/shared/Post-quick-view'
 import About from "@/components/community/About";
-import Write from "@/components/homepage/Write";
+import Write from "@/components/shared/Write";
 export default {
   name: "communityName",
   components: {
@@ -48,13 +48,13 @@ export default {
   mounted() {
     this.getInfo();
     this.getPosts();
+    this.getPeople();
   },
   methods: {
     getInfo() {
       this.name = this.$route.params.community_name;
-      this.$axios.get(`api/community/get_community?name=${this.name}&summery=f`)
-      .then(
-        response => {
+      this.$axios.get(`api/community/get_community?name=${this.name}&summery=t`)
+      .then( response => {
           this.introData = {
             id: response.data.community.id,
             name: response.data.community.name,
@@ -64,14 +64,8 @@ export default {
             since: response.data.community.date_created,
             about: response.data.community.about
           };
-          this.members = response.data.community.members;
-          const user = this.members.filter(u => u.username === this.$auth.user.username);
-          this.isUserJoined = user.length === 1;
-          // this.posts = response.data.community.posts
-        }
-      ).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'})
-      );
+        }).catch(
+        e => this.$notifier.showMessage({content: e.message, color: 'error'}));
     },
     getPosts() {
       this.$axios.get(`api/community/community_posts?name=${this.name}`).then(
@@ -79,6 +73,15 @@ export default {
       ).catch(
         e => this.$notifier.showMessage({content: e.message, color: 'error'})
       );
+    },
+    getPeople() {
+      this.$axios.get('api/community/community_members?name='+this.name).then(
+        response => {
+          this.members = response.data.members;
+          const user = this.members.filter(u => u.username === this.$auth.user.username);
+          this.isUserJoined = user.length === 1;
+        }).catch(
+        e => this.$notifier.showMessage({content: e.message, color: 'error'}));
     }
   }
 }

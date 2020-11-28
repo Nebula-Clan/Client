@@ -9,7 +9,7 @@
           <v-icon size="15">
             mdi-clock
           </v-icon>
-          <span style="font-size: smaller">{{ dateDuration }}</span>
+          <span style="font-size: smaller">{{postDateDuration}}</span>
         </div>
       </v-col>
 
@@ -134,21 +134,11 @@
         } else {
           return ''
         }
-      },
-      dateDuration: {
-        get: function () {
-          const unixTime = new Date(this.post.date_created).getTime()
-          const now = new Date().getTime()
-          if (now - unixTime < 36e+5) {
-            return Math.floor((now - unixTime) / 60000) + ' m'
-          } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
-            return Math.floor((now - unixTime) / 36e+5) + ' h'
-          } else {
-            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
-          }
-        }
-      },
     },
+    postDateDuration() {
+      return dateDuration(this.post.date_created)
+    }
+  },
     methods: {
       ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
       likePost() {

@@ -64,7 +64,6 @@ export default {
   methods: {
     close() {
       this.dialog = false;
-      console.log('closed-community');
       this.$emit('refresh');
     }
   }
