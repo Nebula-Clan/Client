@@ -9,7 +9,7 @@
             </v-col>
         </v-row>
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
-          <v-col cols="12" class="scrollable" style="overflow-x: hidden">
+          <v-col cols="12" class="scrollable" style="overflow-x: hidden" ref="chatList">
             <v-row v-for="(message, idx) in messages" :key="idx">
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
@@ -106,6 +106,10 @@ export default {
     methods: {
       recvMessage(text) {
         this.messages.push(text)
+        this.$nextTick(() => {
+          let chatList = this.$refs.chatList
+          chatList.scrollTop = chatList.scrollHeight;
+        })
       },
         s() {
             console.log('submit')
@@ -156,7 +160,7 @@ export default {
 
 .scrollable {
     overflow-y: auto;
-    height: 80vh;
+    height: 100%;
   }
 
 .tab-stick {
