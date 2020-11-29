@@ -5,7 +5,7 @@
       New Post
     </v-card-title>
     <Editor @updateEditorContent="post.content=$event"/>
-    <v-divider class="primary"></v-divider>
+    <v-divider class="primary"/>
     <v-row class="px-4">
       <v-col>
         <v-dialog
@@ -45,8 +45,7 @@
                         :rules="descRules"
                         counter
                         auto-grow
-                        label="Description"
-                      ></v-textarea>
+                        label="Description"/>
                     </v-col>
                     <v-col cols="12">
                       <v-file-input
@@ -56,22 +55,27 @@
                         show-size
                         prepend-icon="mdi-camera"
                         label="Select post cover"
-                        truncate-length="30"
-                      ></v-file-input>
+                        truncate-length="30"/>
                     </v-col>
                     <v-col cols="12">
                       <v-select
                         v-model="post.communityName"
                         :items="communities"
                         label="Community"
-                        outlined
-                      ></v-select>
+                        outlined/>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-select
+                        v-model="post.category"
+                        :items="categories"
+                        label="Category"
+                        outlined/>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field outlined
                                     @input="recommend"
                                     v-model="hashtag"
-                                    label="Up to 5 hashtags"
+                                    label="Up to 5 hash tags"
                                     @change="addHashtags">
                       </v-text-field>
                       <div v-if="suggestions.length > 0">
@@ -131,101 +135,115 @@
 </template>
 
 <script>
-import Editor from '@/components/post/Editor'
-import {mapActions} from 'vuex'
-import community from "@/store/modules/community/community";
+  import Editor from '@/components/post/Editor'
+  import {mapActions} from 'vuex'
+  import community from "@/store/modules/community/community";
 
-export default {
-  name: 'CreatePost',
-  data: () => ({
-    dialog: false,
-    formValid: false,
-    hashtag: '',
-    suggestions: [],
-    post: {
-      title: '',
-      description: '',
-      contentType: 'OT',
-      category: 'OTHER',
-      content: '',
-      headerImage: null,
-      communityName: '',
-      hashtags: []
-    },
-    isPostPublishing: false,
-    communities: [],
+  export default {
+    name: 'CreatePost',
+    data: () => ({
+      dialog: false,
+      formValid: false,
+      hashtag: '',
+      suggestions: [],
+      post: {
+        title: '',
+        description: '',
+        contentType: 'OT',
+        category: '',
+        content: '',
+        headerImage: null,
+        communityName: '',
+        hashtags: []
+      },
+      isPostPublishing: false,
+      communities: [],
+      categories: [],
 
-    titleRules: [
-      t => !!t || 'Title is required',
-      t => t.length <= 50 || 'Max length is 50 characters'
-    ],
-    descRules: [
-      t => !!t || 'Description is required',
-      t => t.length <= 750 || 'Max length is 750 characters'
-    ],
-    chipsColors: [
-      'blue', 'red', 'green', 'purple', 'orange'
-    ]
-  }),
-  components: {
-    Editor
-  },
-  mounted() {
-    this.fetchCommunities();
-  },
-  methods: {
-    ...mapActions('modules/post', ['createPost']),
-    ...mapActions('modules/community/community', ['getAllUserCommunities']),
-    publish() {
-      console.log(this.post)
-      this.isPostPublishing = true;
-      this.createPost(this.post).then((response) => {
-        console.log(response)
-        this.$auth.redirect('home')
-      }).catch((e) => {
-        console.error(e)
-      })
+      titleRules: [
+        t => !!t || 'Title is required',
+        t => t.length <= 50 || 'Max length is 50 characters'
+      ],
+      descRules: [
+        t => !!t || 'Description is required',
+        t => t.length <= 750 || 'Max length is 750 characters'
+      ],
+      chipsColors: [
+        'blue', 'red', 'green', 'purple', 'orange'
+      ]
+    }),
+    components: {
+      Editor
     },
-    // Hashtag
-    addHashtags() {
-      const hashtagStr = this.hashtag.replace(/ /g, '');
-      if (this.post.hashtags.length < 5) {
-        this.post.hashtags.push(hashtagStr);
-      }
-      this.hashtag = '';
+    mounted() {
+      this.fetchCommunities();
+      this.fetchCategories();
     },
-    recommend() {
-      const hashtagStr = this.hashtag.replace(/ /g, '');
-      this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
-        response => {
-          this.suggestions = response.hashtags
+    methods: {
+      ...mapActions('modules/post', ['createPost']),
+      ...mapActions('modules/community/community', ['getAllUserCommunities']),
+      ...mapActions('modules/category/category', ['getAllCategories']),
+      publish() {
+        if (this.post.headerImage === null || this.post.headerImage === undefined) {
+          delete this.post.headerImage;
         }
-      ).catch();
-    },
-    setHashtag(item) {
-      this.hashtag = '';
-      this.post.hashtags.pop();
-      this.post.hashtags.push(item);
-      this.suggestions = [];
-    },
-    deleteHashtag(index) {
-      this.post.hashtags.splice(index, 1);
-    },
-    // Communities
-    fetchCommunities() {
-      this.getAllUserCommunities().then(({data}) => {
-        this.communities = data.communities.map((community) => community.name);
-      }).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'})
-      );
+        console.log(this.post);
+        this.isPostPublishing = true;
+        this.createPost(this.post).then((response) => {
+          console.log(response)
+          this.$auth.redirect('home')
+        }).catch((e) => {
+          console.error(e)
+        })
+      },
+      // Hashtag
+      addHashtags() {
+        const hashtagStr = this.hashtag.replace(/ /g, '');
+        if (this.post.hashtags.length < 5) {
+          this.post.hashtags.push(hashtagStr);
+        }
+        this.hashtag = '';
+      },
+      recommend() {
+        const hashtagStr = this.hashtag.replace(/ /g, '');
+        this.$axios.$get(`api/hashtag/similarity?&text=${hashtagStr}`).then(
+          response => {
+            this.suggestions = response.hashtags
+          }
+        ).catch();
+      },
+      setHashtag(item) {
+        this.hashtag = '';
+        this.post.hashtags.pop();
+        this.post.hashtags.push(item);
+        this.suggestions = [];
+      },
+      deleteHashtag(index) {
+        this.post.hashtags.splice(index, 1);
+      },
+      // Communities
+      fetchCommunities() {
+        this.getAllUserCommunities().then(({ data }) => {
+          this.communities = data.communities.map((community) => community.name);
+        }).catch(
+          e => this.$notifier.showMessage({ content: e.message, color: 'error' })
+        );
+      },
+      // Categories
+      fetchCategories() {
+        this.getAllCategories()
+          .then(({ data }) => {
+            this.categories = data.categories.map((categoryObj) => categoryObj.title);
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      }
     }
   }
-}
 </script>
 
 
 <style lang="scss" scoped>
-.publish-form {
-  width: 100%;
-}
+  .publish-form {
+    width: 100%;
+  }
 </style>

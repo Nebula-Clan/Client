@@ -92,7 +92,7 @@
     </div>
     <!-- Replay  -->
     <v-expand-transition>
-      <div v-show="isReplyTextAreaExpanded" class="ml-3 mt-3">
+      <div v-show="isReplyTextAreaExpanded" class="mx-3 mt-3">
         <NewComment :is-loading-to-send="isLoadingToSend" :submit-comment="replyComment"/>
       </div>
     </v-expand-transition>
