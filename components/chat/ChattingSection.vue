@@ -13,11 +13,11 @@
             <v-row v-for="(message, idx) in messages" :key="idx">
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
-                  :previousId="shit()"
-                  :currentId="shit()"
-                  :message="message" 
-                  :isSeen="shit() > 3 ? true : false"
-                  :isUser="shit() > 3 ? true : false" />
+                  :previousId="message.previousId"
+                  :currentId="message.currentId"
+                  :message="message.message" 
+                  :isSeen="message.isSeen"
+                  :isUser="message.isUser" />
                 </v-col>
             </v-row>
           </v-col>
@@ -49,6 +49,7 @@ import ProfileStatus from './ProfileStatus'
 export default {
     data() {
         return {
+          last: 2,
           messages: [],
             participants: [
                 {
@@ -99,13 +100,33 @@ export default {
             }
         },
         created() {
+          let oid = 5
+          let uid = 3
+          let last = 3
           for (let i = 0; i < 40; i++) {
-            this.messages.push('Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore perspiciatis enim similique aspernatur alias dolor tempora voluptatum repudiandae fuga delectus nemo error officiis molestiae saepe sunt mollitia, ipsa laboriosam quam esse ipsum ratione voluptates unde eos libero! Voluptate illum aperiam rem assumenda neque, dolorem enim quae ipsam cumque velit modi?')
+            let user = this.shit() > 3 ? true : false;
+            this.messages.push({
+              'isUser': user,
+              'previousId': last,
+              'currentId' : user ? 3 : 5,
+              'isSeen': true,
+              'message': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore perspiciatis enim similique aspernatur alias dolor tempora voluptatum repudiandae fuga delectus nemo error officiis molestiae saepe sunt mollitia, ipsa laboriosam quam esse ipsum ratione voluptates unde eos libero! Voluptate illum aperiam rem assumenda neque, dolorem enim quae ipsam cumque velit modi?'
+              })
+              last = user ? 3 : 5
           }
+          this.last = last
         },
     methods: {
       recvMessage(text) {
-        this.messages.push(text)
+        console.log(text)
+        this.messages.push({
+          'message': text,
+          'isSeen' : false,
+          'isUser' : true,
+          'previousId': this.last,
+          'currentId' : 3
+        })
+        this.last = 3
         this.$nextTick(() => {
           let chatList = this.$refs.chatList
           chatList.scrollTop = chatList.scrollHeight;
