@@ -8,8 +8,7 @@
                 :avatarSize="35" 
                 :textSize="5" />
         <v-card max-width="350" elevation="3" :class="['card-back', 'text--secondary', 'pa-3', 'card-border', getTriangleClass]">
-            <v-card-text :class="getText">
-                {{ message }}
+            <v-card-text :class="getText" v-html="getMessage">
             </v-card-text>
             <v-card-actions class="pa-0">
             <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
@@ -51,6 +50,9 @@ export default {
             random: false
         }
     },
+    mounted() {
+        console.log(this.message.split("\n").length)
+    },
     computed: {
         getClass() {
             if (this.isUser) {
@@ -80,14 +82,18 @@ export default {
                     return 'ml-16'
                 }
             }
+        },
+        getMessage() {
+            let newMessage = this.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            return newMessage
         }
     },
     methods: {
         getMessgaeStatusicon() {
             if (this.isSeen) {
-                return 'mdi-email'
-            } else {
                 return 'mdi-email-open'
+            } else {
+                return 'mdi-email'
             }
         }
     }
