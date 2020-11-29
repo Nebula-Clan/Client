@@ -113,6 +113,7 @@
 <script>
   import {mapActions} from 'vuex'
   import UserAvatar from "../shared/UserAvatar";
+  import {dateDuration} from "~/shared-functions/Posts";
 
   export default {
     name: 'Post-quick-view',
