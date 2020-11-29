@@ -28,7 +28,7 @@
         <WriteLoader v-show="isPageLoading"/>
 
         <PostQuickView v-show="!isPageLoading" v-if="posts" :key="post.id" v-for="post in posts" :post="post"/>
-        <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5"/>
+        <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5" :key="i"/>
       </v-col>
       <v-col cols="3">
         <People v-show="!isPageLoading" v-if="members" :people="members"/>
@@ -38,6 +38,7 @@
               type="heading"/>
           </div>
           <div
+          :key="i"
             v-for="i in 10"
             class="ma-2">
             <v-skeleton-loader
@@ -114,6 +115,8 @@
             since: response.data.community.date_created,
             about: response.data.community.about
           };
+          this.loading.isCommunityLoading = false
+          this.loading.isPostLoading = false
         }).catch(
         e => this.$notifier.showMessage({content: e.message, color: 'error'}));
     },
