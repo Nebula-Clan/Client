@@ -4,7 +4,7 @@
       :rules="commentRules"
       outlined
       auto-grow
-      counter="100"
+      counter="500"
       v-model="replayText"
       :label="`Reply the post`"/>
     <div class="pb-2 d-flex flex-row-reverse">
@@ -34,7 +34,7 @@
       commentRules: [
         p => !!p || 'Type Something',
         p => p.length >= 3 || 'Must be at least 3 characters',
-        p => p.length <= 100 || 'Must be lower than 100 characters',
+        p => p.length <= 500 || 'Must be lower than 100 characters',
       ],
     }),
     props: ['isLoadingToSend', 'submitComment']

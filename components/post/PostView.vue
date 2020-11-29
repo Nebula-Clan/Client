@@ -99,6 +99,7 @@
     components: { UserAvatar },
     data: () => ({}),
     computed: {
+      ...mapGetters('modules/post', ['isCommentToPostExpanded']),
       dateDuration: {
         get: function () {
           const unixTime = new Date(this.post.date_created).getTime()
@@ -119,7 +120,6 @@
           return ''
         }
       },
-      ...mapGetters('modules/post', ['isCommentToPostExpanded'])
     },
     methods: {
       ...mapActions('modules/post', ['setCommentToPost']),

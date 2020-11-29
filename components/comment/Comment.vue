@@ -12,7 +12,7 @@
 
     <div class="content pl-8">
       <!-- Content  -->
-      <div>
+      <div class="pb-1">
         <a class="author">{{ comment.author.username }}</a>
         <div class="metadata">
           <span class="date">{{ dateDuration }}</span>
@@ -320,7 +320,7 @@
        Comment Text
   ---------------------*/
   .comment .text {
-    margin: 0.25em 0em 0.5em;
+    margin: 0.25em 2.5em 0.5em;
     font-size: 1em;
     word-wrap: break-word;
     color: $color-comment-content;
