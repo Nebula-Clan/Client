@@ -9,13 +9,13 @@
           <nuxt-link
             style="text-decoration: none"
             v-if="post.category !== null"
-            :to="`/explore/category?category=${post.category}&order=new`">
+            :to="`/explore/category?category=${post.category !== undefined ? '' : post.category.title}&order=new`">
             <v-sheet
               outlined
               elevation="1"
               color="blue px-3 mt-1 ml-4 rounded-pill">
                 <span>
-                  {{ post.category }}
+                  {{ post.category.title}}
                 </span>
             </v-sheet>
           </nuxt-link>

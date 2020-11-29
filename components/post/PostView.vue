@@ -11,14 +11,6 @@
             style="text-decoration: none"
             v-if="post.category !== null"
             :to="`/explore/category?category=${post.category}&order=new`">
-            <v-sheet
-              outlined
-              elevation="1"
-              color="blue px-3 mt-1 ml-4 rounded-pill">
-                <span>
-                  {{ post.category }}
-                </span>
-            </v-sheet>
           </nuxt-link>
         </v-row>
         <v-row class="pb-1">
