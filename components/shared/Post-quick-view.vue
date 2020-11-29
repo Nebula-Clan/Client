@@ -9,7 +9,7 @@
           <nuxt-link
             style="text-decoration: none"
             v-if="post.category !== null"
-            :to="`/explore/category?category=${post.category}&order=new`">
+            :to="`/explore/category?category=${post.category.title}&order=new`">
             <v-sheet
               outlined
               elevation="1"
