@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="formValid" @submit.prevent="submit">
+  <v-form v-model="formValid" @submit.prevent="setPassword">
     <v-row>
       <v-col>
         <v-text-field
@@ -45,6 +45,7 @@ export default {
   name: "Change-Password",
   data() {
     return {
+      loading: false,
       formValid: false,
       password: {
         currentPassword: '',
@@ -63,9 +64,16 @@ export default {
     }
   },
   methods: {
-    submit: function () {
-
-    }
+    setPassword: function() {
+      const formData = new FormData();
+      formData.append('password', this.password.newPassword);
+      this.$axios.put('api/profile/update_profile', formData).then(
+        () => this["$notifier"].showMessage({ content: 'Password updated successfully', color: 'success' })
+      ).catch(
+        error =>
+          this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+      );
+    },
   }
 }
 </script>

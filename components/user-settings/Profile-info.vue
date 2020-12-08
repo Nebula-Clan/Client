@@ -1,5 +1,5 @@
 <template>
-      <v-form @submit.prevent="setProfile">
+      <v-form @submit.prevent="setProfile" v-model="formValid">
 
         <v-row>
           <v-col>
@@ -7,7 +7,7 @@
 
               <div class="banner">
                 <img alt="banner-img"
-                     class="banner rounded"
+                     class="banner-img rounded"
                      :src="bannerImage">
                 <div class="overlay-banner rounded d-flex justify-center align-center">
                   <v-btn
@@ -50,7 +50,7 @@
               id="profile-img"
               v-model="profile.profile_picture"
               accept="image/png, image/jpeg, image/bmp"
-              @change="imageChanged('profile', $event)"
+              @change="changed('profile_picture', $event)"
               outlined
               style="display: none"
               truncate-length="30">
@@ -58,15 +58,14 @@
             <v-file-input
               id="banner-img"
               v-model="profile.banner_picture"
-              @change="imageChanged('banner', $event)"
+              @change="changed('banner_picture', $event)"
               accept="image/png, image/jpeg, image/bmp"
               outlined
               style="display: none"
               truncate-length="30">
             </v-file-input>
             <v-text-field
-              v-model="profile.username"
-              @change="detectChanges()"
+              v-model="this.$auth.user.username"
               counter
               disabled
               label="Username"
@@ -74,7 +73,8 @@
             </v-text-field>
             <v-text-field
               v-model="profile.first_name"
-              @change="detectChanges()"
+              :rules="rules"
+              @change="changed('first_name')"
               counter
               label="First Name"
               outlined>
@@ -83,7 +83,8 @@
           <v-col>
             <v-text-field
               v-model="profile.last_name"
-              @change="detectChanges()"
+              @change="changed('last_name')"
+              :rules="rules"
               counter
               label="Last Name"
               outlined>
@@ -91,7 +92,8 @@
             <v-textarea
               v-model="profile.biology"
               auto-grow
-              @change="detectChanges()"
+              :rules="rules"
+              @change="changed('bio')"
               counter
               rows="1"
               label="Bio"
@@ -100,8 +102,9 @@
           </v-col>
           <v-col cols="12">
             <v-btn
+              :loading="loading"
               type="submit"
-              :disabled="!isAnyChanges"
+              :disabled="changedFields.length === 0 || !formValid"
               color="accent"
               outlined>
               Apply changes
@@ -116,25 +119,23 @@ export default {
   name: "ProfileInfo",
   data() {
     return {
-      isAnyChanges: false,
+      formValid: false,
+      loading: false,
+      changedFields: [],
       profileImage: null,
       bannerImage: null,
       profile: {
-        username: null,
-        first_name: null,
-        last_name: null,
-        biology: null,
-        profile_picture: null,
-        banner_picture: null,
+        username: '',
+        first_name: '',
+        last_name: '',
+        biology: '',
+        profile_picture: '',
+        banner_picture: ''
       },
-      copyProfile: {
-        username: null,
-        first_name: null,
-        last_name: null,
-        biology: null,
-        profile_picture: null,
-        banner_picture: null,
-      }
+      rules: [
+        t => !!t || 'This field cannot be empty',
+        t => t.length >=4 || 'This field must be at least 4 characters or more'
+      ],
     }
   },
   methods: {
@@ -146,33 +147,53 @@ export default {
       }).then(
         response => {
           this.profile = response.data;
-          this.copyProfile = Object.assign({}, this.profile);
-          this.profileImage = this.$axios.defaults.baseURL + this.profile.profile_picture;
-          this.bannerImage = this.$axios.defaults.baseURL + this.profile.banner_picture;
+          this.profileImage = this.$axios.defaults.baseURL + response.data['profile_picture'];
+          this.bannerImage = this.$axios.defaults.baseURL + response.data['banner_picture'];
+          this.changedFields = [];
         }
       ).catch();
     },
     setProfile: function() {
-      this.$axios.put('api/profile/update_profile', this.profile).then(
-        response => console.log(response)
-      ).catch();
+      this.loading = true;
+      const formData = new FormData();
+      if (this.changedFields.includes('first_name')){
+        formData.append('first_name', this.profile.first_name);
+      }
+      if (this.changedFields.includes('last_name')){
+        formData.append('last_name', this.profile.last_name);
+      }
+      if (this.changedFields.includes('bio')){
+        formData.append('biology', this.profile.biology);
+      }
+      if (this.changedFields.includes('profile_picture')){
+        formData.append('profile_picture', this.profile.profile_picture);
+      }
+      if (this.changedFields.includes('banner_picture')){
+        formData.append('banner_picture', this.profile.banner_picture);
+      }
+      this.$axios.put('api/profile/update_profile', formData).then(
+        () => this["$notifier"].showMessage({ content: 'Profile updated successfully', color: 'success' })
+      ).catch(
+        error =>
+          this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+      ).finally(
+        () => {
+          this.loading = false
+          this.getProfile();
+        }
+      );
     },
-    detectChanges: function () {
-      const originals = JSON.stringify(this.copyProfile);
-      const changed = JSON.stringify(this.profile);
-      this.isAnyChanges = changed !== originals;
+    changed: function (field, file=null) {
+      this.changedFields.push(field);
+      if (field === 'banner_picture') {
+        this.bannerImage = URL.createObjectURL(file);
+      } else if (field === 'profile_picture') {
+        this.profileImage = URL.createObjectURL(file);
+      }
     },
     changeImage: function (field) {
       document.getElementById(field).click();
     },
-    imageChanged: function (field, file) {
-      if (field === 'banner') {
-        this.bannerImage = URL.createObjectURL(file);
-      } else if (field === 'profile') {
-        this.profileImage = URL.createObjectURL(file);
-      }
-      this.detectChanges();
-    }
   },
   mounted() {
     this.getProfile();
@@ -188,6 +209,11 @@ export default {
   .banner {
     width: 100%;
     height: 300px;
+    .banner-img {
+      width: 100%;
+      height: 300px;
+      border: .5px solid #4b4b4b;
+    }
   }
   .overlay-banner {
     position: absolute;
@@ -205,6 +231,7 @@ export default {
       position: absolute;
       bottom: -75px;
       left: calc(50% - 75px);
+      border: .5px solid #4b4b4b;
     }
     .overlay-profile {
       margin: 8px;
