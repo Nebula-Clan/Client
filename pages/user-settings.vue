@@ -1,10 +1,10 @@
 <template>
-  <v-container>
-    <v-row>
+  <v-container fluid>
+    <v-row class="ma-4">
       <v-col md="3">
         <PagesList />
       </v-col>
-      <v-col>
+      <v-col md="9">
         <NuxtChild />
       </v-col>
     </v-row>

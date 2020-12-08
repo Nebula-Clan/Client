@@ -29,9 +29,6 @@
 export default {
   name: "Draft",
   props: ['draft'],
-  data() {
-
-  }
 }
 </script>
 
