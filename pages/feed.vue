@@ -19,14 +19,14 @@
       <PostQuickView
         v-show="!isPageLoading"
         v-for="(post, i) in posts" :key="i" :post="post"/>
-      <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5"/>
+      <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5" :key="i"/>
     </v-col>
     <v-col
       cols="12"
       lg="2"
       md="3"
       sm="3">
-            <User v-show="!isPageLoading" :user="this.$auth.user"/>
+      <User v-show="!isPageLoading" :user="this.$auth.user"/>
       <UserLoader v-show="isPageLoading"/>
 
       <br>
@@ -97,14 +97,14 @@
             this.loading.isPostLoading = false;
             this.loading.isCategoryLoading = false;
           })
-          .catch(e => this.$notifier.showMessage({content: e.message, color: 'error'}));
+          .catch(e => this.$notifier.showMessage({ content: e.message, color: 'error' }));
         // Communities
         this.$axios.get('api/community/user_communities').then(
-          ({data}) => {
+          ({ data }) => {
             this.communities = data.communities;
             this.loading.isCommunitiesLoading = false;
           }
-        ).catch(e => this.$notifier.showMessage({content: e.message, color: 'error'}));
+        ).catch(e => this.$notifier.showMessage({ content: e.message, color: 'error' }));
       },
       refresh() {
         console.log('refresh');
