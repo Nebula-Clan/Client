@@ -18,14 +18,27 @@
         </div>
       </v-col>
       <v-col cols="4" class="d-flex align-center justify-end">
-        <v-btn
-          class="mr-2"
-          :color="left? 'accent': 'error'"
-          :loading="loading"
-          outlined
-          @click="left? join(): leave()">
-          {{ left ? 'join' : 'leave' }}
-        </v-btn>
+        <v-dialog v-model="dialog" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              :loading="loading"
+              :color="left? 'accent': 'error'"
+              v-bind="attrs"
+              v-on="on"
+              outlined>
+              {{left? 'join': 'leave'}}
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline">Leave ?</v-card-title>
+            <v-card-text>Are you sure to leave ?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="error darken-1" outlined text @click="dialog = false">Cancel</v-btn>
+              <v-btn color="accent darken-1" outlined text @click="leave">Yes</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
   </v-card>
@@ -43,7 +56,6 @@ export default {
   data() {
     return {
       loading: false,
-      left: false,
     }
   },
   methods: {
@@ -51,21 +63,8 @@ export default {
       this.loading = true;
       this.$axios.delete(`api/community/leave_community?name=${this.community.name}`).then(
         () => {
-          this.left = true;
           this["$notifier"].showMessage({content: 'Left!', color: 'success'});
-        }
-      ).catch(
-        error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
-      ).finally(
-        () => this.loading = false
-      );
-    },
-    join: function () {
-      this.loading = true;
-      this.$axios.post(`api/community/join_community?name=${this.community.name}`).then(
-        () => {
-          this.left = false;
-          this["$notifier"].showMessage({content: 'Joined', color: 'success'});
+          this.$emit('left');
         }
       ).catch(
         error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})

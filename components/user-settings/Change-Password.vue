@@ -26,7 +26,7 @@
           outlined>
         </v-text-field>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" class="text-right">
         <v-btn
           type="submit"
           :disabled="!formValid"

@@ -13,15 +13,18 @@
           append-icon="mdi-magnify"
           v-model="searchKey">
         </v-text-field>
-        <v-switch
-          v-model="toggle"
-          label="Card View"
-        ></v-switch>
+        <div class="d-flex justify-end">
+          <v-switch
+            v-model="toggle"
+            label="Card View">
+          </v-switch>
+        </div>
       </v-container>
 
-      <v-container v-if="toggle" class="d-flex">
+      <v-container v-if="toggle" class="card-view">
       <CommunityCard
         :community="c"
+        @left="getCommunities"
         v-for="c in communitiesToShow"
         :key="c.name" />
       </v-container>
@@ -29,6 +32,7 @@
         <CommunityItem
           class="item"
           :community="c"
+          @left="getCommunities"
           v-for="c in communitiesToShow"
           :key="c.name" />
       </v-container>
@@ -70,6 +74,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .card-view {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .grid-com {
     .item {
       flex: 1;

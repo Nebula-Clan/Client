@@ -1,7 +1,6 @@
 <template>
   <v-card
     class="mx-auto"
-    max-width="300"
     elevation="2"
     tile>
     <v-list rounded dense>

@@ -100,7 +100,7 @@
               outlined>
             </v-textarea>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12" class="text-right">
             <v-btn
               :loading="loading"
               type="submit"
