@@ -65,9 +65,10 @@
               truncate-length="30">
             </v-file-input>
             <v-text-field
-              v-model="this.$auth.user.username"
+              v-model="profile.username"
               counter
-              disabled
+              :rules="rules"
+              @change="changed('username')"
               label="Username"
               outlined>
             </v-text-field>
@@ -156,6 +157,9 @@ export default {
     setProfile: function() {
       this.loading = true;
       const formData = new FormData();
+      if (this.changedFields.includes('username')){
+        formData.append('username', this.profile.username);
+      }
       if (this.changedFields.includes('first_name')){
         formData.append('first_name', this.profile.first_name);
       }

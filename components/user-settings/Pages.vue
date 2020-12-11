@@ -34,7 +34,6 @@ export default {
         {icon: 'mdi-content-save', label: 'Drafts', link: '/user-settings/drafts'},
         {icon: 'mdi-cog', label: 'Settings', link: '/user-settings/settings'},
         {icon: 'mdi-account-group', label: 'My Communities', link: '/user-settings/communities'},
-        {icon: 'mdi-account-multiple', label: 'My Connections', link: '/user-settings/connections'},
       ]
     }
   }
