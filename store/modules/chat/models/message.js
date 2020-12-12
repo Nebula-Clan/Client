@@ -11,6 +11,10 @@ class Message {
         this._date = date
     }
 
+    set messageBody(body) {
+        this._messageBody = body
+    }
+
     set isSeen(seen) {
         this._seen = seen
     }
@@ -24,6 +28,7 @@ class Message {
         this.messageDate = -1
         this.isSeen = false
         this.isSender = false
+        this.messageBody = ''
     }
 
     parseFromJson(json) {
@@ -31,10 +36,11 @@ class Message {
         this.messageDate = this._praseDateString(json.date)
         this.isSeen = json.seen
         this.isSender = json.is_sender
+        this.messageBody = json.text
     }
 
     _praseDateString(dateString) {
-        return new Date(this.post.postDate).getDate()
+        return new Date(dateString).getDate()
     }
 
     get messageID() {
@@ -43,6 +49,10 @@ class Message {
 
     get messageDate() {
         return this._date
+    }
+
+    get messageBody() {
+        return this._messageBody
     }
 
     get isSeen() {

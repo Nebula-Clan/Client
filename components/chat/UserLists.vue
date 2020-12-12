@@ -26,9 +26,9 @@
         <v-row>
             <v-col cols="12" class="pb-0">
                 <v-container>
-                    <template v-for="i in 12" class="pl-0">
-                        <Profile :key="i * 23" class="pl-0" />
-                        <v-divider :key="i * 27" class="ml-14 mr-3"></v-divider>
+                    <template v-for="(profile, index) in getChatList" class="pl-0">
+                        <Profile :key="(index + 1) * 23" class="pl-0" :profile="profile" />
+                        <v-divider :key="(index + 1) * 27" class="ml-14 mr-3"></v-divider>
                     </template>
                 </v-container>
             </v-col>
@@ -38,9 +38,10 @@
 
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
+
 import Profile from '~/components/chat/Profile'
-
-
 export default {
     data() {
         return {
@@ -48,27 +49,61 @@ export default {
             window: {
                 width: 0,
                 height: 0
-            }
+            },
+            isReqCompleted: false,
+            readyState: -1
         }
     },
     computed: {
+        ...mapGetters('modules/chat/chatManager',['getWebSocket', 'getProfileList']),
         userListHeight() {
             return {
                 'max-height': this.window.height + 'px'
             }
+        },
+        getChatList() {
+            return this.getProfileList
         }
     },
     created() {
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
     },
+    mounted() {
+        this.getWebSocket.AddOnOpenHandler(this.onOpenHandler)
+        this.getWebSocket.AddOnMessageHandler(this.onMessageHandler)
+
+        this.readyState = this.getWebSocket.readyState
+        if (this.readyState == 1) {
+            this.reqChats()
+            this.getWebSocket.DeleteOnOpenHandler(this.onOpenHandler)
+        }
+    },
     destroyed() {
         window.removeEventListener('resize', this.handleResize);
     },
     methods: {
+        ...mapActions('modules/chat/chatManager', ['addProfile']),
         handleResize() {
             this.window.width = window.innerWidth;
             this.window.height = window.innerHeight;
+        },
+        onOpenHandler(event) {
+            this.reqChats()
+        },
+        onMessageHandler({ data }) {
+            data = JSON.parse(data)
+            if (data.type == 'chat.users') {
+                data.data.forEach((item, index) => {
+                    this.addProfile(item)
+                })
+            }
+        },
+        reqChats() {
+            if (this.getWebSocket.readyState == 1) {
+                this.getWebSocket.GetChatUsers()
+                this.isReqCompleted = true
+            }
         }
     }
 }

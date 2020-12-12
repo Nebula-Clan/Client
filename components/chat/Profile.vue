@@ -11,13 +11,13 @@
                 offset-x="11"
                 offset-y="11"
             >
-                <Avatar class="avatar-border" :substituteChar="'K'" :avatarUrl="'/images/LL1.jpg'"
+                <Avatar class="avatar-border" :substituteChar="getProfileFirstChar" :avatarUrl="profile.profileImageUrl"
                 :timeOut="12000" :avatarSize="50" :textSize="5" :avatarProperty="profileAvatar" />
             </v-badge>
         </v-list-item-avatar>
         <v-list-item-content>
-            <v-list-item-title >Jhon</v-list-item-title>
-            <v-list-item-subtitle> Lorem ipsum, dolor sit amet consectetur adipisicing elit. Enim, deserunt!</v-list-item-subtitle>
+            <v-list-item-title >{{ profile.firstname }}</v-list-item-title>
+            <v-list-item-subtitle>{{ profile.lastMessage.messageBody }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action class="py-3">
             <v-icon size="11" color="blue" class="new-message">mdi-checkbox-blank-circle</v-icon>
@@ -29,11 +29,23 @@
 <script>
 import Avatar from '~/components/shared/Avatar'
 export default {
+    props: {
+        profile: {
+            type: Object,
+            required: true
+        }
+    },
+    mounted() {
+        console.log(this.profile)
+    },
     computed: {
         profileAvatar() {
             return {
                 'tile': true
             }
+        },
+        getProfileFirstChar() {
+            return this.profile.firstname.slice(0, 1).toUpperCase()
         }
     }
 }

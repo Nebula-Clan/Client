@@ -94,7 +94,7 @@ class HuddleChatWebSocket extends WebSocket {
         this._onOpenObserver.subscribe(func)
     }
 
-    DeleteOnMessageHandler(func) {
+    DeleteOnOpenHandler(func) {
         if (!this._onOpenObserver) {
             this._onOpenObserver = new Observable()
         }
@@ -110,7 +110,7 @@ class HuddleChatWebSocket extends WebSocket {
         this._onErrorObserver.subscribe(func)
     }
 
-    DeleteOnMessageHandler(func) {
+    DeleteOnErrorHandler(func) {
         if (!this._onErrorObserver) {
             this._onErrorObserver = new Observable()
         }
@@ -126,7 +126,7 @@ class HuddleChatWebSocket extends WebSocket {
         this._onCloseObserver.subscribe(func)
     }
 
-    DeleteOnMessageHandler(func) {
+    DeleteOnCloseHandler(func) {
         if (!this._onCloseObserver) {
             this._onCloseObserver = new Observable()
         }

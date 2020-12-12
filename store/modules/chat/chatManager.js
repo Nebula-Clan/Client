@@ -23,10 +23,10 @@ const mutations = {
     addProfileAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
         chatProfile.parseFromJson(profileJson)
-        state.profile.push(chatProfile)
+        state.profiles.push(chatProfile)
     },
     addMessageToProfile(state, messageJson) {
-        profile.pushMessage(messageJson)
+        profiles.pushMessage(messageJson)
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket

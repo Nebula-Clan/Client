@@ -1,4 +1,4 @@
-import { Message } from './message'
+const { Message } =  require('./message')
 
 
 class ChatProfile {
@@ -106,4 +106,15 @@ class ChatProfile {
     get profileBannerUrl() {
         return this._bannerUrl
     }
+
+    get lastMessage() {
+        return this._lastMessage
+    }
+
+    get messageList() {
+        return this._messageList
+    }
 }
+
+
+exports.ChatProfile = ChatProfile

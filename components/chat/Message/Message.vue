@@ -11,9 +11,12 @@
             <v-card-text :class="getText" v-html="getMessage">
             </v-card-text>
             <v-card-actions class="pa-0">
-            <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
-                {{ getMessgaeStatusicon() }}
-            </v-icon>
+                <div class="mb-0 ml-auto" style="font-size:13px">
+                    {{ date() }}
+                    <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
+                        {{ getMessgaeStatusIcon() }}
+                    </v-icon>
+                </div>
             </v-card-actions>
         </v-card>
     </div>
@@ -89,12 +92,20 @@ export default {
         }
     },
     methods: {
-        getMessgaeStatusicon() {
+        getMessgaeStatusIcon() {
             if (this.isSeen) {
                 return 'mdi-email-open'
             } else {
                 return 'mdi-email'
             }
+        },
+        date() {
+            let date = new Date()
+            return date.toLocaleTimeString(navigator.language, {
+                hour: '2-digit',
+                minute:'2-digit',
+                hour12: false
+            });
         }
     }
 }
