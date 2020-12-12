@@ -67,7 +67,7 @@
     </v-container>
     <v-row>
       <v-col cols="12" lg="3" sm="12">
-        <ProfileDescription/>
+        <ProfileDescription :updateFollowers="fetchFollowers"/>
       </v-col>
       <v-col cols="12" lg="6" sm="12">
         <v-tabs style="border-radius:2px" class="tab-stick mb-4" v-model="selectedTab">

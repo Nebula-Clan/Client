@@ -135,6 +135,7 @@
         }).then(({ data }) => {
           this.$notifier.showMessage({ content: "Followed", color: 'success' });
           this.updateIsFollowing();
+          this.updateFollowers();
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
@@ -147,6 +148,7 @@
           console.log(data);
           this.$notifier.showMessage({ content: "Unfollowed", color: 'success' });
           this.updateIsFollowing();
+          this.updateFollowers();
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
@@ -174,7 +176,7 @@
         }
       }
     },
-    // props: ['user']
+    props: ['updateFollowers']
   }
 </script>
 
