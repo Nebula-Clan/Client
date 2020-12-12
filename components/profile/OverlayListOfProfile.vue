@@ -11,15 +11,14 @@
                         Liked By:
                 </v-card-title>
                 <v-card-text>
-                    <v-divider></v-divider>
+                    <v-divider/>
                     <v-virtual-scroll
                         :bench="10"
                         :items="profiles"
                         width="400"
                         max-height="450"
                         item-height="90"
-                        class="px-15"
-                    >
+                        class="px-15">
                             <template v-slot:default="{ item }">
                                 <ProfileCard :profile="item" />
                             </template>

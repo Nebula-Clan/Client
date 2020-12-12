@@ -10,10 +10,11 @@
           {{ profile.nickname }}
         </div>
         <v-btn
+          outlined
           v-if="this.$route.params.username !== this.$auth.user.username"
           depressed
           class="ml-auto mr-10"
-          color="blue darken-1"
+          color="primary"
           @click="()=>{isFollowing ? unfollow()  : follow()}"
           :loading="isFollowLoading">
           {{isFollowing ? "Unfollow" : "Follow"}}
@@ -36,9 +37,10 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
 
-  import Avatar from '~/components/shared/Avatar'
+  import Avatar from "../shared/Avatar";
 
   export default {
+    components: { Avatar },
     data: () => {
       return {
         avatarClass: "avatar-lg",
@@ -125,7 +127,7 @@
     methods: {
       ...mapActions('modules/follow', ['followUser']),
       ...mapActions('modules/follow', ['unfollowUser']),
-      ...mapActions('modules/follow', ['getFollowings']),
+      ...mapActions('modules/follow', ['getFollowers']),
       follow() {
         this.isFollowLoading = true;
         this.followUser({
@@ -150,12 +152,16 @@
         })
       },
       updateIsFollowing() {
-        this.getFollowings({
+        this.getFollowers({
           username: this.$route.params.username
         }).then(({ data }) => {
           console.log(data);
-          let followersUsername = data.user_followers.map((user) => user.username);
-          this.isFollowing = followersUsername.includes(this.$auth.user.username);
+          if (data.user_followers.length === 0) {
+            this.isFollowing = false;
+          } else {
+            let followersUsername = data.user_followers.map((user) => user.username);
+            this.isFollowing = followersUsername.includes(this.$auth.user.username);
+          }
           this.isFollowLoading = false;
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
@@ -163,11 +169,12 @@
       },
       imageLoaded(event) {
         if (this.errorTime) {
-          clearTimeout(this.errorTime)
+          clearTimeout(this.errorTime);
           this.errorTime = null
         }
       }
-    }
+    },
+    // props: ['user']
   }
 </script>
 

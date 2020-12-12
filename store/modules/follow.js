@@ -17,14 +17,14 @@ const actions = {
     });
   },
   getFollowers({ commit }, data) {
-    return this.$axios.get('api/follow/user_followings', {
+    return this.$axios.get('api/follow/user_followers', {
       params: {
         username: data.username,
       }
     });
   },
   getFollowings({ commit }, data) {
-    return this.$axios.get('api/follow/user_followers', {
+    return this.$axios.get('api/follow/user_followings', {
       params: {
         username: data.username,
       }
