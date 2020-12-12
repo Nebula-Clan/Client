@@ -9,11 +9,6 @@ const getters = {
     getProfileList: (state) => {
         return state.profiles
     },
-    getProfileByUsername: (state, username) => {
-        return state.profiles.find((profile) => {
-            return profile.username === username
-        })
-    },
     getWebSocket: (state) => {
         return state.websocket
     }
@@ -25,8 +20,8 @@ const mutations = {
         chatProfile.parseFromJson(profileJson)
         state.profiles.push(chatProfile)
     },
-    addMessageToProfile(state, messageJson) {
-        profiles.pushMessage(messageJson)
+    addMessageToProfile(state, {findedProfile, messageJson}) {
+        findedProfile.pushMessage(messageJson)
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket
@@ -34,14 +29,14 @@ const mutations = {
 }
   
 const actions = {
-    pushMessageToProfile({ state, commit}, username, messageJson) {
-        let profile = state.profiles.find((profile) => {
+    pushMessageToProfile({ state, commit}, {username, messageJson}) {
+        let findedProfile = state.profiles.find((profile) => {
             return profile.username === username
         })
-        if (profile == undefined || profile == null) {
+        if (findedProfile == undefined || findedProfile == null) {
             return false
         }
-        commit('addMessageToProfile', profile, messageJson)
+        commit('addMessageToProfile', {findedProfile, messageJson})
         return true
     },
     addProfile({ state, commit}, profileJson) {
@@ -51,6 +46,11 @@ const actions = {
     setWebSocket({ state, commit}, webSocket) {
         commit('setSocket', webSocket)
         return true
+    },
+    getProfileByUsername: ({ state, commit }, username) => {
+        return state.profiles.find((profile) => {
+            return profile.username === username
+        })
     }
 }
 

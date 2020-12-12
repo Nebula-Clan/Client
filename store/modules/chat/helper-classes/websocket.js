@@ -8,6 +8,22 @@ class HuddleChatWebSocket extends WebSocket {
     }
 
     InitializeObservers() {
+        if (!this._onCloseObserver) {
+            this._onCloseObserver = new Observable()
+        }
+
+        if (!this._onMessageObserver) {
+            this._onMessageObserver = new Observable()
+        }
+
+        if (!this._onErrorObserver) {
+            this._onErrorObserver = new Observable()
+        }
+
+        if (!this._onOpenObserver) {
+            this._onOpenObserver = new Observable()
+        }
+
         this.onopen = this.triggerOnOpenEvent
         this.onclose = this.triggerOnCloseEvent
         this.onmessage = this.triggerOnMessageEvent
@@ -71,67 +87,35 @@ class HuddleChatWebSocket extends WebSocket {
     }
 
     AddOnMessageHandler(func) {
-        if (!this._onMessageObserver) {
-            this._onMessageObserver = new Observable()
-        }
-
         this._onMessageObserver.subscribe(func)
     }
 
     DeleteOnMessageHandler(func) {
-        if (!this._onMessageObserver) {
-            this._onMessageObserver = new Observable()
-        }
-
         this._onMessageObserver.unsubscribe(func)
     }
 
     AddOnOpenHandler(func) {
-        if (!this._onOpenObserver) {
-            this._onOpenObserver = new Observable()
-        }
-
         this._onOpenObserver.subscribe(func)
     }
 
     DeleteOnOpenHandler(func) {
-        if (!this._onOpenObserver) {
-            this._onOpenObserver = new Observable()
-        }
-
-        this._onMessageObserver.unsubscribe(func)
+        this._onOpenObserver.unsubscribe(func)
     }
 
     AddOnErrorHandler(func) {
-        if (!this._onErrorObserver) {
-            this._onErrorObserver = new Observable()
-        }
-
         this._onErrorObserver.subscribe(func)
     }
 
     DeleteOnErrorHandler(func) {
-        if (!this._onErrorObserver) {
-            this._onErrorObserver = new Observable()
-        }
-
-        this._onMessageObserver.unsubscribe(func)
+        this._onErrorObserver.unsubscribe(func)
     }
 
     AddOnCloseHandler(func) {
-        if (!this._onCloseObserver) {
-            this._onCloseObserver = new Observable()
-        }
-
         this._onCloseObserver.subscribe(func)
     }
 
     DeleteOnCloseHandler(func) {
-        if (!this._onCloseObserver) {
-            this._onCloseObserver = new Observable()
-        }
-
-        this._onMessageObserver.unsubscribe(func)
+        this._onCloseObserver.unsubscribe(func)
     }
 }
 

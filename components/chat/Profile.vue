@@ -35,9 +35,6 @@ export default {
             required: true
         }
     },
-    mounted() {
-        console.log(this.profile)
-    },
     computed: {
         profileAvatar() {
             return {

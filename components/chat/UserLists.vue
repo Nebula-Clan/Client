@@ -1,5 +1,5 @@
 <template>
-    <v-container class="user-list-color ml-0 overflow-y-auto" :style="userListHeight">
+    <v-container class="user-list-color ml-0 overflow-y-auto fill-height d-block" :style="userListHeight">
         <v-row dense>
             <v-col cols="12">
                 <v-container class="py-0 d-inline-flex">
@@ -23,11 +23,12 @@
                 </v-container>
             </v-col>
         </v-row>
-        <v-row>
+        <v-row class="top-row flex-grow-1 flex-shrink-1">
             <v-col cols="12" class="pb-0">
                 <v-container>
                     <template v-for="(profile, index) in getChatList" class="pl-0">
-                        <Profile :key="(index + 1) * 23" class="pl-0" :profile="profile" />
+                        <Profile :key="(index + 1) * 23" class="pl-0" :profile="profile"
+                         @click.native="loadProfileChat(profile.username)"/>
                         <v-divider :key="(index + 1) * 27" class="ml-14 mr-3"></v-divider>
                     </template>
                 </v-container>
@@ -50,7 +51,6 @@ export default {
                 width: 0,
                 height: 0
             },
-            isReqCompleted: false,
             readyState: -1
         }
     },
@@ -72,6 +72,9 @@ export default {
     mounted() {
         this.getWebSocket.AddOnOpenHandler(this.onOpenHandler)
         this.getWebSocket.AddOnMessageHandler(this.onMessageHandler)
+        this.getWebSocket.AddOnErrorHandler(this.onError)
+
+        console.log(this.getWebSocket)
 
         this.readyState = this.getWebSocket.readyState
         if (this.readyState == 1) {
@@ -84,15 +87,22 @@ export default {
     },
     methods: {
         ...mapActions('modules/chat/chatManager', ['addProfile']),
+        onError({ data }) {
+            console.log(data)
+        },
         handleResize() {
             this.window.width = window.innerWidth;
             this.window.height = window.innerHeight;
+        },
+        loadProfileChat(profileUsername) {
+            this.$nuxt.$emit('loadProfileChats', profileUsername)
         },
         onOpenHandler(event) {
             this.reqChats()
         },
         onMessageHandler({ data }) {
             data = JSON.parse(data)
+            console.log(data)
             if (data.type == 'chat.users') {
                 data.data.forEach((item, index) => {
                     this.addProfile(item)
@@ -102,7 +112,6 @@ export default {
         reqChats() {
             if (this.getWebSocket.readyState == 1) {
                 this.getWebSocket.GetChatUsers()
-                this.isReqCompleted = true
             }
         }
     }
@@ -117,6 +126,10 @@ export default {
 
 .scroll {
     overflow: hidden;
+}
+
+.top-row{
+	min-height: 0;
 }
 
 .search-field {

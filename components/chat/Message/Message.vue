@@ -3,7 +3,7 @@
         <Avatar v-if="!isUser && previousId != currentId"
                 class="avatar mt-5 ml-4" 
                 :substituteChar="'K'" 
-                :avatarUrl="'/images/LL1.jpg'"
+                :avatarUrl="getProfieImageUrl"
                 :timeOut="12000" 
                 :avatarSize="35" 
                 :textSize="5" />
@@ -26,17 +26,23 @@
 <script>
 export default {
     props: {
+        profile: {
+            type: Object,
+            required: false
+        },
         message: {
             type: String,
             required: true
         },
         previousId: {
             type: Number,
-            required: true
+            required: false,
+            default: 1
         },
         currentId: {
             type: Number,
-            required: true
+            required: false,
+            default: 1
         },
         isUser: {
             type: Boolean,
@@ -89,6 +95,13 @@ export default {
         getMessage() {
             let newMessage = this.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
             return newMessage
+        },
+        getProfieImageUrl() {
+            if (this.profile != undefined) {
+                return this.profile.profileImageUrl
+            }
+
+            return '' 
         }
     },
     methods: {
