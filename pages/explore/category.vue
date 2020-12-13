@@ -1,8 +1,9 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col>
-        <h1>{{ category }}</h1>
+    <v-row class="primary darken-3">
+      <v-col class="text-left text-h4">
+        <v-icon class="text-h3 mr-2 mb-2" v-if="posts.length !== 0" v-text="posts[0].category.icon"/>
+        {{ category }}
       </v-col>
     </v-row>
     <v-row>
@@ -22,6 +23,7 @@
 <script>
   import Settings from "@/components/search/Settings";
   import PostQuickView from '@/components/shared/Post-quick-view'
+  import post from "../../store/modules/post";
 
   export default {
     name: "category",

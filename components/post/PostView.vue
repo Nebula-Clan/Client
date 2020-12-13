@@ -16,7 +16,7 @@
               elevation="1"
               color="blue px-3 mt-1 ml-4 rounded-pill">
                 <span>
-                  {{ post.category }}
+                  {{ post.category === undefined ? "" : post.category.title }}
                 </span>
             </v-sheet>
           </nuxt-link>
