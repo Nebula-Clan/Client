@@ -20,7 +20,8 @@
             <v-list-item-subtitle>{{ profile.lastMessage.messageBody }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action class="py-3">
-            <v-icon size="11" color="blue" class="new-message">mdi-checkbox-blank-circle</v-icon>
+                <v-badge content="66" class="mr-5 mt-3">
+                </v-badge>
             <v-icon size="11">mdi-pin-outline</v-icon>
         </v-list-item-action>
     </v-list-item>
