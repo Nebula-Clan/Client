@@ -2,7 +2,7 @@
     <v-list-item two-line class="back-status">
         <v-list-item-content class="py-1">
             <v-list-item-title > {{ getProfileName }} </v-list-item-title>
-            <v-list-item-subtitle> {{ getLastSeen }} </v-list-item-subtitle>
+            <v-list-item-subtitle :class="getLastSeenTextColor"> {{ getLastSeen }} </v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
             <v-icon>mdi-dots-vertical</v-icon>
@@ -18,6 +18,11 @@ export default {
             require: false
         }
     },
+    data() {
+        return {
+            isOnline: false
+        }
+    },
     computed: {
         getProfileName() {
             if (this.profile != undefined) {
@@ -27,11 +32,39 @@ export default {
             return ''
         },
         getLastSeen() {
-            if (this.profile != undefined) {
-                return this.profile.firstname
+            console.log(this.profile)
+            if (this.profile != undefined && 
+            this.profile.lastSeen != null && 
+            this.profile.lastSeen != undefined) {
+                if (this.profile.lastSeen === 'online') {
+                    this.isOnline = true
+                    return 'online'
+                } else {
+                    return `${this.getTimeElapse(this.profile.lastSeen)} ago`
+                }
             }
 
-            return ''
+            return 'last seen recently'
+        },
+        getLastSeenTextColor() {
+            if (this.isOnline) {
+                return 'teal--text text--accent-4'
+            } else {
+                return ''
+            }
+        }
+    },
+    methods: {
+        getTimeElapse(time) {
+            const unixTime = time.getTime()
+            const now = new Date().getTime()
+            if (now - unixTime < 36e+5) {
+            return Math.floor((now - unixTime) / 60000) + ' m'
+            } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
+            return Math.floor((now - unixTime) / 36e+5) + ' h'
+            } else {
+            return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+            }
         }
     }
     

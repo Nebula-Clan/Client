@@ -14,9 +14,7 @@
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
                   :profile="profile"
-                  :message="message.messageBody" 
-                  :isSeen="message.isSeen"
-                  :isUser="message.isSender" />
+                  :message="message" />
                 </v-col>
             </v-row>
           </v-col>
@@ -43,10 +41,15 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-
 import UserInput from './UserInput/UserInput'
 import Message from './Message/Message'
 import ProfileStatus from './ProfileStatus'
+
+import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
+import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
+import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
+import { Message as MessageClass } from '~/store/modules/chat/models/message'
 export default {
     data() {
       return {
@@ -106,7 +109,9 @@ export default {
   computed: {
     ...mapGetters('modules/chat/chatManager',['getWebSocket']),
     getMessages() {
+      console.log('hallo')
       if (this.profile != undefined) {
+          this.scrollToBottom()
           return this.profile.messageList
       }
 
@@ -137,12 +142,11 @@ export default {
 
     this.readyState = this.getWebSocket.readyState
     if (this.readyState == 1) {
-        this.reqChats()
         this.getWebSocket.DeleteOnOpenHandler(this.onOpenHandler)
     }
   },
   methods: {
-    ...mapActions('modules/chat/chatManager', ['pushMessageToProfile', 'getProfileByUsername']),
+    ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile', 'getProfileByUsername', 'sortProfileMessages']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.getProfileByUsername(this.username).then((profile) => {this.profile = profile})
@@ -157,39 +161,56 @@ export default {
       if (data.type == 'chat.message.get') {
         data.data = JSON.parse(data.data)
         let username = this.username
-
-        data.data.forEach((messageJson, index) => {
-          this.pushMessageToProfile({username, messageJson})
-        })
+        let messageJson = data.data
+        let isArray = Array.isArray(messageJson)
+        this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
+        console.log(isArray)
+        if (isArray) {
+          this.sortProfileMessages(username)
+        }
       }
     },
     obtainMessages() {
       console.log(this.getWebSocket)
       console.log(this.username)
       if (this.getWebSocket.readyState == 1 && this.username != undefined) {
-        this.getWebSocket.GetUserMessages(this.username)
+        let getUserMessageReq = new GetUserMessagesRequestJson(this.username)
+        this.getWebSocket.SendRequest(getUserMessageReq)
       }
     },
     recvMessage(text) {
-      console.log(text)
-      this.getWebSocket.SendMessage(text, this.username)
-      this.last = 3
+      let sendMessageReq = new SendMessageRequestJson(text, this.username)
+      this.getWebSocket.SendRequest(sendMessageReq)
+
+      let username = this.username
+      let messageInstance = new MessageClass()
+      let isArray = false
+
+      messageInstance.messageDate = new Date()
+      messageInstance.messageBody = text
+      messageInstance.isSeen = false
+      messageInstance.isSender = true
+
+      this.pushMessageToProfile({username, messageInstance, isArray})
+      this.scrollToBottom()
+    },
+    scrollToBottom() {
       this.$nextTick(() => {
         let chatList = this.$refs.chatList
         chatList.scrollTop = chatList.scrollHeight;
       })
     },
-      s() {
-          console.log('submit')
-      },
-      sug() {
-          console.log('sug')
-          return []
-      },
-      shit() {
-          let s = Math.floor((Math.random() * 10) + 1) % 7
-          return s
-      }
+    s() {
+        console.log('submit')
+    },
+    sug() {
+        console.log('sug')
+        return []
+    },
+    shit() {
+        let s = Math.floor((Math.random() * 10) + 1) % 7
+        return s
+    }
   }
 }
 </script>

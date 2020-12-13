@@ -40,7 +40,7 @@ class Message {
     }
 
     _praseDateString(dateString) {
-        return new Date(dateString).getDate()
+        return new Date(dateString)
     }
 
     get messageID() {

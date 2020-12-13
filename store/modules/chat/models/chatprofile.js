@@ -35,6 +35,14 @@ class ChatProfile {
         this._bannerUrl = bannerUrl
     }
 
+    set lastSeen(lastSeenString) {
+        if (lastSeenString === 'online') {
+            this._lastSeen = 'online'
+        } else if (lastSeenString != null) {
+            this._lastSeen = new Date(lastSeenString)
+        }
+    }
+
     set lastMessage(message) {
         this._lastMessage = message
     }
@@ -52,6 +60,7 @@ class ChatProfile {
         this.description = ''
         this.profileImageUrl = ''
         this.profileBannerUrl = ''
+        this.lastSeen = null
         this.lastMessage = ''
         this.messageList = []
     }
@@ -64,15 +73,43 @@ class ChatProfile {
         this.description = json.user.biology
         this.profileImageUrl = json.user.profile_picture
         this.profileBannerUrl = json.user.banner_picture
+        this.lastSeen = json.last_seen
         let last_message = new Message()
         last_message.parseFromJson(json.last_message)
         this.lastMessage = last_message
     }
 
-    pushMessage(messageJson) {
+    pushMessage(messageInstance) {
+        this._messageList.push(messageInstance)
+    }
+
+    pushMessageArray(messagerArr) {
+        messagerArr.forEach((message, index) => {
+            this.pushMessage(message)
+        })
+    }
+
+    pushMessageJson(messageJson) {
         let message = new Message()
         message.parseFromJson(messageJson)
         this._messageList.push(message) 
+    }
+
+    pushMessageArrayJson(messagerArrJson) {
+        messagerArrJson.forEach((messageJson, index) => {
+            this.pushMessageJson(messageJson)
+        })
+    }
+
+    sortMessages() {
+        let messages = this.messageList
+        if (messages != undefined && messages != null) {
+            messages.sort((a,b) => {
+                return a.messageDate - b.messageDate;
+            })
+        }
+
+        this.messageList = messages
     }
 
     get profileID() {
@@ -105,6 +142,10 @@ class ChatProfile {
 
     get profileBannerUrl() {
         return this._bannerUrl
+    }
+
+    get lastSeen() {
+        return this._lastSeen
     }
 
     get lastMessage() {

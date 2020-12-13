@@ -1,6 +1,6 @@
 <template>
     <div :class="[getClass, 'd-inline-flex']">
-        <Avatar v-if="!isUser && previousId != currentId"
+        <Avatar v-if="!message.isSender && previousId != currentId"
                 class="avatar mt-5 ml-4" 
                 :substituteChar="'K'" 
                 :avatarUrl="getProfieImageUrl"
@@ -13,7 +13,7 @@
             <v-card-actions class="pa-0">
                 <div class="mb-0 ml-auto" style="font-size:13px">
                     {{ date() }}
-                    <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
+                    <v-icon v-if="message.isSender" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
                         {{ getMessgaeStatusIcon() }}
                     </v-icon>
                 </div>
@@ -31,7 +31,7 @@ export default {
             required: false
         },
         message: {
-            type: String,
+            type: Object,
             required: true
         },
         previousId: {
@@ -43,15 +43,6 @@ export default {
             type: Number,
             required: false,
             default: 1
-        },
-        isUser: {
-            type: Boolean,
-            required: true
-        },
-        isSeen: {
-            type: Boolean,
-            required: false,
-            default: false
         }
     },
     data() {
@@ -60,18 +51,18 @@ export default {
         }
     },
     mounted() {
-        console.log(this.message.split("\n").length)
+
     },
     computed: {
         getClass() {
-            if (this.isUser) {
+            if (this.message.isSender) {
                 return 'ml-auto mr-2'
             } else {
                 return 'mr-auto ml-2'
             }
         },
         getText() {
-            if (this.isUser) {
+            if (this.message.isSender) {
                 return 'pa-0 mr-8 green--text text--lighten-1'
             } else {
                 return 'pa-0 mr-8'
@@ -79,13 +70,13 @@ export default {
         },
         getTriangleClass() {
             if (this.previousId != this.currentId) {
-                if (this.isUser) {
+                if (this.message.isSender) {
                     return 'right mr-7'
                 } else {
                     return 'left ml-3'
                 }
             } else {
-                if (this.isUser) {
+                if (this.message.isSender) {
                     return 'mr-7'
                 } else {
                     return 'ml-16'
@@ -93,7 +84,7 @@ export default {
             }
         },
         getMessage() {
-            let newMessage = this.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            let newMessage = this.message.messageBody.replace(/(?:\r\n|\r|\n)/g, '<br>');
             return newMessage
         },
         getProfieImageUrl() {
@@ -106,14 +97,14 @@ export default {
     },
     methods: {
         getMessgaeStatusIcon() {
-            if (this.isSeen) {
+            if (this.message.isSeen) {
                 return 'mdi-email-open'
             } else {
                 return 'mdi-email'
             }
         },
         date() {
-            let date = new Date()
+            let date = new Date(this.message.messageDate)
             return date.toLocaleTimeString(navigator.language, {
                 hour: '2-digit',
                 minute:'2-digit',

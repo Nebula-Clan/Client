@@ -20,8 +20,20 @@ const mutations = {
         chatProfile.parseFromJson(profileJson)
         state.profiles.push(chatProfile)
     },
-    addMessageToProfile(state, {findedProfile, messageJson}) {
-        findedProfile.pushMessage(messageJson)
+    addMessageJsonToProfile(state, {findedProfile, messageJson}) {
+        findedProfile.pushMessageJson(messageJson)
+    },
+    addMessageArrayJsonToProfile(state, {findedProfile, messageJson}) {
+        findedProfile.pushMessageArrayJson(messageJson)
+    },
+    addMessageInctanceToProfile(state, {findedProfile, messageInstance}) {
+        findedProfile.pushMessage(messageInstance)
+    },
+    addMessageArrayInctanceToProfile(state, {findedProfile, messageInstance}) {
+        findedProfile.pushMessageArray(messageInstance)
+    },
+    sortProfileMessages(state, { findedProfile }) {
+        findedProfile.sortMessages()
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket
@@ -29,14 +41,42 @@ const mutations = {
 }
   
 const actions = {
-    pushMessageToProfile({ state, commit}, {username, messageJson}) {
+    pushMessageJsonToProfile({ state, commit}, {username, messageJson, isArray}) {
         let findedProfile = state.profiles.find((profile) => {
             return profile.username === username
         })
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
-        commit('addMessageToProfile', {findedProfile, messageJson})
+        if (isArray == true) {
+            commit('addMessageArrayJsonToProfile', {findedProfile, messageJson})
+        } else {
+            commit('addMessageJsonToProfile', {findedProfile, messageJson})
+        }
+        return true
+    },
+    pushMessageToProfile({ state, commit}, {username, messageInstance, isArray}) {
+        let findedProfile = state.profiles.find((profile) => {
+            return profile.username === username
+        })
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+        if (isArray == true) {
+            commit('addMessageArrayInctanceToProfile', {findedProfile, messageInstance})
+        } else {
+            commit('addMessageInctanceToProfile', {findedProfile, messageInstance})
+        }
+        return true
+    },
+    sortProfileMessages({ state, commit }, username) {
+        let findedProfile = state.profiles.find((profile) => {
+            return profile.username === username
+        })
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+        commit('sortProfileMessages', {findedProfile})
         return true
     },
     addProfile({ state, commit}, profileJson) {

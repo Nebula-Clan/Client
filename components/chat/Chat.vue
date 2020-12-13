@@ -17,6 +17,11 @@ import { HuddleChatWebSocket } from '~/store/modules/chat/helper-classes/websock
 import UserLists from '~/components/chat/UserLists'
 import ChattingSection from '~/components/chat/ChattingSection'
 
+import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
+import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
+import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
+
 export default {
     data: function() {
         return {
@@ -40,14 +45,11 @@ export default {
         this.access_token = this.$auth.getToken('local').split(" ")[1]
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageToProfile', 'addProfile']),
-        sendMessage(message) {
-            console.log(this.websocket);
-            this.websocket.SendMessage(message);
-        },
+        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
         onOpenWebSocket(event) {
             console.log(event.data)
-            this.websocket.Authenticate(this.access_token)
+            let authReq = new AuthenticationRequestJson(this.access_token)
+            this.websocket.SendRequest(authReq)
         },
         onErrorWebSocket(event) {
             console.log(event.data)
@@ -59,7 +61,7 @@ export default {
             } else if (data.type == 'chat.message.recieve') {
                 let username = data.message._from.username
                 let messageJson = data.message
-                this.pushMessageToProfile({username, messageJson})
+                this.pushMessageJsonToProfile({username, messageJson})
             }
         },
         onCloseWebSocket(event) {

@@ -41,8 +41,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-
 import Profile from '~/components/chat/Profile'
+
+import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
+import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
+import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 export default {
     data() {
         return {
@@ -111,7 +115,8 @@ export default {
         },
         reqChats() {
             if (this.getWebSocket.readyState == 1) {
-                this.getWebSocket.GetChatUsers()
+                let getUserReq = new GetChatUsersRequestJson()
+                this.getWebSocket.SendRequest(getUserReq)
             }
         }
     }

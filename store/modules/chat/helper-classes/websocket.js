@@ -31,7 +31,7 @@ class HuddleChatWebSocket extends WebSocket {
     }
 
 
-    SendMessage(requestJsonObj) {
+    SendRequest(requestJsonObj) {
         this.send(requestJsonObj.json)
     }
 

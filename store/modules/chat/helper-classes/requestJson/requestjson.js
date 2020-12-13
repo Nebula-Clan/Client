@@ -9,7 +9,7 @@ class RequestJson {
     }
 
     constructor() {
-
+        this.json = ''
     }
 
     get json() {
