@@ -28,6 +28,13 @@ const actions = {
       }
     })
   },
+  getPostByAuthor({commit}, data) {
+    return this.$axios.get('/api/posts/get_user_posts', {
+      params: {
+        username: data.username,
+      }
+    })
+  },
   // Post view management
   setCommentToPost({commit}, status) {
     commit('setIsCommentToPostExpanded', !status);
