@@ -16,6 +16,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { HuddleChatWebSocket } from '~/store/modules/chat/helper-classes/websocket'
 import UserLists from '~/components/chat/UserLists'
 import ChattingSection from '~/components/chat/ChattingSection'
+
 export default {
     data: function() {
         return {

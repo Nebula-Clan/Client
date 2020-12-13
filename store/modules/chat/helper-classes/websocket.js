@@ -30,44 +30,9 @@ class HuddleChatWebSocket extends WebSocket {
         this.onerror = this.triggerOnErrorEvent
     }
 
-    SendMessage(message, toUsername) {
-        let reqJson = JSON.stringify(
-            {
-                "type" : "chat.message.send",
-                "to" : toUsername,
-                "text" : message
-            }
-        )
-        this.send(reqJson)
-    }
 
-    Authenticate(access_token) {
-        let reqJson = JSON.stringify(
-            {
-                "type": "chat.authenticate",
-                "access_token" : access_token
-            }
-        )
-        this.send(reqJson)
-    }
-
-    GetUserMessages(username) {
-        let reqJson = JSON.stringify(
-            {
-                "type" : "chat.message.get",
-                "from" : username
-            }
-        )
-        this.send(reqJson)
-    }
-
-    GetChatUsers() {
-        let reqJson = JSON.stringify(
-            {
-                "type": "chat.users"
-            }
-        )
-        this.send(reqJson)
+    SendMessage(requestJsonObj) {
+        this.send(requestJsonObj.json)
     }
 
     triggerOnOpenEvent(ev) {
