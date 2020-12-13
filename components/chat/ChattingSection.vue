@@ -14,7 +14,9 @@
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
                   :profile="profile"
-                  :message="message" />
+                  :message="message"
+                  :previousId="getPrev(idx)"
+                  :currentId="getCur(idx)" />
                 </v-col>
             </v-row>
           </v-col>
@@ -127,21 +129,6 @@ export default {
   },
   created() {
     this.$nuxt.$on('loadProfileChats', this.onLoadProfileChatsHandler)
-    let oid = 5
-    let uid = 3
-    let last = 3
-    for (let i = 0; i < 40; i++) {
-      let user = this.shit() > 3 ? true : false;
-      this.messages.push({
-        'isUser': user,
-        'previousId': last,
-        'currentId' : user ? 3 : 5,
-        'isSeen': true,
-        'message': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore perspiciatis enim similique aspernatur alias dolor tempora voluptatum repudiandae fuga delectus nemo error officiis molestiae saepe sunt mollitia, ipsa laboriosam quam esse ipsum ratione voluptates unde eos libero! Voluptate illum aperiam rem assumenda neque, dolorem enim quae ipsam cumque velit modi?'
-        })
-        last = user ? 3 : 5
-    }
-    this.last = last
   },
   mounted() {
     this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
@@ -161,7 +148,7 @@ export default {
     },
     onMessageHandler({ data }) {
       data = JSON.parse(data)
-      
+
       console.log(data)
       data.data = JSON.parse(data.data)
       let username = this.username
@@ -203,8 +190,20 @@ export default {
         chatList.scrollTop = chatList.scrollHeight;
       })
     },
-    getCurrentId() {
-
+    getPrev(index) {
+      if (index === 0) {
+        return -1
+      }
+      if (this.profile.messageList[index - 1].isSender) {
+        return 1
+      }
+      return 0
+    },
+    getCur(index) {
+      if (this.profile.messageList[index].isSender) {
+        return 1
+      }
+      return 0
     },
     s() {
         console.log('submit')
@@ -212,10 +211,6 @@ export default {
     sug() {
         console.log('sug')
         return []
-    },
-    shit() {
-        let s = Math.floor((Math.random() * 10) + 1) % 7
-        return s
     }
   }
 }

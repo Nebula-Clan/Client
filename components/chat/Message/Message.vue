@@ -2,7 +2,7 @@
     <div :class="[getClass, 'd-inline-flex']">
         <Avatar v-if="!message.isSender && previousId != currentId"
                 class="avatar mt-5 ml-4" 
-                :substituteChar="'K'" 
+                :substituteChar="getProfileFirstChar" 
                 :avatarUrl="getProfieImageUrl"
                 :timeOut="12000" 
                 :avatarSize="35" 
@@ -93,6 +93,9 @@ export default {
             }
 
             return '' 
+        },
+        getProfileFirstChar() {
+            return this.profile.firstname.slice(0, 1).toUpperCase()
         }
     },
     methods: {
