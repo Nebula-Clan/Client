@@ -15,15 +15,19 @@
             color="primary"
             avatar-string="H"
             :avatar-src="user.profile_picture"/>
-          <span class="text-body-1">{{user.username}}</span>
+          <nuxt-link :to="`/profile/${user.username}`" class="text-decoration-none">
+            {{user.username}}
+          </nuxt-link>
           <v-spacer/>
-<!--          <v-btn-->
-<!--            outlined-->
-<!--            v-if="this.$route.params.username !== this.$auth.user.username"-->
-<!--            class="mr-4"-->
-<!--            color="primary">-->
-<!--            {{isFollowing ? "Unfollow" : "Follow"}}-->
-<!--          </v-btn>-->
+          <v-btn
+            width="100"
+            outlined
+            v-if="isNotCurrentUser(user.username)"
+            class="text-body-2 mr-4"
+            :color="user.followed_by_viewer ? 'red' : 'accent'">
+            {{user.followed_by_viewer ? "Unfollow" : "Follow"}}
+          </v-btn>
+          <div v-else class="text-header-4 text-center mr-14">You</div>
         </v-row>
 
       </v-card-text>
@@ -41,13 +45,18 @@
 </template>
 
 <script>
-  import UserAvatar from "./UserAvatar";
+    import UserAvatar from "./UserAvatar";
 
-  export default {
-    name: "ListDialog",
-    components: { UserAvatar },
-    props: ['title', 'isDialogEnabled', 'userList', 'closeFunc']
-  }
+    export default {
+        name: "ListDialog",
+        components: { UserAvatar },
+        methods: {
+            isNotCurrentUser(username) {
+                return this.$auth.user.username !== username;
+            }
+        },
+        props: ['title', 'isDialogEnabled', 'userList', 'closeFunc']
+    }
 </script>
 
 <style scoped>
