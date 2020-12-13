@@ -31,7 +31,7 @@
       <div>
         <b>{{ profileInfo.followings.length }}</b>
         <br>
-        <span>Followings</span>
+        <span>Following</span>
       </div>
       <div>
         <b>{{ profileInfo.posts.length }}</b>

@@ -1,70 +1,68 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-container fluid>
-      <v-row>
-        <v-img :src="getProfileBanner" lazy-src="/images/login-background.jpg"
-               :eager="true" @load="imageLoaded" max-height="450">
-          <template v-slot:placeholder>
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center">
-              <v-progress-circular
-                indeterminate
-                color="grey lighten-5"/>
-            </v-row>
-          </template>
-        </v-img>
-      </v-row>
-      <v-row style="background-color:#12232E" justify="center" align="center">
-        <div>
-          <v-btn
-            color="rgb(255, 0, 0, 0)"
-            elevation="0"
-            :class="getPaddingAndMargin">
-            <span class="mr-2">{{ profile.numberOfPosts }}</span> Posts
-          </v-btn>
-        </div>
-        <v-divider class="my-3" vertical/>
-        <div>
-          <v-btn
-            color="rgb(255, 0, 0, 0)"
-            elevation="0"
-            @click="openFollowersDialog"
-            :class="getPaddingAndMargin">
-            <span class="mr-2">{{ profileInfo.followers.length }}</span> Followers
-          </v-btn>
-        </div>
-        <v-divider class="my-3" vertical/>
-        <div>
-          <v-btn
-            color="rgb(255, 0, 0, 0)"
-            elevation="0"
-            @click="openFollowingDialog"
-            :class="getPaddingAndMargin">
-            <span class="mr-2">{{ profileInfo.followings.length }}</span> Followings
-          </v-btn>
-        </div>
-        <v-divider class="my-3" vertical/>
-        <div>
-          <v-btn
-            color="rgb(255, 0, 0, 0)"
-            elevation="0"
-            :class="getPaddingAndMargin">
-            <span class="mr-2">{{ profile.numberOfLikes }}</span> Likes
-          </v-btn>
-        </div>
-        <v-divider class="my-3" vertical/>
-        <div>
-          <v-btn
-            color="rgb(255, 0, 0, 0)"
-            elevation="0"
-            :class="getPaddingAndMargin">
-            <span class="mr-2">{{ profile.numberOfComments }}</span> Comments
-          </v-btn>
-        </div>
-      </v-row>
-    </v-container>
+  <div>
+    <v-row>
+      <v-img :src="getProfileBanner" lazy-src="/images/login-background.jpg"
+             :eager="true" @load="imageLoaded" max-height="450">
+        <template v-slot:placeholder>
+          <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center">
+            <v-progress-circular
+              indeterminate
+              color="grey lighten-5"/>
+          </v-row>
+        </template>
+      </v-img>
+    </v-row>
+    <v-row class="primary darken-4" justify="center" align="center">
+      <div>
+        <v-btn
+          color="rgb(255, 0, 0, 0)"
+          elevation="0"
+          :class="getPaddingAndMargin">
+          <span class="mr-2">{{ profile.numberOfPosts }}</span> Posts
+        </v-btn>
+      </div>
+      <v-divider class="my-3" vertical/>
+      <div>
+        <v-btn
+          color="rgb(255, 0, 0, 0)"
+          elevation="0"
+          @click="openFollowersDialog"
+          :class="getPaddingAndMargin">
+          <span class="mr-2">{{ profileInfo.followers.length }}</span> Followers
+        </v-btn>
+      </div>
+      <v-divider class="my-3" vertical/>
+      <div>
+        <v-btn
+          color="rgb(255, 0, 0, 0)"
+          elevation="0"
+          @click="openFollowingDialog"
+          :class="getPaddingAndMargin">
+          <span class="mr-2">{{ profileInfo.followings.length }}</span> Following
+        </v-btn>
+      </div>
+      <v-divider class="my-3" vertical/>
+      <div>
+        <v-btn
+          color="rgb(255, 0, 0, 0)"
+          elevation="0"
+          :class="getPaddingAndMargin">
+          <span class="mr-2">{{ profile.numberOfLikes }}</span> Likes
+        </v-btn>
+      </div>
+      <v-divider class="my-3" vertical/>
+      <div>
+        <v-btn
+          color="rgb(255, 0, 0, 0)"
+          elevation="0"
+          :class="getPaddingAndMargin">
+          <span class="mr-2">{{ profile.numberOfComments }}</span> Comments
+        </v-btn>
+      </div>
+    </v-row>
     <v-row>
       <v-col cols="12" lg="3" sm="12">
         <ProfileDescription :updateFollowers="fetchFollowers"/>
@@ -89,7 +87,7 @@
       :user-list="userListDialog.userList"
       :closeFunc="()=>{userListDialog.isEnabled=false}"/>
 
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -210,6 +208,10 @@
           username: this.$route.params.username
         }).then(({ data }) => {
           this.profileInfo.followings = data.user_followings;
+          this.profileInfo.followings.map((user) => {
+            user.isFollowLoading = false;
+            return user;
+          });
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         });
@@ -219,6 +221,10 @@
           username: this.$route.params.username
         }).then(({ data }) => {
           this.profileInfo.followers = data.user_followers;
+          this.profileInfo.followers.map((user) => {
+            user.isFollowLoading = false;
+            return user;
+          });
         }).catch((error) => {
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         });
@@ -239,23 +245,23 @@
       },
       switchToPosts() {
         this.getProfilePosts(this.username)
-          .catch((error) => {
-            this.showErrorWithMessage('Something went wrong')
-          })
+        .catch((error) => {
+          this.showErrorWithMessage('Something went wrong')
+        })
         this.comp = ProfilePosts
       },
       switchToComments() {
         this.getProfileComments(this.username)
-          .catch((error) => {
-            this.showErrorWithMessage('Something went wrong')
-          })
+        .catch((error) => {
+          this.showErrorWithMessage('Something went wrong')
+        })
         this.comp = ProfileComments
       },
       switchToLikes() {
         this.getProfileLikes(this.username)
-          .catch((error) => {
-            this.showErrorWithMessage('Something went wrong')
-          })
+        .catch((error) => {
+          this.showErrorWithMessage('Something went wrong')
+        })
         this.comp = ProfileLikes
       },
       componentArgs(index) {
@@ -324,43 +330,5 @@
 </script>
 
 <style scoped>
-  .tab-stick {
-    top: 0;
-    position: sticky;
-    position: -webkit-sticky;
-    z-index: 5;
-  }
-
-
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 3px;
-  }
-
-  ::-webkit-scrollbar-button {
-    background-color: #00000000;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #646464;
-  }
-
-  ::-webkit-scrollbar-track-piece {
-    background-color: #000;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    height: 50px;
-    background-color: #666;
-    border-radius: 3px;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background-color: #646464;
-  }
-
-  ::-webkit-resizer {
-    background-color: #666;
-  }
 
 </style>
