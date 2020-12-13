@@ -47,6 +47,13 @@ import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/r
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
+
+import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
+import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
+import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
+import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
+
 export default {
     data() {
         return {
@@ -74,16 +81,15 @@ export default {
         this.handleResize();
     },
     mounted() {
-        this.getWebSocket.AddOnOpenHandler(this.onOpenHandler)
-        this.getWebSocket.AddOnMessageHandler(this.onMessageHandler)
-        this.getWebSocket.AddOnErrorHandler(this.onError)
+        this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
+        this.getWebSocket.AddOnMessageHandler(new GetUserChatResponseHandler(this.onMessageHandler))
+        this.getWebSocket.AddOnErrorHandler(new BaseHandler(this.onError))
 
         console.log(this.getWebSocket)
 
         this.readyState = this.getWebSocket.readyState
         if (this.readyState == 1) {
             this.reqChats()
-            this.getWebSocket.DeleteOnOpenHandler(this.onOpenHandler)
         }
     },
     destroyed() {
@@ -106,12 +112,11 @@ export default {
         },
         onMessageHandler({ data }) {
             data = JSON.parse(data)
+
             console.log(data)
-            if (data.type == 'chat.users') {
-                data.data.forEach((item, index) => {
-                    this.addProfile(item)
-                })
-            }
+            data.data.forEach((item, index) => {
+                this.addProfile(item)
+            })
         },
         reqChats() {
             if (this.getWebSocket.readyState == 1) {

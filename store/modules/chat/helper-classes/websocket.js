@@ -51,36 +51,40 @@ class HuddleChatWebSocket extends WebSocket {
         this._onErrorObserver.notify(ev)
     }
 
-    AddOnMessageHandler(func) {
-        this._onMessageObserver.subscribe(func)
+
+    AddOnMessageHandler(baseHandlerObj) {
+        this._onMessageObserver.subscribe(baseHandlerObj)
     }
 
-    DeleteOnMessageHandler(func) {
-        this._onMessageObserver.unsubscribe(func)
+    DeleteOnMessageHandler(baseHandlerObj) {
+        this._onMessageObserver.unsubscribe(baseHandlerObj)
     }
 
-    AddOnOpenHandler(func) {
-        this._onOpenObserver.subscribe(func)
+
+    AddOnOpenHandler(baseHandlerObj) {
+        this._onOpenObserver.subscribe(baseHandlerObj)
     }
 
-    DeleteOnOpenHandler(func) {
-        this._onOpenObserver.unsubscribe(func)
+    DeleteOnOpenHandler(baseHandlerObj) {
+        this._onOpenObserver.unsubscribe(baseHandlerObj)
     }
 
-    AddOnErrorHandler(func) {
-        this._onErrorObserver.subscribe(func)
+
+    AddOnErrorHandler(baseHandlerObj) {
+        this._onErrorObserver.subscribe(baseHandlerObj)
     }
 
-    DeleteOnErrorHandler(func) {
-        this._onErrorObserver.unsubscribe(func)
+    DeleteOnErrorHandler(baseHandlerObj) {
+        this._onErrorObserver.unsubscribe(baseHandlerObj)
     }
 
-    AddOnCloseHandler(func) {
-        this._onCloseObserver.subscribe(func)
+
+    AddOnCloseHandler(baseHandlerObj) {
+        this._onCloseObserver.subscribe(baseHandlerObj)
     }
 
-    DeleteOnCloseHandler(func) {
-        this._onCloseObserver.unsubscribe(func)
+    DeleteOnCloseHandler(baseHandlerObj) {
+        this._onCloseObserver.unsubscribe(baseHandlerObj)
     }
 }
 

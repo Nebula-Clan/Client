@@ -22,6 +22,12 @@ import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/req
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 
+import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
+import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
+import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
+import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
+
 export default {
     data: function() {
         return {
@@ -32,11 +38,13 @@ export default {
     created() {
         let websocket = new HuddleChatWebSocket(`ws://188.40.212.205:8000/ws/chat/${this.$auth.user.username}`)
 
-        websocket.AddOnMessageHandler(this.onMessageWebSocket)
+        websocket.AddOnMessageHandler(new AuthenticationResponseHandler(this.onAuthenticate))
 
-        websocket.AddOnOpenHandler(this.onOpenWebSocket)
+        websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
 
-        websocket.AddOnErrorHandler(this.onErrorWebSocket)
+        websocket.AddOnOpenHandler(new BaseHandler(this.onOpenWebSocket))
+
+        websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
 
         this.setWebSocket(websocket)
 
@@ -54,15 +62,17 @@ export default {
         onErrorWebSocket(event) {
             console.log(event.data)
         },
-        onMessageWebSocket({ data }) {
+        onAuthenticate({ data }) {
             data = JSON.parse(data)
-            if (data.type === "chat.authenticate") {
-                console.log(data)
-            } else if (data.type == 'chat.message.recieve') {
-                let username = data.message._from.username
-                let messageJson = data.message
-                this.pushMessageJsonToProfile({username, messageJson})
-            }
+
+            console.log(data)
+        },
+        onRecieveMessage({ data }) {
+            data = JSON.parse(data)
+
+            let username = data.message._from.username
+            let messageJson = data.message
+            this.pushMessageJsonToProfile({username, messageJson})
         },
         onCloseWebSocket(event) {
             console.log(event.data)

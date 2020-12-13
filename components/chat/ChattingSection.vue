@@ -50,11 +50,18 @@ import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/req
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 import { Message as MessageClass } from '~/store/modules/chat/models/message'
+
+import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
+import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
+import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
+import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
+
 export default {
     data() {
       return {
         username: undefined,
-        last: 2,
+        last: -1,
         readyState: -1,
         profile: null,
         messages: [],
@@ -137,13 +144,10 @@ export default {
     this.last = last
   },
   mounted() {
-    this.getWebSocket.AddOnOpenHandler(this.onOpenHandler)
-    this.getWebSocket.AddOnMessageHandler(this.onMessageHandler)
+    this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
+    this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
 
     this.readyState = this.getWebSocket.readyState
-    if (this.readyState == 1) {
-        this.getWebSocket.DeleteOnOpenHandler(this.onOpenHandler)
-    }
   },
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile', 'getProfileByUsername', 'sortProfileMessages']),
@@ -157,17 +161,16 @@ export default {
     },
     onMessageHandler({ data }) {
       data = JSON.parse(data)
+      
       console.log(data)
-      if (data.type == 'chat.message.get') {
-        data.data = JSON.parse(data.data)
-        let username = this.username
-        let messageJson = data.data
-        let isArray = Array.isArray(messageJson)
-        this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
-        console.log(isArray)
-        if (isArray) {
-          this.sortProfileMessages(username)
-        }
+      data.data = JSON.parse(data.data)
+      let username = this.username
+      let messageJson = data.data
+      let isArray = Array.isArray(messageJson)
+      this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
+      console.log(isArray)
+      if (isArray) {
+        this.sortProfileMessages(username)
       }
     },
     obtainMessages() {
@@ -199,6 +202,9 @@ export default {
         let chatList = this.$refs.chatList
         chatList.scrollTop = chatList.scrollHeight;
       })
+    },
+    getCurrentId() {
+
     },
     s() {
         console.log('submit')

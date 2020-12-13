@@ -1,19 +1,19 @@
 
 class Observable {
     constructor() {
-      this.observers = [];
+      this.handlers = [];
     }
 
-    subscribe(f) {
-      this.observers.push(f);
+    subscribe(h) {
+      this.handlers.push(h);
     }
 
-    unsubscribe(f) {
-      this.observers = this.observers.filter(subscriber => subscriber !== f);
+    unsubscribe(h) {
+      this.handlers = this.handlers.filter(subscriber => subscriber !== h);
     }
 
     notify(data) {
-      this.observers.forEach(observer => observer(data));
+      this.handlers.forEach(handler => handler.handleEvent(data));
     }
   }
 
