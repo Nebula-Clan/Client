@@ -4,7 +4,7 @@
     elevation="2"
     tile>
     <v-list rounded dense>
-      <v-subheader>Settings</v-subheader>
+      <v-subheader>Menu</v-subheader>
       <v-list-item-group
         :v-model="1"
         color="primary">
@@ -30,10 +30,10 @@ export default {
   data() {
     return {
       pages: [
-        {icon: 'mdi-account', label: 'Profile', link: '/user-settings/profile'},
-        {icon: 'mdi-content-save', label: 'Drafts', link: '/user-settings/drafts'},
-        {icon: 'mdi-cog', label: 'Settings', link: '/user-settings/settings'},
-        {icon: 'mdi-account-group', label: 'My Communities', link: '/user-settings/communities'},
+        {icon: 'mdi-account', label: 'Profile', link: '/preferences/profile'},
+        {icon: 'mdi-content-save', label: 'Drafts', link: '/preferences/drafts'},
+        {icon: 'mdi-cog', label: 'Settings', link: '/preferences/settings'},
+        {icon: 'mdi-account-group', label: 'My Communities', link: '/preferences/communities'},
       ]
     }
   }

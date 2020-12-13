@@ -3,7 +3,7 @@
 
         <v-row>
           <v-col>
-            <section class="images">
+            <section class="images" v-if="pageLoaded">
 
               <div class="banner">
                 <img alt="banner-img"
@@ -22,13 +22,12 @@
               </div>
 
               <div class="profile">
-                <v-avatar class="ma-2 profile-img"
-                          size="150px">
-                  <v-img
-                    :src="profileImage"
-                    alt="profile image">
-                  </v-img>
-                </v-avatar>
+                <UserAvatar
+                  class="profile-img"
+                  color="primary"
+                  :size="150"
+                  :avatar-string="$auth.user.username"
+                  :avatar-src="profileImage"/>
                 <div class="overlay-profile d-flex justify-center align-center">
                   <v-btn
                     @click="changeImage('profile-img')"
@@ -40,7 +39,10 @@
                   </v-btn>
                 </div>
               </div>
+
             </section>
+            <ProfileInfoLoader v-if="!pageLoaded"></ProfileInfoLoader>
+
           </v-col>
         </v-row>
 
@@ -116,10 +118,15 @@
 </template>
 
 <script>
+import UserAvatar from "~/components/shared/UserAvatar";
+import ProfileInfoLoader from "~/components/user-settings/Profile-Info-Loader";
+
 export default {
   name: "ProfileInfo",
+  components: {ProfileInfoLoader, UserAvatar },
   data() {
     return {
+      pageLoaded: false,
       formValid: false,
       loading: false,
       changedFields: [],
@@ -141,6 +148,7 @@ export default {
   },
   methods: {
     getProfile: function() {
+      this.pageLoaded = false;
       this.$axios.get('/api/profile/public', {
         params: {
           username: this.$auth.user.username
@@ -148,9 +156,10 @@ export default {
       }).then(
         response => {
           this.profile = response.data;
-          this.profileImage = this.$axios.defaults.baseURL + response.data['profile_picture'];
+          this.profileImage = response.data['profile_picture'];
           this.bannerImage = this.$axios.defaults.baseURL + response.data['banner_picture'];
           this.changedFields = [];
+          this.pageLoaded = true;
         }
       ).catch();
     },
@@ -233,8 +242,8 @@ export default {
     width: 100%;
     .profile-img {
       position: absolute;
-      bottom: -75px;
-      left: calc(50% - 75px);
+      bottom: -68px;
+      left: calc(50% - 83px);
       border: .5px solid #4b4b4b;
     }
     .overlay-profile {
