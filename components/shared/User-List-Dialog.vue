@@ -17,9 +17,9 @@
             :avatar-src="user.profile_picture"/>
           <v-list-item-content class="ml-1">
             <nuxt-link :to="`/profile/${user.username}`" class="text-decoration-none">
-              <v-list-item-title v-text="user.first_name + user.last_name"/>
+              <v-list-item-title v-text="user.username"/>
             </nuxt-link>
-            <v-list-item-subtitle class="mt-1" v-text="user.username"/>
+            <v-list-item-subtitle class="mt-1" v-text="user.first_name + ' ' + user.last_name"/>
           </v-list-item-content>
           <v-spacer/>
           <v-btn
