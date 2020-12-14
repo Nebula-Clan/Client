@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  props: ['draft'],
   data () {
     return {
       content: '',
@@ -47,8 +48,16 @@ export default {
     onEditorFocus (editor) {
     },
     onEditorReady (editor) {
-    }
+    },
   },
+  mounted() {
+    this.content = this.draft;
+  },
+  watch: {
+    draft: function (newVal, oldVal) {
+      this.content = this.draft;
+    }
+  }
 }
 </script>
 
