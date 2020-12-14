@@ -3,7 +3,10 @@
     <v-card-title>Drafts</v-card-title>
     <v-card-text>
       <div v-if="pageLoaded">
-        <Draft v-for="i in 5" :key="i" :draft="post"></Draft>
+        <Draft v-for="d in drafts"
+               @deleted="getDrafts"
+               :key="i"
+               :draft="d"></Draft>
       </div>
       <div v-if="!pageLoaded">
         <DraftLoader></DraftLoader>
@@ -22,13 +25,19 @@ export default {
   components: {DraftLoader, Draft},
   data() {
     return {
-      pageLoaded: false,
-      post: {
-        title: 'Hello',
-        date: '2020-12-04',
-        description: 'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content'
-      }
+      pageLoaded: true,
+      drafts: []
     }
+  },
+  methods: {
+    getDrafts: function() {
+      this.$axios.get('api/draft/get_drafts/').then(
+        response => this.drafts = response.data['draft_posts']
+      ).catch();
+    }
+  },
+  mounted() {
+    this.getDrafts();
   }
 }
 </script>

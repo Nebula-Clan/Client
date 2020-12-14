@@ -4,7 +4,7 @@
       <v-icon class="pr-3">mdi-pencil</v-icon>
       New Post
     </v-card-title>
-    <Editor @updateEditorContent="post.content=$event"/>
+    <Editor @updateEditorContent="post.content=$event" :draft="post.content"/>
     <v-divider class="primary"/>
     <v-row class="px-4">
       <v-col>
@@ -118,6 +118,14 @@
                 Close
               </v-btn>
               <v-btn
+                :loading="isSavingDraft"
+                outlined
+                color="secondary"
+                text
+                @click="saveAsDraft">
+                Save As Draft
+              </v-btn>
+              <v-btn
                 :loading="isPostPublishing"
                 outlined
                 :disabled="!formValid"
@@ -129,6 +137,14 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-btn
+          :loading="isSavingDraft"
+          outlined
+          color="secondary"
+          text
+          @click="saveAsDraft">
+          Save As Draft
+        </v-btn>
       </v-col>
     </v-row>
   </v-card>
@@ -142,11 +158,13 @@
   export default {
     name: 'CreatePost',
     data: () => ({
+      draft: false,
       dialog: false,
       formValid: false,
       hashtag: '',
       suggestions: [],
       post: {
+        id: '',
         title: '',
         description: '',
         contentType: 'OT',
@@ -157,6 +175,7 @@
         hashtags: []
       },
       isPostPublishing: false,
+      isSavingDraft: false,
       communities: [],
       categories: [],
 
@@ -178,6 +197,7 @@
     mounted() {
       this.fetchCommunities();
       this.fetchCategories();
+      this.getDraft();
     },
     methods: {
       ...mapActions('modules/post', ['createPost']),
@@ -190,7 +210,6 @@
         console.log(this.post);
         this.isPostPublishing = true;
         this.createPost(this.post).then((response) => {
-          console.log(response)
           this.$auth.redirect('home')
         }).catch((e) => {
           console.error(e)
@@ -236,8 +255,60 @@
             this.categories = data.categories.map((categoryObj) => categoryObj.title);
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+      getDraft: function () {
+        const draft_id = this.$route.query.draft
+        if (draft_id) {
+          this.$axios.get('api/draft/get_draft', {
+            params: {
+              draft_id
+            }
+          }).then(
+            response => {
+              const draftItem = response.data['draft_post'];
+              this.post = {
+                id: draftItem.id,
+                title: draftItem.title,
+                description: draftItem.description,
+                headerImage: draftItem['header_image'],
+                content: draftItem['post_content']['content_text'],
+                hashtags: draftItem['hashtags'],
+                contentType: draftItem['post_content']['content_type']
+              }
+              this.draft = true;
+            }
+          ).catch(
+            error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+          );
+        }
+      },
+      saveAsDraft: function () {
+        let data = new FormData();
+        data.append('title', this.post.title);
+        data.append('description', this.post.description);
+        data.append('content_type', this.post.contentType);
+        data.append('category', this.post.category);
+        data.append('content', this.post.content);
+        data.append('header_image', this.post.headerImage);
+        data.append('community_name', this.post.communityName);
+        this.post.hashtags.map(h => data.append('hashtags', h));
+        let url;
+        let httpReq;
+        if (this.draft) {
+          url = '/api/draft/update_draft/';
+          data.append('id', this.post.id);
+          httpReq = this.$axios.put
+        } else {
+          url = '/api/draft/create/';
+          httpReq = this.$axios.post
+        }
+        httpReq(url, data).then(
+          () => this["$notifier"].showMessage({ content: 'Saved!', color: 'success' })
+        ).catch(
+          error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+        );
       }
-    }
+    },
   }
 </script>
 

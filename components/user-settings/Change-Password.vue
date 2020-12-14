@@ -66,8 +66,9 @@ export default {
   methods: {
     setPassword: function() {
       const formData = new FormData();
-      formData.append('password', this.password.newPassword);
-      this.$axios.put('api/profile/update_profile', formData).then(
+      formData.append('new_password', this.password.newPassword);
+      formData.append('old_password', this.password.currentPassword);
+      this.$axios.put('api/profile/update_password', formData).then(
         () => this["$notifier"].showMessage({ content: 'Password updated successfully', color: 'success' })
       ).catch(
         error =>
