@@ -40,24 +40,24 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
+<!--      <v-btn-->
+<!--        icon-->
+<!--        @click.stop="miniVariant = !miniVariant"-->
+<!--      >-->
+<!--        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>-->
+<!--      </v-btn>-->
+<!--      <v-btn-->
+<!--        icon-->
+<!--        @click.stop="clipped = !clipped"-->
+<!--      >-->
+<!--        <v-icon>mdi-application</v-icon>-->
+<!--      </v-btn>-->
+<!--      <v-btn-->
+<!--        icon-->
+<!--        @click.stop="fixed = !fixed"-->
+<!--      >-->
+<!--        <v-icon>mdi-minus</v-icon>-->
+<!--      </v-btn>-->
       <v-toolbar-title v-text="title"/>
       <v-spacer/>
       <v-btn
@@ -99,7 +99,7 @@ import GoUpFAB from "@/components/shared/GoUpFAB";
 
 export default {
   components: {GoUpFAB, Snackbar},
-   created() {
+  created() {
     this.updateMenu();
   },
   data() {
@@ -111,14 +111,16 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js'
+      title: ''
     }
   },
   methods: {
     logout() {
       this.$auth.logout();
       this.$notifier.showMessage({content: "Logout", color: 'error'});
-      this.$auth.redirect('login')
+      this.$auth.redirect('login');
+      this.updateMenu();
+      this.$forceUpdate();
     },
     updateMenu() {
       this.items = this.$auth.user !== null ? [
@@ -152,6 +154,11 @@ export default {
           title: 'Preferences',
           to: '/preferences'
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'My Chats',
+          to: '/my-chats'
+        },
       ] : [
         {
           icon: 'mdi-chart-bubble',
@@ -163,7 +170,7 @@ export default {
           title: 'Sign Up',
           to: '/signup'
         },
-      ]
+      ];
     }
   }
 }

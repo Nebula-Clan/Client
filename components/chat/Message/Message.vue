@@ -1,9 +1,9 @@
 <template>
     <div :class="[getClass, 'd-inline-flex']">
-        <Avatar v-if="!isUser && previousId != currentId"
+        <Avatar v-if="!message.isSender && previousId != currentId"
                 class="avatar mt-5 ml-4" 
-                :substituteChar="'K'" 
-                :avatarUrl="'/images/LL1.jpg'"
+                :substituteChar="getProfileFirstChar" 
+                :avatarUrl="getProfieImageUrl"
                 :timeOut="12000" 
                 :avatarSize="35" 
                 :textSize="5" />
@@ -11,9 +11,12 @@
             <v-card-text :class="getText" v-html="getMessage">
             </v-card-text>
             <v-card-actions class="pa-0">
-            <v-icon v-if="isUser" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
-                {{ getMessgaeStatusicon() }}
-            </v-icon>
+                <div class="mb-0 ml-auto" style="font-size:13px">
+                    {{ date() }}
+                    <v-icon v-if="message.isSender" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
+                        {{ getMessgaeStatusIcon() }}
+                    </v-icon>
+                </div>
             </v-card-actions>
         </v-card>
     </div>
@@ -23,26 +26,23 @@
 <script>
 export default {
     props: {
+        profile: {
+            type: Object,
+            required: false
+        },
         message: {
-            type: String,
+            type: Object,
             required: true
         },
         previousId: {
             type: Number,
-            required: true
+            required: false,
+            default: 1
         },
         currentId: {
             type: Number,
-            required: true
-        },
-        isUser: {
-            type: Boolean,
-            required: true
-        },
-        isSeen: {
-            type: Boolean,
             required: false,
-            default: false
+            default: 1
         }
     },
     data() {
@@ -51,18 +51,18 @@ export default {
         }
     },
     mounted() {
-        console.log(this.message.split("\n").length)
+
     },
     computed: {
         getClass() {
-            if (this.isUser) {
+            if (this.message.isSender) {
                 return 'ml-auto mr-2'
             } else {
                 return 'mr-auto ml-2'
             }
         },
         getText() {
-            if (this.isUser) {
+            if (this.message.isSender) {
                 return 'pa-0 mr-8 green--text text--lighten-1'
             } else {
                 return 'pa-0 mr-8'
@@ -70,13 +70,13 @@ export default {
         },
         getTriangleClass() {
             if (this.previousId != this.currentId) {
-                if (this.isUser) {
+                if (this.message.isSender) {
                     return 'right mr-7'
                 } else {
                     return 'left ml-3'
                 }
             } else {
-                if (this.isUser) {
+                if (this.message.isSender) {
                     return 'mr-7'
                 } else {
                     return 'ml-16'
@@ -84,17 +84,35 @@ export default {
             }
         },
         getMessage() {
-            let newMessage = this.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+            let newMessage = this.message.messageBody.replace(/(?:\r\n|\r|\n)/g, '<br>');
             return newMessage
+        },
+        getProfieImageUrl() {
+            if (this.profile != undefined) {
+                return this.profile.profileImageUrl
+            }
+
+            return '' 
+        },
+        getProfileFirstChar() {
+            return this.profile.firstname.slice(0, 1).toUpperCase()
         }
     },
     methods: {
-        getMessgaeStatusicon() {
-            if (this.isSeen) {
+        getMessgaeStatusIcon() {
+            if (this.message.isSeen) {
                 return 'mdi-email-open'
             } else {
                 return 'mdi-email'
             }
+        },
+        date() {
+            let date = new Date(this.message.messageDate)
+            return date.toLocaleTimeString(navigator.language, {
+                hour: '2-digit',
+                minute:'2-digit',
+                hour12: false
+            });
         }
     }
 }
