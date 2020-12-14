@@ -22,12 +22,9 @@
               </div>
 
               <div class="profile">
-                <UserAvatar
-                  class="profile-img"
-                  color="primary"
-                  :size="150"
-                  :avatar-string="$auth.user.username"
-                  :avatar-src="profileImage"/>
+                <v-avatar size="150" class="profile-img">
+                  <img :alt="$auth.user.username" :src="profileImage"/>
+                </v-avatar>
                 <div class="overlay-profile d-flex justify-center align-center">
                   <v-btn
                     @click="changeImage('profile-img')"
@@ -95,7 +92,6 @@
             <v-textarea
               v-model="profile.biology"
               auto-grow
-              :rules="rules"
               @change="changed('bio')"
               counter
               rows="1"
@@ -156,7 +152,7 @@ export default {
       }).then(
         response => {
           this.profile = response.data;
-          this.profileImage = response.data['profile_picture'];
+          this.profileImage = this.$axios.defaults.baseURL + response.data['profile_picture'];
           this.bannerImage = this.$axios.defaults.baseURL + response.data['banner_picture'];
           this.changedFields = [];
           this.pageLoaded = true;
@@ -242,12 +238,12 @@ export default {
     width: 100%;
     .profile-img {
       position: absolute;
-      bottom: -68px;
-      left: calc(50% - 83px);
+      bottom: -75px;
+      left: calc(50% - 75px);
       border: .5px solid #4b4b4b;
     }
     .overlay-profile {
-      margin: 8px;
+      //margin: 8px;
       position: absolute;
       bottom: -75px;
       left: calc(50% - 75px);
