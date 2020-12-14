@@ -59,7 +59,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost:8000'
+    baseURL: 'http://huddle.pythonanywhere.com'
   },
 
   // Auth module configuration
