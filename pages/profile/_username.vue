@@ -62,6 +62,23 @@
           <span class="mr-2">{{ profile.numberOfComments }}</span> Comments
         </v-btn>
       </div>
+      <v-divider
+        v-if="this.$route.params.username === this.$auth.user.username"
+        class="my-3" vertical/>
+      <div
+        v-if="this.$route.params.username === this.$auth.user.username">
+        <nuxt-link
+          class="text-decoration-none"
+          to="/preferences">
+          <v-btn
+            color="rgb(255, 0, 0, 0)"
+            elevation="0"
+            :class="getPaddingAndMargin">
+            <v-icon class="mr-2">mdi-cog</v-icon>
+            Settings
+          </v-btn>
+        </nuxt-link>
+      </div>
     </v-row>
     <v-row>
       <v-col cols="12" lg="3" sm="12">
