@@ -38,7 +38,7 @@
               </div>
 
             </section>
-            <ProfileInfoLoader v-if="!pageLoaded"></ProfileInfoLoader>
+            <ProfileInfoLoader v-if="!pageLoaded"/>
 
           </v-col>
         </v-row>
@@ -67,14 +67,14 @@
               v-model="profile.username"
               counter
               :rules="rules"
-              @change="changed('username')"
+              @keydown="changed('username')"
               label="Username"
               outlined>
             </v-text-field>
             <v-text-field
               v-model="profile.first_name"
               :rules="rules"
-              @change="changed('first_name')"
+              @keydown="changed('first_name')"
               counter
               label="First Name"
               outlined>
@@ -83,7 +83,7 @@
           <v-col>
             <v-text-field
               v-model="profile.last_name"
-              @change="changed('last_name')"
+              @keydown="changed('last_name')"
               :rules="rules"
               counter
               label="Last Name"
@@ -92,7 +92,7 @@
             <v-textarea
               v-model="profile.biology"
               auto-grow
-              @change="changed('bio')"
+              @keydown="changed('bio')"
               counter
               rows="1"
               label="Bio"

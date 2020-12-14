@@ -109,7 +109,7 @@
               </v-container>
             </v-card-text>
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer/>
               <v-btn
                 outlined
                 color="error"
@@ -142,6 +142,7 @@
           outlined
           color="secondary"
           text
+          class="ml-3"
           @click="saveAsDraft">
           Save As Draft
         </v-btn>

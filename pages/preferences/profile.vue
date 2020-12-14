@@ -8,7 +8,7 @@
         <v-col cols="12">
           <ProfileInfo />
         </v-col>
-        <v-divider class="mx-10"></v-divider>
+        <v-divider class="mx-10"/>
         <v-col cols="12">
           <ChangePassword />
         </v-col>

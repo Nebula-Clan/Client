@@ -147,6 +147,11 @@ export default {
           title: 'Django Community',
           to: '/community/Django'
         },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Preferences',
+          to: '/preferences'
+        },
       ] : [
         {
           icon: 'mdi-chart-bubble',
