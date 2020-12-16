@@ -89,7 +89,7 @@ export default {
         },
         getProfieImageUrl() {
             if (this.profile != undefined) {
-                return this.profile.profileImageUrl
+                return this.$axios.defaults.baseURL + this.profile.profileImageUrl
             }
 
             return '' 

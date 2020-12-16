@@ -11,7 +11,7 @@
                 offset-x="11"
                 offset-y="11"
             >
-                <Avatar class="avatar-border" :substituteChar="getProfileFirstChar" :avatarUrl="profile.profileImageUrl"
+                <Avatar class="avatar-border" :substituteChar="getProfileFirstChar" :avatarUrl="getProfileImgUrl"
                 :timeOut="12000" :avatarSize="50" :textSize="5" :avatarProperty="profileAvatar" />
             </v-badge>
         </v-list-item-avatar>
@@ -44,6 +44,9 @@ export default {
         },
         getProfileFirstChar() {
             return this.profile.firstname.slice(0, 1).toUpperCase()
+        },
+        getProfileImgUrl() {
+            return this.$axios.defaults.baseURL + this.profile.profileImageUrl
         }
     }
 }
