@@ -19,6 +19,9 @@ export default {
       isActive: false
     }
   },
+  mounted() {
+    this.$nuxt.$on('hideEmoji', this.hideEmojiPicker)
+  },
   methods: {
     _openPicker(e) {
       this.isActive = !this.isActive
@@ -28,6 +31,9 @@ export default {
     },
     nofityClickedEmoji(emoji) {
       this.$emit('emoji', emoji)
+    },
+    hideEmojiPicker() {
+      this.isActive = false
     }
   }
 }

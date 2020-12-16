@@ -56,11 +56,7 @@ export default {
     }
   },
   mounted() {
-    this.$root.$on('focusUserInput', () => {
-      if (this.$refs.userInput) {
-        this.focusUserInput()
-      }
-    })
+    
   },
   methods: {
     appendEmoji(emoji) {
@@ -69,14 +65,12 @@ export default {
     sendMessage() {
       if (this.text != '' || this.text != null || this.text != undefined) {
         this.$emit('recMessage', this.text.replace(/^\s+|\s+$/g, ''))
+        this.$nuxt.$emit('hideEmoji')
         setTimeout(()=> this.text = '', 50)
       }
     },
     cancelFile() {
       this.file = null
-    },
-    setInputActive(onoff) {
-      this.inputActive = onoff
     },
     handleKey(event) {
       console.log(event)
@@ -84,91 +78,8 @@ export default {
         this.sendMessage()
       }
     },
-    focusUserInput() {
-      this.$nextTick(() => {
-        this.$refs.userInput.focus()
-      })
-    },
-    _submitSuggestion(suggestion) {
-      this.onSubmit({author: 'me', type: 'text', data: {text: suggestion}})
-    },
-    _checkSubmitSuccess(success) {
-      if (Promise !== undefined) {
-        Promise.resolve(success).then(
-          function (wasSuccessful) {
-            if (wasSuccessful === undefined || wasSuccessful) {
-              this.file = null
-              this.$refs.userInput.innerHTML = ''
-            }
-          }.bind(this)
-        )
-      } else {
-        this.file = null
-        this.$refs.userInput.innerHTML = ''
-      }
-    },
-    _submitText(event) {
-      const text = this.$refs.userInput.textContent
-      const file = this.file
-      if (file) {
-        this._submitTextWhenFile(event, text, file)
-      } else {
-        if (text && text.length > 0) {
-          this._checkSubmitSuccess(
-            this.onSubmit({
-              author: 'me',
-              type: 'text',
-              data: {text}
-            })
-          )
-        }
-      }
-    },
-    _submitTextWhenFile(event, text, file) {
-      if (text && text.length > 0) {
-        this._checkSubmitSuccess(
-          this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: {text, file}
-          })
-        )
-      } else {
-        this._checkSubmitSuccess(
-          this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: {file}
-          })
-        )
-      }
-    },
-    _editText(event) {
-      const text = this.$refs.userInput.textContent
-      if (text && text.length) {
-        this.$emit('edit', {
-          author: 'me',
-          type: 'text',
-          id: store.state.editMessage.id,
-          data: {text}
-        })
-        this._editFinish()
-      }
-    },
-    _handleEmojiPicked(emoji) {
-      this._checkSubmitSuccess(
-        this.onSubmit({
-          author: 'me',
-          type: 'emoji',
-          data: {emoji}
-        })
-      )
-    },
     _handleFileSubmit(file) {
       this.file = file
-    },
-    _editFinish() {
-      store.setState('editMessage', null)
     }
   }
 }

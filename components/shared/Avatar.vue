@@ -1,24 +1,8 @@
 <template>
     <v-avatar :eager="true" :size="avatarSize"
     :style="classForImageError" v-bind="avatarProperty">
-        <v-img v-if="!showImageByName" :src="avatarSrc"
-         :eager="true" @load="imageLoaded" @error="emitError">
-            <template v-slot:placeholder>
-                <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-                >
-                <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                ></v-progress-circular>
-                </v-row>
-            </template>
-        </v-img>
-        <p :class="[classForError, 'mt-3']" v-else>
-            {{ substituteChar }}
-        </p>
+        <img :src="avatarSrc"  @load="imageLoaded" @error="emitError"
+         :alt="substituteChar" />
     </v-avatar>
 </template>
 
