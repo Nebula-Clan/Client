@@ -3,7 +3,8 @@
     <v-col cols="12" class="px-0">
       <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" v-model="text"
        style="border-top: 1px solid gray;border-radius:0px" multi-line auto-grow rows="1"
-       hide-details flat solo placeholder="Send message ...">
+       hide-details flat solo placeholder="Send message ..."
+       @keydown="handleKey">
       </v-textarea>
     </v-col>
     <v-col cols="12" class="px-3 d-flex mb-2">
@@ -50,21 +51,8 @@ export default {
     }
   },
   computed: {
-    editMessageId() {
-      return this.isEditing && store.state.editMessage.id
-    },
     isEditing() {
       return false
-    }
-  },
-  watch: {
-    editMessageId(m) {
-      if (store.state.editMessage != null && store.state.editMessage != undefined) {
-        this.$refs.userInput.focus()
-        this.$refs.userInput.textContent = store.state.editMessage.data.text
-      } else {
-        this.$refs.userInput.textContent = ''
-      }
     }
   },
   mounted() {
@@ -80,8 +68,8 @@ export default {
     },
     sendMessage() {
       if (this.text != '' || this.text != null || this.text != undefined) {
-        this.$emit('recMessage', this.text)
-        this.text = null
+        this.$emit('recMessage', this.text.replace(/^\s+|\s+$/g, ''))
+        setTimeout(()=> this.text = '', 50)
       }
     },
     cancelFile() {
@@ -91,20 +79,10 @@ export default {
       this.inputActive = onoff
     },
     handleKey(event) {
-      if (event.keyCode === 13 && !event.shiftKey) {
-        if (!this.isEditing) {
-          this._submitText(event)
-        } else {
-          this._editText(event)
-        }
-        this._editFinish()
-        event.preventDefault()
-      } else if (event.keyCode === 27) {
-        this._editFinish()
-        event.preventDefault()
+      console.log(event)
+      if (event.key === 'Enter' && !event.shiftKey) {
+        this.sendMessage()
       }
-
-      this.$emit('onType')
     },
     focusUserInput() {
       this.$nextTick(() => {
