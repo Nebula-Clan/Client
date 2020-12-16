@@ -84,6 +84,9 @@ export default {
             }
         },
         getMessage() {
+            if (this.message == undefined || this.message == null) {
+                return this.message
+            }
             let newMessage = this.message.messageBody.replace(/(?:\r\n|\r|\n)/g, '<br>');
             return newMessage
         },

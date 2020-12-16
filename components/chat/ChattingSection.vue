@@ -169,6 +169,9 @@ export default {
       }
     },
     recvMessage(text) {
+      if (text == undefined || text == null || text.length == 0) {
+        return
+      }
       let sendMessageReq = new SendMessageRequestJson(text, this.username)
       this.getWebSocket.SendRequest(sendMessageReq)
 
