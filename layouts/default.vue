@@ -1,106 +1,146 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"/>
-          </v-list-item-content>
-        </v-list-item>
-        <div v-if="this.$auth.user" class="d-flex align-center">
-          <v-row align="center"
-                 justify="center">
-            <v-btn
-              @click="logout"
-              color="error"
-              class="mt-5">logout
-            </v-btn>
-          </v-row>
-        </div>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
-<!--      <v-btn-->
-<!--        icon-->
-<!--        @click.stop="miniVariant = !miniVariant"-->
-<!--      >-->
-<!--        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>-->
-<!--      </v-btn>-->
-<!--      <v-btn-->
-<!--        icon-->
-<!--        @click.stop="clipped = !clipped"-->
-<!--      >-->
-<!--        <v-icon>mdi-application</v-icon>-->
-<!--      </v-btn>-->
-<!--      <v-btn-->
-<!--        icon-->
-<!--        @click.stop="fixed = !fixed"-->
-<!--      >-->
-<!--        <v-icon>mdi-minus</v-icon>-->
-<!--      </v-btn>-->
-      <v-toolbar-title v-text="title"/>
-      <v-spacer/>
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+    <v-app-bar app color="primary darken-4" dark elevate-on-scroll >
+      <v-row v-if="$auth.user" class="align-center toolbar px-4">
+        <v-col cols="2" md="4" class="search-col">
+          <v-menu
+            v-if="$vuetify.breakpoint.xsOnly"
+            :close-on-content-click="false"
+            offset-y
+            transition="slide-x-transition">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs"
+                v-on="on">
+                <v-icon>
+                  mdi-magnify
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-list class="pa-2">
+                <v-text-field
+                  hide-details
+                  placeholder="hashtags, people, etc..."
+                  outlined
+                  @click:append="search"
+                  append-icon="mdi-magnify"
+                  dense>
+                </v-text-field>
+            </v-list>
+          </v-menu>
+          <v-text-field
+            style="width: max-content"
+            class="search"
+            outlined
+            placeholder="hashtags, people, etc..."
+            dense
+            @click:append="search"
+            hide-details
+            append-icon="mdi-magnify">
+          </v-text-field>
+        </v-col>
+        <v-col cols="5" md="4" class="text-center">
+          <nuxt-link to="/feed"
+                     style="width: min-content"
+                     class="text-decoration-none white--text">
+            <v-toolbar-title>Huddle</v-toolbar-title>
+          </nuxt-link>
+        </v-col>
+        <v-col cols="5" md="4" class="d-flex nav-action justify-end">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="nav-btn"
+                to="/"
+                icon
+                dark
+                v-bind="attrs"
+                v-on="on">
+                <v-icon>mdi-compass</v-icon>
+              </v-btn>
+            </template>
+            <span>Explore</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="nav-btn"
+                to="/my-chats"
+                icon
+                dark
+                v-bind="attrs"
+                v-on="on">
+                <v-icon>mdi-message</v-icon>
+              </v-btn>
+            </template>
+            <span>Messages</span>
+          </v-tooltip>
+          <v-menu offset-y transition="slide-x-transition">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="nav-btn"
+                icon
+                v-bind="attrs"
+                v-on="on">
+                <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"></UserAvatar>
+              </v-btn>
+            </template>
+            <v-list dense>
+              <v-list-item :to="'/profile/'+$auth.user.username">
+                <v-list-item-icon>
+                  <v-icon>mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>My Profile</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/preferences">
+                <v-list-item-icon>
+                  <v-icon>mdi-cog</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Preferences</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="logout">
+                <v-list-item-icon>
+                  <v-icon>mdi-logout</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Logout</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
+      </v-row>
+      <v-row v-else class="align-center toolbar px-4">
+        <v-toolbar-title>Huddle</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon to="/login">
+          <v-icon>
+            mdi-login
+          </v-icon>
+        </v-btn>
+        <v-btn icon to="/signup">
+          <v-icon>
+            mdi-account-plus
+          </v-icon>
+        </v-btn>
+      </v-row>
     </v-app-bar>
-    <v-main>
-      <nuxt>
-      </nuxt>
+    <v-main >
+      <nuxt></nuxt>
       <Snackbar/>
       <GoUpFAB/>
     </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
   </v-app>
 </template>
 
 <script>
 import Snackbar from '~/components/shared/Snackbar.vue'
 import GoUpFAB from "@/components/shared/GoUpFAB";
+import Avatar from "~/components/shared/Avatar";
+import UserAvatar from "~/components/shared/UserAvatar";
 
 export default {
-  components: {GoUpFAB, Snackbar},
+  components: {UserAvatar, Avatar, GoUpFAB, Snackbar},
   created() {
-    this.updateMenu();
   },
   data() {
     return {
@@ -122,56 +162,31 @@ export default {
       this.updateMenu();
       this.$forceUpdate();
     },
-    updateMenu() {
-      this.items = this.$auth.user !== null ? [
-        {
-          icon: 'mdi-apps',
-          title: 'Feed',
-          to: '/feed'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Create Post',
-          to: '/new-post'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Profile',
-          to: '/profile/had0007'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Complete PostView',
-          to: '/posts/1/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Django Community',
-          to: '/community/Django'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Preferences',
-          to: '/preferences'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'My Chats',
-          to: '/my-chats'
-        },
-      ] : [
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign In',
-          to: '/login'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Sign Up',
-          to: '/signup'
-        },
-      ];
+    getProfileInfo: function () {
+    },
+    search: function () {
+      document.getElementById()
     }
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+.toolbar {
+  .nav-btn {
+    margin: 0 8px 0 8px;
+  }
+}
+@media screen and (max-width: 576px) {
+  .toolbar {
+    padding: 0;
+    .search{
+      display: none;
+    }
+    .nav-btn {
+      margin: unset;
+    }
+  }
+}
+</style>
