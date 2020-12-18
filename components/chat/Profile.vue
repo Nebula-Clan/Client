@@ -20,9 +20,8 @@
             <v-list-item-subtitle :class="getLastSeenTextColor">{{ getProfileStatusOrMessage }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action class="py-3">
-                <v-badge content="66" class="mr-5 mt-3">
+                <v-badge v-if="unseenMessageShow" :content="profile.numberOfUnseenMessages" class="mr-5 mt-3">
                 </v-badge>
-            <v-icon size="11">mdi-pin-outline</v-icon>
         </v-list-item-action>
     </v-list-item>
 </template>
@@ -86,6 +85,12 @@ export default {
             } else {
                 return ''
             }
+        },
+        unseenMessageShow() {
+            if (this.profile.numberOfUnseenMessages === 0) {
+                return false
+            }
+            return true
         }
     },
     methods: {

@@ -47,6 +47,9 @@ const mutations = {
     setStatus(state, { findedProfile, status }) {
         findedProfile.profileStatus = status
     },
+    addUnseen(state, { findedProfile, unseenCount }) {
+        findedProfile.numberOfUnseenMessages += unseenCount
+    },
     setSocket(state, webScoket) {
         state.websocket = webScoket
     },
@@ -122,6 +125,15 @@ const actions = {
         commit('setStatus', { findedProfile, status })
         return true
     },
+    addUnseenToProfile({ state, commit }, {username , unseenCount}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('addUnseen', { findedProfile, unseenCount })
+        return true
+    }
 }
 
 

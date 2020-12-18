@@ -64,6 +64,11 @@ export default {
       this.text += emoji
     },
     sendMessage() {
+      if (this.timeOut !== null) {
+        clearTimeout(this.timeOut)
+      }
+      this.$emit('stopTyping')
+      
       if (this.text != '' || this.text != null || this.text != undefined) {
         this.$emit('recMessage', this.text.replace(/^\s+|\s+$/g, ''))
         this.$nuxt.$emit('hideEmoji')

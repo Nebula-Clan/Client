@@ -57,6 +57,10 @@ class ChatProfile {
         this._messageList = mList
     }
 
+    set numberOfUnseenMessages(unseenMessageCount) {
+        this._unseenMessageCount = unseenMessageCount
+    }
+
     constructor() {
         this.profileID = -1
         this.nickname = ''
@@ -70,6 +74,7 @@ class ChatProfile {
         this.lastMessage = ''
         this.messageList = []
         this.profileStatus = null
+        this.numberOfUnseenMessages = 0
     }
 
     parseFromJson(json) {
@@ -81,6 +86,7 @@ class ChatProfile {
         this.profileImageUrl = json.user.profile_picture
         this.profileBannerUrl = json.user.banner_picture
         this.lastSeen = json.last_seen
+        this.numberOfUnseenMessages = json.usneen_messages_count
         let last_message = new Message()
         last_message.parseFromJson(json.last_message)
         this.lastMessage = last_message
@@ -169,6 +175,10 @@ class ChatProfile {
 
     get messageList() {
         return this._messageList
+    }
+
+    get numberOfUnseenMessages() {
+        return this._unseenMessageCount
     }
 }
 

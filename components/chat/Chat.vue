@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile',
-         'addProfile', 'swapProfileToFront', 'setProfileStatus']),
+         'addProfile', 'swapProfileToFront', 'setProfileStatus', 'addUnseenToProfile']),
         onErrorWebSocket(event) {
             console.log(event.data)
         },
@@ -59,9 +59,11 @@ export default {
 
             let username = data.message._from.username
             let messageJson = data.message
+            let unseenCount = 1
             console.log(messageJson)
             this.pushMessageJsonToProfile({username, messageJson})
             this.swapProfileToFront(username)
+            this.addUnseenToProfile({username, unseenCount})
         },
         onStatusHandler({ data }) {
             data = JSON.parse(data)
