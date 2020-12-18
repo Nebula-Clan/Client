@@ -79,6 +79,10 @@ class ChatProfile {
         this.lastMessage = last_message
     }
 
+    changeLastMessage(messageInstance) {
+        this.lastMessage = messageInstance
+    }
+
     pushMessage(messageInstance) {
         this._messageList.push(messageInstance)
     }

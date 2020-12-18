@@ -1,8 +1,8 @@
 <template>
     <v-app>
         <v-container fluid class="pa-0 fill-height">
-            <!-- <Chat /> -->
-            <LoadPage />
+            <LoadPage v-if="!isConnected" @connected="onConnected" />
+            <Chat v-else />
         </v-container>
     </v-app>
 </template>
@@ -15,6 +15,16 @@ export default {
     layout: 'chat',
     components: {
         Chat
+    },
+    data() {
+        return {
+            isConnected: false
+        }
+    },
+    methods: {
+        onConnected() {
+            this.isConnected = true
+        }
     }
 }
 </script>

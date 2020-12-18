@@ -10,12 +10,86 @@
                 <div class="back"></div>
             </div>
         </div>
+        <div class="text">{{ getWaitText }}</div>
     </v-container>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
+import { HuddleChatWebSocket } from '~/store/modules/chat/helper-classes/websocket'
+import UserLists from '~/components/chat/UserLists'
+import ChattingSection from '~/components/chat/ChattingSection'
+
+import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
+import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
+import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
+
+import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
+import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
+import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
+import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
+
 export default {
-    
+    data: function() {
+        return {
+            websocket: null,
+            access_token: "",
+            redirect: false,
+            numberOfSeconds: 5,
+            interval: null
+        }
+    },
+    computed: {
+        getWaitText() {
+            if (this.redirect) {
+                return `Please login,we are redirecting you to login page in ${this.numberOfSeconds}s...`
+            }
+            return 'Please wait, we are trying to connect you to Huddle\'s servers...'
+        }
+    },
+    created() {
+        if (this.$auth.user !== null && this.$auth.user !== undefined && this.$auth.user.username !== '') {
+            let websocket = new HuddleChatWebSocket(`ws://188.40.212.205:8000/ws/chat/${this.$auth.user.username}`)
+
+            websocket.AddOnMessageHandler(new AuthenticationResponseHandler(this.onAuthenticate))
+
+            websocket.AddOnOpenHandler(new BaseHandler(this.onOpenWebSocket))
+
+            this.setWebSocket(websocket)
+
+            this.websocket = websocket
+
+            this.access_token = this.$auth.getToken('local').split(" ")[1]
+        } else {
+            this.redirect = true
+            this.countDownToRedirect()
+        }
+    },
+    methods: {
+        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
+        onAuthenticate({ data }) {
+            data = JSON.parse(data)
+
+            this.$emit('connected')
+        },
+        onOpenWebSocket(event) {
+            console.log(event.data)
+            let authReq = new AuthenticationRequestJson(this.access_token)
+            this.websocket.SendRequest(authReq)
+        },
+        countDownToRedirect() {
+            this.interval = setInterval(() => {
+                this.numberOfSeconds--
+                if (this.numberOfSeconds <= 0) {
+                    clearInterval(this.interval)
+                    this.$router.push('/login')
+                }
+            }, 1000)
+        }
+    }
 }
 </script>
 

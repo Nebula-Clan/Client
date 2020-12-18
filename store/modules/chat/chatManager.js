@@ -1,13 +1,18 @@
 import { ChatProfile } from './models/chatprofile'
+import { ProfileListController } from './helper-classes/controllers/profilelistcontroller'
 
-const state = () => ({
-    profiles: [],
-    websocket: null
-})
+const getDefaultState = () => {
+    return {
+        profileController: new ProfileListController(),
+        status: 'empty'
+    }
+}
+
+const state = getDefaultState()
   
 const getters = {
     getProfileList: (state) => {
-        return state.profiles
+        return state.profileController.profileList
     },
     getWebSocket: (state) => {
         return state.websocket
@@ -18,7 +23,7 @@ const mutations = {
     addProfileAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
         chatProfile.parseFromJson(profileJson)
-        state.profiles.push(chatProfile)
+        state.profileController.pushProfileInBack(chatProfile)
     },
     addMessageJsonToProfile(state, {findedProfile, messageJson}) {
         findedProfile.pushMessageJson(messageJson)
@@ -41,13 +46,15 @@ const mutations = {
 }
   
 const actions = {
+    getProfileWithUsername: ({ state, commit}, username) => {
+        return state.profileController.findProfile(username)
+    },
     pushMessageJsonToProfile({ state, commit}, {username, messageJson, isArray}) {
-        let findedProfile = state.profiles.find((profile) => {
-            return profile.username === username
-        })
+        let findedProfile = state.profileController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
+
         if (isArray == true) {
             commit('addMessageArrayJsonToProfile', {findedProfile, messageJson})
         } else {
@@ -56,12 +63,11 @@ const actions = {
         return true
     },
     pushMessageToProfile({ state, commit}, {username, messageInstance, isArray}) {
-        let findedProfile = state.profiles.find((profile) => {
-            return profile.username === username
-        })
+        let findedProfile = state.profileController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
+
         if (isArray == true) {
             commit('addMessageArrayInctanceToProfile', {findedProfile, messageInstance})
         } else {
@@ -70,12 +76,11 @@ const actions = {
         return true
     },
     sortProfileMessages({ state, commit }, username) {
-        let findedProfile = state.profiles.find((profile) => {
-            return profile.username === username
-        })
+        let findedProfile = state.profileController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
+
         commit('sortProfileMessages', {findedProfile})
         return true
     },
@@ -88,9 +93,7 @@ const actions = {
         return true
     },
     getProfileByUsername: ({ state, commit }, username) => {
-        return state.profiles.find((profile) => {
-            return profile.username === username
-        })
+        return state.profileController.findProfile(username)
     }
 }
 

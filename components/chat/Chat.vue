@@ -35,37 +35,20 @@ export default {
             access_token: ""
         }
     },
+    computed: {
+        ...mapGetters('modules/chat/chatManager',['getWebSocket']),
+    },
     created() {
-        let websocket = new HuddleChatWebSocket(`ws://188.40.212.205:8000/ws/chat/${this.$auth.user.username}`)
+        this.websocket = this.getWebSocket
 
-        websocket.AddOnMessageHandler(new AuthenticationResponseHandler(this.onAuthenticate))
+        this.websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
 
-        websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
-
-        websocket.AddOnOpenHandler(new BaseHandler(this.onOpenWebSocket))
-
-        websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
-
-        this.setWebSocket(websocket)
-
-        this.websocket = websocket
-
-        this.access_token = this.$auth.getToken('local').split(" ")[1]
+        this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
     },
     methods: {
         ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
-        onOpenWebSocket(event) {
-            console.log(event.data)
-            let authReq = new AuthenticationRequestJson(this.access_token)
-            this.websocket.SendRequest(authReq)
-        },
         onErrorWebSocket(event) {
             console.log(event.data)
-        },
-        onAuthenticate({ data }) {
-            data = JSON.parse(data)
-
-            console.log(data)
         },
         onRecieveMessage({ data }) {
             data = JSON.parse(data)
