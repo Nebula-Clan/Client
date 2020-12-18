@@ -90,6 +90,14 @@ export default {
       return this.getProfileList;
     }
   },
+  watch: {
+    getChatList: {
+      handler: function(val, oldVal) {
+         this.$forceUpdate() 
+      },
+      deep: true
+    }
+  },
   created() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();

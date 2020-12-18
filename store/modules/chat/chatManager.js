@@ -4,7 +4,7 @@ import { ProfileListController } from './helper-classes/controllers/profilelistc
 const getDefaultState = () => {
     return {
         profileController: new ProfileListController(),
-        status: 'empty'
+        websocket: null
     }
 }
 
@@ -42,6 +42,9 @@ const mutations = {
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket
+    },
+    swapProfileInFront(state, username) {
+        state.profileController.swapProfileToFront(username)
     }
 }
   
@@ -60,6 +63,7 @@ const actions = {
         } else {
             commit('addMessageJsonToProfile', {findedProfile, messageJson})
         }
+
         return true
     },
     pushMessageToProfile({ state, commit}, {username, messageInstance, isArray}) {
@@ -73,6 +77,7 @@ const actions = {
         } else {
             commit('addMessageInctanceToProfile', {findedProfile, messageInstance})
         }
+
         return true
     },
     sortProfileMessages({ state, commit }, username) {
@@ -94,7 +99,10 @@ const actions = {
     },
     getProfileByUsername: ({ state, commit }, username) => {
         return state.profileController.findProfile(username)
-    }
+    },
+    swapProfileToFront: ({ state, commit }, username) => {
+        commit('swapProfileInFront', username)
+    },
 }
 
 

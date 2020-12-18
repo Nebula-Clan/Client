@@ -39,6 +39,19 @@ class ProfileListController {
         return null
     }
 
+    findProfileIndex(username) {
+        if (this.profileList) {
+            let profileIndex = this.profileList.findIndex((profile) => {
+                return profile.username === username
+            })
+            if (profileIndex === -1) {
+                return null
+            }
+            return profileIndex
+        }
+        return -1
+    }
+
     pushProfileInFront(profile) {
         if (this.profileList) {
             this._profileList.unshift(profile)
@@ -47,12 +60,11 @@ class ProfileListController {
 
     swapProfileToFront(username) {
         if (this.profileList) {
-            let profile = this.findProfile(username)
-            if (profile === null) {
+            let index = this.findProfileIndex(username)
+            if (index === -1) {
                 return false
             }
 
-            let index = this.profileList.indexOf(profile)
             [this.profileList[0], this.profileList[index]] = [this.profileList[index], this.profileList[0]];
         }
     }

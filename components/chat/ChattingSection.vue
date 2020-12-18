@@ -135,11 +135,14 @@ export default {
     this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
   },
   methods: {
-    ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile', 'getProfileByUsername', 'sortProfileMessages']),
+    ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
+     'getProfileByUsername', 'sortProfileMessages']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
-      this.getProfileByUsername(this.username).then((profile) => {this.profile = profile})
-      this.obtainMessages()
+      this.getProfileByUsername(this.username).then((profile) => {
+        this.profile = profile
+        this.obtainMessages()
+      })
     },
     onOpenHandler({ data }) {
       this.obtainMessages()
@@ -161,6 +164,10 @@ export default {
     obtainMessages() {
       console.log(this.getWebSocket)
       console.log(this.username)
+      if (this.profile && this.profile.messageList.length != 0) {
+        return
+      }
+
       if (this.username != undefined) {
         let getUserMessageReq = new GetUserMessagesRequestJson(this.username)
         this.getWebSocket.SendRequest(getUserMessageReq)

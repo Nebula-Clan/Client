@@ -46,7 +46,7 @@ export default {
         this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
+        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile', 'swapProfileToFront']),
         onErrorWebSocket(event) {
             console.log(event.data)
         },
@@ -55,7 +55,9 @@ export default {
 
             let username = data.message._from.username
             let messageJson = data.message
+            console.log(messageJson)
             this.pushMessageJsonToProfile({username, messageJson})
+            this.swapProfileToFront(username)
         },
         onCloseWebSocket(event) {
             console.log(event.data)
