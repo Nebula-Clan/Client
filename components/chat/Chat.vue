@@ -23,10 +23,12 @@ import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
 import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
+import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
 
 export default {
     data: function() {
@@ -42,11 +44,13 @@ export default {
         this.websocket = this.getWebSocket
 
         this.websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
+        this.websocket.AddOnMessageHandler(new ControlMessageHandler(this.onStatusHandler))
 
         this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile', 'swapProfileToFront']),
+        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile',
+         'addProfile', 'swapProfileToFront', 'setProfileStatus']),
         onErrorWebSocket(event) {
             console.log(event.data)
         },
@@ -58,6 +62,28 @@ export default {
             console.log(messageJson)
             this.pushMessageJsonToProfile({username, messageJson})
             this.swapProfileToFront(username)
+        },
+        onStatusHandler({ data }) {
+            data = JSON.parse(data)
+            console.log(data)
+
+            let fromUsername = data.from
+            let statusData = data.data
+
+            if (statusData.type === "status") {
+                if (statusData.status === "typing") {
+                    this.setProfileStatus({
+                        username: fromUsername,
+                        status: statusData.status
+                    })
+                } else {
+                    this.setProfileStatus({
+                        username: fromUsername,
+                        status: statusData.status
+                    })
+                }
+            }
+
         },
         onCloseWebSocket(event) {
             console.log(event.data)

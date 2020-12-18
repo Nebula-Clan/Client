@@ -47,7 +47,8 @@ export default {
       inputActive: false,
       showEmoji: false,
       showFile: true,
-      text: null
+      text: null,
+      timeOut: null
     }
   },
   computed: {
@@ -76,10 +77,27 @@ export default {
       console.log(event)
       if (event.key === 'Enter' && !event.shiftKey) {
         this.sendMessage()
+        return
       }
+      this.handleTyping()
     },
     _handleFileSubmit(file) {
       this.file = file
+    },
+    handleTyping() {
+      if (this.timeOut === null) {
+        this.$emit('typing')
+        this.timeOut = setTimeout(() => {
+          this.$emit('stopTyping')
+          this.timeOut = null
+        }, 5000)
+      } else {
+        clearTimeout(this.timeOut)
+        this.timeOut = setTimeout(() => {
+          this.$emit('stopTyping')
+          this.timeOut = null
+        }, 5000)
+      }
     }
   }
 }

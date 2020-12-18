@@ -1,3 +1,4 @@
+const { state } = require('~/store/snackbar')
 const { Message } =  require('./message')
 
 
@@ -35,9 +36,14 @@ class ChatProfile {
         this._bannerUrl = bannerUrl
     }
 
+    set profileStatus(status) {
+        this._status = status
+    }
+
     set lastSeen(lastSeenString) {
         if (lastSeenString === 'online') {
             this._lastSeen = 'online'
+            this.profileStatus = 'online'
         } else if (lastSeenString != null) {
             this._lastSeen = new Date(lastSeenString)
         }
@@ -63,6 +69,7 @@ class ChatProfile {
         this.lastSeen = null
         this.lastMessage = ''
         this.messageList = []
+        this.profileStatus = null
     }
 
     parseFromJson(json) {
@@ -146,6 +153,10 @@ class ChatProfile {
 
     get profileBannerUrl() {
         return this._bannerUrl
+    }
+
+    get profileStatus() {
+        return this._status
     }
 
     get lastSeen() {

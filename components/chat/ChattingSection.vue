@@ -26,12 +26,13 @@
                 <v-container class="pa-0">
                     <UserInput
                     :show-emoji="true"
-                    :on-submit="s"
                     :suggestions="sug()"
                     :show-file="false"
                     :placeholder="'ssfsdf'"
                     :colors="colors"
                     @recMessage="recvMessage"
+                    @typing="typing"
+                    @stopTyping="stop"
                     />
                 </v-container>
             </v-col>
@@ -48,12 +49,14 @@ import Message from './Message/Message'
 import ProfileStatus from './ProfileStatus'
 
 import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 import { Message as MessageClass } from '~/store/modules/chat/models/message'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
@@ -216,8 +219,21 @@ export default {
       }
       return 0
     },
-    s() {
-        console.log('submit')
+    typing() {
+      let typingMessage = new ControlMessageRequestJson(this.profile.username, {
+        type: "status",
+        status: "typing"
+      })
+      this.getWebSocket.SendRequest(typingMessage)
+      console.log('submit')
+    },
+    stop() {
+      let typingMessage = new ControlMessageRequestJson(this.profile.username, {
+        type: "status",
+        status: "online"
+      })
+      this.getWebSocket.SendRequest(typingMessage)
+      console.log('stop')
     },
     sug() {
         console.log('sug')

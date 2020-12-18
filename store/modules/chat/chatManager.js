@@ -2,9 +2,13 @@ import { ChatProfile } from './models/chatprofile'
 import { ProfileListController } from './helper-classes/controllers/profilelistcontroller'
 
 const getDefaultState = () => {
+    let statusMap = new Map();
+    statusMap.set('online', {text: 'online', textColor: 'teal--text text--accent-4', preferred: false})
+    statusMap.set('typing', {text: 'typing', textColor: 'blue--text text--darken-1', preferred: true })
     return {
         profileController: new ProfileListController(),
-        websocket: null
+        websocket: null,
+        statusMap: statusMap
     }
 }
 
@@ -39,6 +43,9 @@ const mutations = {
     },
     sortProfileMessages(state, { findedProfile }) {
         findedProfile.sortMessages()
+    },
+    setStatus(state, { findedProfile, status }) {
+        findedProfile.profileStatus = status
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket
@@ -102,6 +109,18 @@ const actions = {
     },
     swapProfileToFront: ({ state, commit }, username) => {
         commit('swapProfileInFront', username)
+    },
+    getStatus({ state, commit }, status) {
+        return state.statusMap.get(status)
+    },
+    setProfileStatus({ state, commit }, {username , status}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('setStatus', { findedProfile, status })
+        return true
     },
 }
 

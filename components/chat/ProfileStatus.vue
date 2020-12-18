@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     props: {
         profile: {
@@ -20,7 +22,9 @@ export default {
     },
     data() {
         return {
-            isOnline: false
+            textColor: '',
+            hasStatus: false,
+            statusText: 'last seen recently'
         }
     },
     computed: {
@@ -32,29 +36,40 @@ export default {
             return ''
         },
         getLastSeen() {
-            console.log(this.profile)
             if (this.profile != undefined && 
             this.profile.lastSeen != null && 
-            this.profile.lastSeen != undefined) {
-                if (this.profile.lastSeen === 'online') {
-                    this.isOnline = true
-                    return 'online'
-                } else {
-                    return `${this.getTimeElapse(this.profile.lastSeen)} ago`
-                }
+            this.profile.lastSeen != undefined &&
+            this.profile.profileStatus != null && 
+            this.profile.profileStatus != undefined) {
+                this.getStatus(this.profile.profileStatus).then((status) => {
+                    if (status !== undefined) {
+                        this.hasStatus = true
+                        this.textColor = status.textColor
+                        this.statusText = status.text
+                    } else {
+                        this.textColor = ''
+                        this.hasStatus = false
+                        this.statusText = `${this.getTimeElapse(this.profile.lastSeen)} ago`
+                    }
+                })
+            } else {
+                this.textColor = ''
+                this.hasStatus = false
+                this.statusText = 'last seen recently'
             }
 
-            return 'last seen recently'
+            return this.statusText
         },
         getLastSeenTextColor() {
-            if (this.isOnline) {
-                return 'teal--text text--accent-4'
+            if (this.hasStatus) {
+                return this.textColor
             } else {
                 return ''
             }
         }
     },
     methods: {
+        ...mapActions('modules/chat/chatManager', ['getStatus']),
         getTimeElapse(time) {
             const unixTime = time.getTime()
             const now = new Date().getTime()

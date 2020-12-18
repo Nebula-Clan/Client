@@ -17,7 +17,7 @@
         </v-list-item-avatar>
         <v-list-item-content>
             <v-list-item-title >{{ profile.firstname }}</v-list-item-title>
-            <v-list-item-subtitle>{{ profile.lastMessage.messageBody }}</v-list-item-subtitle>
+            <v-list-item-subtitle :class="getLastSeenTextColor">{{ getProfileStatusOrMessage }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action class="py-3">
                 <v-badge content="66" class="mr-5 mt-3">
@@ -28,12 +28,21 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 import Avatar from '~/components/shared/Avatar'
 export default {
     props: {
         profile: {
             type: Object,
-            required: true
+            required: true,
+        }
+    },
+    data() {
+        return {
+            subtitleText: '',
+            textColor: '',
+            hasStatus: false
         }
     },
     computed: {
@@ -47,7 +56,40 @@ export default {
         },
         getProfileImgUrl() {
             return this.$axios.defaults.baseURL + this.profile.profileImageUrl
+        },
+        getProfileStatusOrMessage() {
+            if (this.profile != undefined &&
+            this.profile.profileStatus != null && 
+            this.profile.profileStatus != undefined) {
+                this.getStatus(this.profile.profileStatus).then((status) => {
+                    if (status !== undefined && status.preferred) {
+                        this.subtitleText = status.text
+                        this.textColor = status.textColor
+                        this.hasStatus = true
+                    } else {
+                        this.subtitleText = this.profile.lastMessage.messageBody
+                        this.textColor = ''
+                        this.hasStatus = false
+                    }
+                })
+            } else {
+                this.subtitleText = this.profile.lastMessage.messageBody
+                this.textColor = ''
+                this.hasStatus = false
+            }
+
+            return this.subtitleText
+        },
+        getLastSeenTextColor() {
+            if (this.hasStatus) {
+                return this.textColor
+            } else {
+                return ''
+            }
         }
+    },
+    methods: {
+        ...mapActions('modules/chat/chatManager', ['getStatus']),
     }
 }
 </script>
