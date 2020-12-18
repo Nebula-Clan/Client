@@ -50,12 +50,15 @@ const mutations = {
     addUnseen(state, { findedProfile, unseenCount }) {
         findedProfile.numberOfUnseenMessages += unseenCount
     },
+    setObtainedMessage(state, { findedProfile, obtainedStatus }) {
+        findedProfile.isObtainedMessages = obtainedStatus
+    },
     setSocket(state, webScoket) {
         state.websocket = webScoket
     },
     swapProfileInFront(state, username) {
         state.profileController.swapProfileToFront(username)
-    }
+    },
 }
   
 const actions = {
@@ -133,7 +136,16 @@ const actions = {
 
         commit('addUnseen', { findedProfile, unseenCount })
         return true
-    }
+    },
+    setObtainMessageStatus({ state, commit }, {username , obstainStatus}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('setObtainedMessage', { findedProfile, obstainStatus })
+        return true
+    },
 }
 
 

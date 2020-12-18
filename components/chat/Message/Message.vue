@@ -1,5 +1,5 @@
 <template>
-    <div :class="[getClass, 'd-inline-flex']">
+    <div :class="[getClass, 'd-inline-flex']" :message-id="message.messageID">
         <Avatar v-if="!message.isSender && previousId != currentId"
                 class="avatar mt-5 ml-4" 
                 :substituteChar="getProfileFirstChar" 
@@ -14,7 +14,7 @@
                 <div class="mb-0 ml-auto" style="font-size:13px">
                     {{ date() }}
                     <v-icon v-if="message.isSender" color="blue-grey darken-1" class="ml-auto" size="16" style="filter: contrast(20%);">
-                        {{ getMessgaeStatusIcon() }}
+                        {{ getMessgaeStatusIcon }}
                     </v-icon>
                 </div>
             </v-card-actions>
@@ -43,15 +43,36 @@ export default {
             type: Number,
             required: false,
             default: 1
+        },
+        observer: {
+            required: true,
         }
     },
     data() {
         return {
-            random: false
+            random: false,
+            isUnderObserver: false
         }
     },
     mounted() {
-
+        if (!this.message.isSeen && !this.message.isSender) {
+            console.log(this.message.messageID)
+            this.observer.observe(this.$el)
+            this.isUnderObserver = true
+        } 
+    },
+    beforeUpdate() {
+        if (!this.isUnderObserver && !this.message.isSeen && !this.message.isSender) {
+            console.log(this.message.messageID)
+            this.addToObserver()
+        } else if (this.isUnderObserver && this.message.isSeen) {
+            this.removeFromObserver()
+        }
+    },
+    beforeDestroy() {
+        if (!this.message.isSeen  && !this.message.isSender && this.isUnderObserver) {
+            this.removeFromObserver()
+        }
     },
     computed: {
         getClass() {
@@ -99,16 +120,16 @@ export default {
         },
         getProfileFirstChar() {
             return this.profile.firstname.slice(0, 1).toUpperCase()
-        }
-    },
-    methods: {
+        },
         getMessgaeStatusIcon() {
             if (this.message.isSeen) {
                 return 'mdi-email-open'
-            } else {
-                return 'mdi-email'
             }
-        },
+            
+            return 'mdi-email'
+        }
+    },
+    methods: {
         date() {
             let date = new Date(this.message.messageDate)
             return date.toLocaleTimeString(navigator.language, {
@@ -116,6 +137,14 @@ export default {
                 minute:'2-digit',
                 hour12: false
             });
+        },
+        addToObserver() {
+            this.observer.observe(this.$el)
+            this.isUnderObserver = true
+        },
+        removeFromObserver() {
+            this.observer.unobserve(this.$el)
+            this.isUnderObserver = false
         }
     }
 }

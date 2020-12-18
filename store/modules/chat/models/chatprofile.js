@@ -57,6 +57,10 @@ class ChatProfile {
         this._messageList = mList
     }
 
+    set isObtainedMessages(isObtained) {
+        this._isObtained = isObtained
+    }
+
     set numberOfUnseenMessages(unseenMessageCount) {
         this._unseenMessageCount = unseenMessageCount
     }
@@ -75,6 +79,7 @@ class ChatProfile {
         this.messageList = []
         this.profileStatus = null
         this.numberOfUnseenMessages = 0
+        this.isObtainedMessages = false
     }
 
     parseFromJson(json) {
@@ -175,6 +180,10 @@ class ChatProfile {
 
     get messageList() {
         return this._messageList
+    }
+
+    get isObtainedMessages() {
+        return this._isObtained
     }
 
     get numberOfUnseenMessages() {

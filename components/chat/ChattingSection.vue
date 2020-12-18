@@ -16,7 +16,8 @@
                   :profile="profile"
                   :message="message"
                   :previousId="getPrev(idx)"
-                  :currentId="getCur(idx)" />
+                  :currentId="getCur(idx)"
+                  :observer="observer" />
                 </v-col>
             </v-row>
           </v-col>
@@ -50,6 +51,7 @@ import ProfileStatus from './ProfileStatus'
 
 import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
 import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
+import { SeenMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/seenmessagerequestjson'
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
@@ -57,6 +59,7 @@ import { Message as MessageClass } from '~/store/modules/chat/models/message'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
 import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
+import { SeenMessageHandler } from '~/store/modules/chat/helper-classes/handlers/seenmessagehandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
@@ -70,6 +73,7 @@ export default {
         readyState: -1,
         profile: null,
         messages: [],
+        observer: null,
         participants: [
             {
             id: 'user1',
@@ -132,14 +136,23 @@ export default {
   },
   created() {
     this.$nuxt.$on('loadProfileChats', this.onLoadProfileChatsHandler)
+
+    this.observer = new IntersectionObserver(
+      this.onMessageSeen, 
+      {
+        root: this.$el,
+        threshold: 1.0,
+      }
+    );
   },
   mounted() {
     this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
     this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
+    this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
   },
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
-     'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront']),
+     'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile', 'setObtainMessageStatus']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.getProfileByUsername(this.username).then((profile) => {
@@ -167,13 +180,17 @@ export default {
     obtainMessages() {
       console.log(this.getWebSocket)
       console.log(this.username)
-      if (this.profile && this.profile.messageList.length != 0) {
+      if (this.profile && this.profile.isObtained) {
         return
       }
 
       if (this.username != undefined) {
         let getUserMessageReq = new GetUserMessagesRequestJson(this.username)
         this.getWebSocket.SendRequest(getUserMessageReq)
+
+        let username = this.username
+        let obtainStatus = true
+        this.setObtainMessageStatus({username, obtainStatus})
       }
     },
     recvMessage(text) {
@@ -197,6 +214,35 @@ export default {
       this.pushMessageToProfile({username, messageInstance, isArray})
       this.swapProfileToFront(username)
       this.scrollToBottom()
+    },
+    onSeenMessage({ data }) {
+      data = JSON.parse(data)
+      console.log(data)
+
+      let messageID = data.id
+
+    },
+    seenMessage(messageID) {
+      let seenMessage = new SeenMessageRequestJson(messageID)
+      this.getWebSocket.SendRequest(seenMessage)
+    },
+    onMessageSeen(entries) {
+      entries.forEach(({ target, isIntersecting}) => {
+          if (!isIntersecting) {
+            return;
+          }
+
+          let unseenCount = -1
+          let username = this.username
+          this.addUnseenToProfile({username, unseenCount})
+        
+          this.observer.unobserve(target);
+        
+          setTimeout(() => {
+            let messageID = target.getAttribute("message-id");
+            this.seenMessage(messageID)
+          }, 1000)
+      });
     },
     scrollToBottom() {
       this.$nextTick(() => {

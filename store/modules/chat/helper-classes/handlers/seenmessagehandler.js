@@ -10,7 +10,7 @@ class SeenMessageHandler extends BaseHandler {
 
     handleEvent(event) {
         if (event != undefined && event != null &&
-            JSON.parse(event.data).type === "chat.message.see") {
+            JSON.parse(event.data).type === "chat.message.saw") {
                 this._handleFunc(event)
         }
     }
