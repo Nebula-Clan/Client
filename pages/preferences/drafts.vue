@@ -7,6 +7,12 @@
                @deleted="getDrafts"
                :key="i"
                :draft="d"></Draft>
+        <div v-if="drafts.length === 0" class="text-center">
+          <img alt="empty"
+               height="400px"
+               src="../../static/user-settings/empty.svg" />
+          <h3>It is so quiet here, Add some drafts.</h3>
+        </div>
       </div>
       <div v-if="!pageLoaded">
         <DraftLoader></DraftLoader>

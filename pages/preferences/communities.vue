@@ -27,6 +27,12 @@
         @left="getCommunities"
         v-for="c in communitiesToShow"
         :key="c.name" />
+        <div v-if="communitiesToShow.length === 0" class="text-center">
+          <img alt="empty"
+               height="400px"
+               src="../../static/user-settings/empty.svg" />
+          <h3>It is so quiet here, join into some communities.</h3>
+        </div>
       </v-container>
 
       <v-container v-if="toggle && !pageLoaded" class="card-view">
@@ -42,6 +48,12 @@
           @left="getCommunities"
           v-for="c in communitiesToShow"
           :key="c.name" />
+        <div v-if="communitiesToShow.length === 0" class="text-center">
+          <img alt="empty"
+               height="400px"
+               src="../../static/user-settings/empty.svg" />
+          <h3>It is so quiet here, join into some communities.</h3>
+        </div>
       </v-container>
 
       <v-container fluid v-else-if="!toggle && !pageLoaded" class="grid-com">
