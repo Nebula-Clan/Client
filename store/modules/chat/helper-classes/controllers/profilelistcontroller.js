@@ -64,8 +64,14 @@ class ProfileListController {
             if (index === -1) {
                 return false
             }
-
-            [this.profileList[0], this.profileList[index]] = [this.profileList[index], this.profileList[0]];
+            let temp = this.profileList[index];  
+            
+            let i; 
+            for (i = index; i >= 0; i--) { 
+                this.profileList[i] = this.profileList[i - 1];  
+            } 
+             
+            this.profileList[0] = temp; 
         }
     }
 
@@ -78,13 +84,19 @@ class ProfileListController {
     swapProfileToBack(username) {
         if (this.profileList) {
             let length = this.profileList.length
-            let profile = this.findProfile(username)
+            let index = this.findProfileIndex(username)
             if (profile === null && length <= 0) {
                 return false
             }
 
-            let index = this.profileList.indexOf(profile)
-            [this.profileList[length - 1], this.profileList[index]] = [this.profileList[index], this.profileList[length - 1]];
+            let temp = this.profileList[index];  
+            
+            let i; 
+            for (i = index; i >= length - 1; i--) { 
+                this.profileList[i] = this.profileList[i - 1];  
+            } 
+             
+            this.profileList[length - 1] = temp; 
         }
     }
 

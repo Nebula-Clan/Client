@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
-     'getProfileByUsername', 'sortProfileMessages']),
+     'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.getProfileByUsername(this.username).then((profile) => {
@@ -192,6 +192,7 @@ export default {
       messageInstance.isSender = true
 
       this.pushMessageToProfile({username, messageInstance, isArray})
+      this.swapProfileToFront(username)
       this.scrollToBottom()
     },
     scrollToBottom() {
