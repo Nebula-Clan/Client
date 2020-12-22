@@ -4,7 +4,7 @@
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Login</div>
-    <v-divider class="my-6"></v-divider>
+    <v-divider class="my-6"/>
     <v-form v-model="formValid" @submit.prevent="onSubmit">
       <v-text-field
         label="Username"

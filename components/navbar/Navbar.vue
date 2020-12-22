@@ -53,7 +53,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="nav-btn"
-              to="/"
+              to="/explore"
               icon
               dark
               v-bind="attrs"
@@ -85,7 +85,7 @@
               icon
               v-bind="attrs"
               v-on="on">
-              <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"></UserAvatar>
+              <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"/>
             </v-btn>
           </template>
           <v-list dense>
@@ -113,7 +113,7 @@
     </v-row>
     <v-row v-else class="align-center toolbar px-4">
       <v-toolbar-title>Huddle</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer/>
       <v-btn icon to="/login">
         <v-icon>
           mdi-login
