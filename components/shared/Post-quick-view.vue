@@ -49,7 +49,7 @@
     <v-row>
       <v-col v-if="post.header_image && post.header_image !== '/media/undefined'" class="mx-5 header-image">
         <img alt="image"
-             :src="$axios.defaults.baseURL + post.header_image">
+             :src="$axios.defaults.baseURL + '/media/' + post.header_image">
       </v-col>
     </v-row>
 
