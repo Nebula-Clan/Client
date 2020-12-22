@@ -40,6 +40,10 @@ class ChatProfile {
         this._status = status
     }
 
+    set numberOfMessage(number) {
+        this._numberOfMessages = number
+    }
+
     set lastSeen(lastSeenString) {
         if (lastSeenString === 'online') {
             this._lastSeen = 'online'
@@ -80,6 +84,7 @@ class ChatProfile {
         this.profileStatus = null
         this.numberOfUnseenMessages = 0
         this.isObtainedMessages = false
+        this.numberOfMessage = 0
     }
 
     parseFromJson(json) {
@@ -103,6 +108,7 @@ class ChatProfile {
 
     pushMessage(messageInstance) {
         this._messageList.push(messageInstance)
+        this.numberOfMessage++
     }
 
     pushMessageArray(messagerArr) {
@@ -115,6 +121,7 @@ class ChatProfile {
         let message = new Message()
         message.parseFromJson(messageJson)
         this._messageList.push(message) 
+        this.numberOfMessage++
     }
 
     pushMessageArrayJson(messagerArrJson) {
@@ -188,6 +195,10 @@ class ChatProfile {
 
     get numberOfUnseenMessages() {
         return this._unseenMessageCount
+    }
+
+    get numberOfMessage() {
+        return this._numberOfMessages
     }
 }
 

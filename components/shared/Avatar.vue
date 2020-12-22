@@ -1,8 +1,24 @@
 <template>
-    <v-avatar :eager="true" :size="avatarSize"
+    <v-avatar :size="avatarSize"
     :style="classForImageError" v-bind="avatarProperty">
-        <img :src="avatarSrc"  @load="imageLoaded" @error="emitError"
-         :alt="substituteChar" />
+        <v-img :eager="eager" v-if="!showImageByName" :src="avatarUrl"
+          @load="imageLoaded" @error="emitError" alt="s">
+            <template v-slot:placeholder>
+                <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+                >
+                <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                ></v-progress-circular>
+                </v-row>
+            </template>
+        </v-img>
+        <p :class="[classForError, 'mt-3']" v-else>
+            {{ substituteChar }}
+        </p>
     </v-avatar>
 </template>
 
@@ -68,6 +84,11 @@
         validator: function (value) {
           return (value >= 1) && (value <= 6)
         }
+      },
+      eager: {
+        type: Boolean,
+        require: false,
+        default: false
       }
     },
     data() {
@@ -75,20 +96,16 @@
         isCompleted: false,
         hasError: false,
         showImageByName: false,
-        errorTime: null
+        errorTime: null,
+        loaded: false
       }
     },
     mounted() {
-      this.errorTime = setTimeout(() => {
-        this.hasError = true;
-        this.showImageByName = true;
-        this.emitError();
-      }, this.timeOut)
+      if (this.eager) {
+        this.setErrorTimeout()
+      }
     },
     computed: {
-      avatarSrc() {
-        return this.avatarUrl
-      },
       classForImageError() {
         if (this.showImageByName) {
           return {
@@ -103,14 +120,47 @@
     },
     methods: {
       imageLoaded(event) {
-        if (this.errorTime) {
-          clearTimeout(this.errorTime);
-          this.hasError = false;
-          this.errorTime = null;
+        if (!this.hasError) {
+          this.clearErrorAndSetToLoaded()
         }
       },
-      emitError() {
+      emitError(event) {
+        if (!this.hasError && 
+          !this.eager && 
+          !this.loaded && 
+          !this.errorTime) {
+          this.setErrorTimeout()
+        }
         this.$emit('error')
+      },
+      clearErrorTime() {
+        if (this.errorTime) {
+          clearTimeout(this.errorTime)
+          this.errorTime = null
+        }
+      },
+      setErrorTimeout() {
+        this.clearErrorTime()
+
+        this.errorTime = setTimeout(() => {
+          this.hasError = true;
+          this.showImageByName = true;
+          this.emitError();
+        }, this.timeOut)
+      },
+      clearErrorTimeOutAndSetToError() {
+        this.clearErrorTime()
+
+        this.hasError = true
+        this.showImageByName = true
+        this.loaded = false
+      },
+      clearErrorAndSetToLoaded() {
+        this.clearErrorTime()
+
+        this.hasError = false
+        this.showImageByName = false
+        this.loaded = true
       }
     }
   }

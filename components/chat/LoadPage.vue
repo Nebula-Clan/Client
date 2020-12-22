@@ -58,6 +58,8 @@ export default {
 
             websocket.AddOnOpenHandler(new BaseHandler(this.onOpenWebSocket))
 
+            websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
+
             this.setWebSocket(websocket)
 
             this.websocket = websocket
@@ -72,6 +74,7 @@ export default {
         ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
         onAuthenticate({ data }) {
             data = JSON.parse(data)
+            console.log(data)
 
             this.$emit('connected')
         },
@@ -79,6 +82,9 @@ export default {
             console.log(event.data)
             let authReq = new AuthenticationRequestJson(this.access_token)
             this.websocket.SendRequest(authReq)
+        },
+        onErrorWebSocket({ data }) {
+            console.log(data)
         },
         countDownToRedirect() {
             this.interval = setInterval(() => {
