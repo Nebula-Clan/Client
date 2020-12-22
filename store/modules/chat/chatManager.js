@@ -59,6 +59,13 @@ const mutations = {
     swapProfileInFront(state, username) {
         state.profileController.swapProfileToFront(username)
     },
+    setProfileLastMessage(state, { findedProfile, lastMessage, isJson }) {
+        if (isJson) {
+            findedProfile.changeLastMessage(lastMessage)
+        } else {
+            findedProfile.lastMessage = lastMessage
+        }
+    }
 }
   
 const actions = {
@@ -146,6 +153,15 @@ const actions = {
         commit('setObtainedMessage', { findedProfile, obstainStatus })
         return true
     },
+    setProfileLastMessage({ state, commit }, {username , lastMessage, isJson}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('setProfileLastMessage', { findedProfile, lastMessage, isJson })
+        return true
+    }
 }
 
 

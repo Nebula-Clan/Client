@@ -44,6 +44,39 @@ export default {
             hasStatus: false
         }
     },
+    watch: {
+        'profile.lastMessage': {
+            handler: function(val, oldVal) {
+                if (!this.hasStatus) {
+                    this.textColor = ''
+                    this.hasStatus = false
+                    this.subtitleText = this.profile.lastMessage.messageBody
+                    this.$forceUpdate()
+                }
+            },
+            deep: true
+        },
+        'profile.profileStatus': {
+            handler: function(val, oldVal) {
+                this.getStatus(val).then((status) => {
+                    if (status !== undefined && status.preferred) {
+                        this.subtitleText = status.text
+                        this.textColor = status.textColor
+                        this.hasStatus = true
+                    } else {
+                        this.subtitleText = this.profile.lastMessage.messageBody
+                        this.textColor = ''
+                        this.hasStatus = false
+                    }
+                    this.$forceUpdate()
+                })
+            },
+            deep: true
+        }
+    },
+    mounted() {
+        this.subtitleText = this.profile.lastMessage.messageBody
+    },
     computed: {
         profileAvatar() {
             return {
@@ -57,26 +90,6 @@ export default {
             return this.$axios.defaults.baseURL + this.profile.profileImageUrl
         },
         getProfileStatusOrMessage() {
-            if (this.profile != undefined &&
-            this.profile.profileStatus != null && 
-            this.profile.profileStatus != undefined) {
-                this.getStatus(this.profile.profileStatus).then((status) => {
-                    if (status !== undefined && status.preferred) {
-                        this.subtitleText = status.text
-                        this.textColor = status.textColor
-                        this.hasStatus = true
-                    } else {
-                        this.subtitleText = this.profile.lastMessage.messageBody
-                        this.textColor = ''
-                        this.hasStatus = false
-                    }
-                })
-            } else {
-                this.subtitleText = this.profile.lastMessage.messageBody
-                this.textColor = ''
-                this.hasStatus = false
-            }
-
             return this.subtitleText
         },
         getLastSeenTextColor() {
@@ -95,6 +108,9 @@ export default {
     },
     methods: {
         ...mapActions('modules/chat/chatManager', ['getStatus']),
+        updatee() {
+            console.log(this.getProfileStatusOrMessage)
+        }
     }
 }
 </script>

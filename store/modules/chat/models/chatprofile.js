@@ -102,8 +102,10 @@ class ChatProfile {
         this.lastMessage = last_message
     }
 
-    changeLastMessage(messageInstance) {
-        this.lastMessage = messageInstance
+    changeLastMessage(messageJson) {
+        let lastMessage = new Message()
+        lastMessage.parseFromJson(messageJson)
+        this.lastMessage = lastMessage
     }
 
     pushMessage(messageInstance) {
