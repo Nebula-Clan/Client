@@ -43,23 +43,25 @@
           v-for="n in 30"
           :key="n"
           class="d-flex child-flex"
-          cols="3">
-          <v-img
-            :src="`https://picsum.photos/500/300?image=${n + 10}`"
-            :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"
-            aspect-ratio="1"
-            class="grey lighten-2">
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"/>
-              </v-row>
-            </template>
-          </v-img>
+          :cols="postColumns">
+          <nuxt-link to="/posts/53">
+            <v-img
+              :src="`https://picsum.photos/500/300?image=${n + 10}`"
+              :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"
+              aspect-ratio="1"
+              class="grey lighten-2 post-cover">
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"/>
+                </v-row>
+              </template>
+            </v-img>
+          </nuxt-link>
         </v-col>
       </v-row>
 
@@ -388,6 +390,20 @@
             return 'blue-grey';
         }
       },
+      postColumns() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs':
+            return 6;
+          case 'sm':
+            return 6;
+          case 'md':
+            return 4;
+          case 'lg':
+            return 4;
+          case 'xl':
+            return 3;
+        }
+      }
     },
     methods: {
       ...mapActions('modules/category/category', ['getAllCategories']),
@@ -409,5 +425,13 @@
     position: fixed;
     bottom: 0;
     left: 0;
+  }
+
+  .post-cover {
+    transition: opacity .4s;
+  }
+
+  .post-cover:hover {
+    opacity: 0.5;
   }
 </style>
