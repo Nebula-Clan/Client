@@ -1,30 +1,37 @@
 <template>
     <v-list-item two-line class="back-status">
         <v-list-item-content class="py-1">
-            <v-list-item-title > {{ getProfileName }} </v-list-item-title>
+            <v-list-item-title @click="profileViewOverlay = true"> {{ getProfileName }} </v-list-item-title>
             <v-list-item-subtitle :class="getLastSeenTextColor"> {{ getLastSeen }} </v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-action>
-            <v-icon>mdi-dots-vertical</v-icon>
-        </v-list-item-action>
+        <v-overlay
+        :z-index="99"
+        :value="profileViewOverlay"
+        opacity="0.8"
+        >
+            <ProfileView :profile="profile" @cancel="profileViewOverlay = false"  />
+        </v-overlay>
     </v-list-item>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+import ProfileView from './ProfileView'
+
 export default {
     props: {
         profile: {
             type: Object,
-            require: false
+            require: true
         }
     },
     data() {
         return {
             textColor: '',
             hasStatus: false,
-            statusText: 'last seen recently'
+            statusText: 'last seen recently',
+            profileViewOverlay: false
         }
     },
     computed: {

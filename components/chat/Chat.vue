@@ -45,6 +45,7 @@ export default {
 
         this.websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
         this.websocket.AddOnMessageHandler(new ControlMessageHandler(this.onStatusHandler))
+        this.websocket.AddOnMessageHandler(new BaseHandler(this.printData))
 
         this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
     },
@@ -53,6 +54,9 @@ export default {
          'addProfile', 'swapProfileToFront', 'setProfileStatus', 'addUnseenToProfile', 'setProfileLastMessage']),
         onErrorWebSocket(event) {
             console.log(event.data)
+        },
+        printData({ data }) {
+            console.log(data)
         },
         onRecieveMessage({ data }) {
             data = JSON.parse(data)
