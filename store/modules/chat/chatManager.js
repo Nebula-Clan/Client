@@ -50,8 +50,8 @@ const mutations = {
     addUnseen(state, { findedProfile, unseenCount }) {
         findedProfile.numberOfUnseenMessages += unseenCount
     },
-    setObtainedMessage(state, { findedProfile, obtainedStatus }) {
-        findedProfile.isObtainedMessages = obtainedStatus
+    setObtainedMessage(state, { findedProfile, obtainStatus }) {
+        findedProfile.isObtainedMessages = obtainStatus
     },
     setSocket(state, webScoket) {
         state.websocket = webScoket
@@ -68,6 +68,12 @@ const mutations = {
     },
     setValidationOfProfileImg(state, { findedProfile, isValid }) {
         findedProfile.isValidProfileImg = isValid
+    },
+    seenProfileMessageWithID(state, { findedProfile, messageID }) {
+        let message = findedProfile.messageList.find(message => message.messageID == messageID)
+        if (message !== null && message !== undefined) {
+            message.isSeen = true
+        }
     }
 }
   
@@ -147,13 +153,13 @@ const actions = {
         commit('addUnseen', { findedProfile, unseenCount })
         return true
     },
-    setObtainMessageStatus({ state, commit }, {username , obstainStatus}) {
+    setObtainMessageStatus({ state, commit }, {username , obtainStatus}) {
         let findedProfile = state.profileController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
 
-        commit('setObtainedMessage', { findedProfile, obstainStatus })
+        commit('setObtainedMessage', { findedProfile, obtainStatus })
         return true
     },
     setProfileLastMessage({ state, commit }, {username , lastMessage, isJson}) {
@@ -172,6 +178,15 @@ const actions = {
         }
 
         commit('setValidationOfProfileImg', { findedProfile, isValid })
+        return true
+    },
+    seenProfileMessageWithID({ state, commit }, {username, messageID}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('seenProfileMessageWithID', { findedProfile, messageID })
         return true
     }
 }

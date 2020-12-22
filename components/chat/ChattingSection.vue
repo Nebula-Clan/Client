@@ -28,7 +28,6 @@
                     <UserInput
                     v-if="hasUsername"
                     :show-emoji="true"
-                    :suggestions="sug()"
                     :show-file="false"
                     @recMessage="recvMessage"
                     @typing="typing"
@@ -114,7 +113,7 @@ export default {
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
      'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
-      'setObtainMessageStatus', 'setProfileLastMessage']),
+      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.getProfileByUsername(this.username).then((profile) => {
@@ -141,10 +140,11 @@ export default {
     },
     obtainMessages() {
       console.log(this.getWebSocket)
-      console.log(this.username)
-      if (this.profile && this.profile.isObtained) {
+      console.log(this.profile)
+      if (this.profile && this.profile.isObtainedMessages) {
         return
       }
+      console.log('omgggg')
 
       if (this.username != undefined) {
         let getUserMessageReq = new GetUserMessagesRequestJson(this.username, this.profile.numberOfMessage)
@@ -190,6 +190,15 @@ export default {
 
     },
     seenMessage(messageID) {
+      this.seenProfileMessageWithID({
+        username: this.username, 
+        messageID: messageID}).then((status) => {
+        if (status) {
+          let unseenCount = -1
+          let username = this.username
+          this.addUnseenToProfile({username, unseenCount})
+        }
+      })
       let seenMessage = new SeenMessageRequestJson(messageID)
       this.getWebSocket.SendRequest(seenMessage)
     },
@@ -198,17 +207,13 @@ export default {
           if (!isIntersecting) {
             return;
           }
-
-          let unseenCount = -1
-          let username = this.username
-          this.addUnseenToProfile({username, unseenCount})
         
           this.observer.unobserve(target);
         
           setTimeout(() => {
             let messageID = target.getAttribute("message-id");
             this.seenMessage(messageID)
-          }, 1000)
+          }, 300)
       });
     },
     scrollToBottom() {
@@ -247,10 +252,6 @@ export default {
       })
       this.getWebSocket.SendRequest(typingMessage)
       console.log('stop')
-    },
-    sug() {
-        console.log('sug')
-        return []
     }
   }
 }
