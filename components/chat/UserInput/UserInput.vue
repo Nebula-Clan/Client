@@ -66,6 +66,7 @@ export default {
     sendMessage() {
       if (this.timeOut !== null) {
         clearTimeout(this.timeOut)
+        this.timeOut = null
       }
       this.$emit('stopTyping')
       
