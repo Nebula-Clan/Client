@@ -89,6 +89,11 @@
         type: Boolean,
         require: false,
         default: false
+      },
+      showByName: {
+        type: Boolean,
+        require: false,
+        default: false
       }
     },
     data() {
@@ -101,7 +106,11 @@
       }
     },
     mounted() {
-      if (this.eager) {
+      if (this.showByName === true) {
+        this.hasError = false
+        this.showImageByName = true
+        this.loaded = false
+      } else if (this.eager) {
         this.setErrorTimeout()
       }
     },

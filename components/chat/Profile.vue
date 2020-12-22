@@ -13,7 +13,7 @@
                 offset-y="11"
             >
                 <Avatar class="avatar-border" :substituteChar="getProfileFirstChar" :avatarUrl="getProfileImgUrl"
-                :timeOut="12000" :avatarSize="50" :textSize="5" :avatarProperty="profileAvatar" />
+                :timeOut="12000" :avatarSize="50" :textSize="5" :avatarProperty="profileAvatar" @error="imgError" />
             </v-badge>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -117,7 +117,13 @@ export default {
         }
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['getStatus'])
+        ...mapActions('modules/chat/chatManager', ['getStatus', 'setValidationOfProfileImg']),
+        imgError() {
+            this.setValidationOfProfileImg({
+                username: this.profile.username,
+                isValid: false
+            })
+        }
     }
 }
 </script>

@@ -65,6 +65,9 @@ const mutations = {
         } else {
             findedProfile.lastMessage = lastMessage
         }
+    },
+    setValidationOfProfileImg(state, { findedProfile, isValid }) {
+        findedProfile.isValidProfileImg = isValid
     }
 }
   
@@ -160,6 +163,15 @@ const actions = {
         }
 
         commit('setProfileLastMessage', { findedProfile, lastMessage, isJson })
+        return true
+    },
+    setValidationOfProfileImg({ state, commit }, {username, isValid}) {
+        let findedProfile = state.profileController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('setValidationOfProfileImg', { findedProfile, isValid })
         return true
     }
 }

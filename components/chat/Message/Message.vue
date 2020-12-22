@@ -6,7 +6,8 @@
                 :avatarUrl="getProfieImageUrl"
                 :timeOut="12000" 
                 :avatarSize="35" 
-                :textSize="5" />
+                :textSize="5"
+                :showByName="!profile.isValidProfileImg" />
         <v-card max-width="350" elevation="3" :class="['card-back', 'text--secondary', 'pa-3', 'card-border', getTriangleClass]">
             <v-card-text :class="getText" v-html="getMessage">
             </v-card-text>
@@ -28,7 +29,7 @@ export default {
     props: {
         profile: {
             type: Object,
-            required: false
+            required: true
         },
         message: {
             type: Object,

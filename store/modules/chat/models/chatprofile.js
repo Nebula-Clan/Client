@@ -69,6 +69,10 @@ class ChatProfile {
         this._unseenMessageCount = unseenMessageCount
     }
 
+    set isValidProfileImg(isValid) {
+        this._isValidProfileImg = isValid
+    }
+
     constructor() {
         this.profileID = -1
         this.nickname = ''
@@ -85,6 +89,7 @@ class ChatProfile {
         this.numberOfUnseenMessages = 0
         this.isObtainedMessages = false
         this.numberOfMessage = 0
+        this.isValidProfileImg = true
     }
 
     parseFromJson(json) {
@@ -201,6 +206,10 @@ class ChatProfile {
 
     get numberOfMessage() {
         return this._numberOfMessages
+    }
+
+    get isValidProfileImg() {
+        return this._isValidProfileImg
     }
 }
 

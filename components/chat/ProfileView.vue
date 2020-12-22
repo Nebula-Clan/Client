@@ -24,7 +24,7 @@
                         </v-btn>
                     <v-card-title class="white--text ml-5" style="margin-top:120px">
                         <Avatar class="avatar-border" :substituteChar="getProfileFirstChar" :avatarUrl="getProfileImgUrl"
-                            :timeOut="12000" :avatarSize="56" :textSize="5" />
+                            :timeOut="12000" :avatarSize="56" :textSize="5" :showByName="!profile.isValidProfileImg" />
                         <p class="ml-3">
                             {{ getProfileFirstNameAndLastName }}
                         </p>
