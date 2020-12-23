@@ -25,6 +25,8 @@
 
 
 <script>
+import VoiceMessage from './VoiceMessage'
+
 export default {
     props: {
         profile: {
