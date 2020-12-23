@@ -3,6 +3,7 @@
     <v-list-item two-line>
         <v-list-item-avatar size="50" class="avatar-border">
             <v-badge
+                :value="isOnline"
                 color="teal lighten-2"
                 overlap
                 right
@@ -104,13 +105,19 @@ export default {
                 return false
             }
             return true
+        },
+        isOnline() {
+            if (this.profile !== undefined) {
+                if (this.profile.lastSeen === 'online') {
+                    return true
+                }
+            }
+
+            return false
         }
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['getStatus']),
-        updatee() {
-            console.log(this.getProfileStatusOrMessage)
-        }
+        ...mapActions('modules/chat/chatManager', ['getStatus'])
     }
 }
 </script>

@@ -105,7 +105,7 @@ export default {
     this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
   },
   updated() {
-    if (this.username === undefined && this.hasUsername) {
+    if ((this.username === undefined || this.username === null) && this.hasUsername) {
       this.hasUsername = false
     } else {
       this.hasUsername = true
