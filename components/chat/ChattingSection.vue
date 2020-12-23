@@ -4,7 +4,7 @@
         <v-row no-gutters class="flex-grow-0 flex-shrink-0">
           <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
-                    <ProfileStatus :profile="profile" />
+                    <ProfileStatus v-if="hasUsername" :profile="profile" />
                 </v-container>
             </v-col>
         </v-row>
@@ -26,6 +26,7 @@
           <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
                     <UserInput
+                    v-if="hasUsername"
                     :show-emoji="true"
                     :suggestions="sug()"
                     :show-file="false"
@@ -72,6 +73,7 @@ export default {
         profile: null,
         messages: [],
         observer: null,
+        hasUsername: false
       }
     },
   computed: {
@@ -101,6 +103,13 @@ export default {
     this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
     this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
     this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
+  },
+  updated() {
+    if (this.username === undefined && this.hasUsername) {
+      this.hasUsername = false
+    } else {
+      this.hasUsername = true
+    }
   },
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
