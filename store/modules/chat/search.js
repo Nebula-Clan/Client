@@ -1,6 +1,7 @@
 import axious from 'axios'
 import { Profile } from '~/store/modules/profile/classes/profile'
 import { ChatProfile } from './models/chatprofile'
+import { index } from './helper-classes/utils/jaccard'
 
 const state = () => ({
     results: [],
@@ -16,6 +17,7 @@ const getters = {
 const mutations = {
     addProfileToResults(state, chatProfile) {
         state.results.push(chatProfile)
+        state.is_filled = true
     },
     getProfileIndex(state, chatProfile) {
         let profileIndex = state.results.findIndex((profile) => {
@@ -40,24 +42,37 @@ const mutations = {
 }
 
 const actions = {
-    serachWithUsername({state, commit}, username) {
+    serachWithUsername({state, commit}, searchText) {
         return this.$axios.get('api/search/search_in_users', {
             params: {
-                'key': username
+                'key': searchText
             }
         })
         .then(({ data }) => {
             let users = data.users_finded
+            users = users.slice(0, 10)
             let found_profiles = []
             users.forEach((profileJson) => {
                 let profile = new Profile()
+                let similarity = 0
                 profile.parseFromJson(profileJson)
-                found_profiles.push(convertToChatProfile(profile))
+                let convertedProfile = convertToChatProfile(profile)
+                similarity += index(searchText.split(''), convertedProfile.username.split(''))
+                similarity += index(searchText.split(''), convertedProfile.firstname.split(''))
+                similarity += index(searchText.split(''), convertedProfile.lastname.split(''))
+                found_profiles.push(
+                    {
+                        profile: convertToChatProfile(profile),
+                        similarity: similarity
+                    })
             })
             if (state.is_filled) {
                 commit('clearResults')
             }
-            commit('setResults', found_profiles)
+            found_profiles.sort((a,b) => {
+                return b.similarity - a.similarity;
+            })
+            found_profiles.forEach((profile) => commit('addProfileToResults', profile.profile))
 
             return state.results
         })

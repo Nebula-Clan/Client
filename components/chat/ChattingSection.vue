@@ -78,7 +78,6 @@ export default {
   computed: {
     ...mapGetters('modules/chat/chatManager',['getWebSocket']),
     getMessages() {
-      console.log('hallo')
       if (this.profile != undefined) {
           this.scrollToBottom()
           return this.profile.messageList
@@ -155,11 +154,9 @@ export default {
       }
     },
     recvMessage(text) {
-      console.log(text)
       if (text == undefined || text == null || text.length == 0) {
         return
       }
-      console.log(text.length)
       let sendMessageReq = new SendMessageRequestJson(text, this.username)
       this.getWebSocket.SendRequest(sendMessageReq)
 
