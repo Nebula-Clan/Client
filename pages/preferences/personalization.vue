@@ -6,10 +6,12 @@
       <v-switch label="Dark Mode" v-model="darkMode" @change="themeChanged">
       </v-switch>
       <div class="text-center">
-        <img
+        <v-img
           width="350"
           alt=""
-          src="../../static/user-settings/personalization.svg">
+          contain
+          :src="require('../../static/user-settings/personalization.svg')">
+        </v-img>
       </div>
     </v-card-text>
   </v-card>

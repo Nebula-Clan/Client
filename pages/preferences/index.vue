@@ -1,6 +1,10 @@
 <template>
   <v-container class="text-center">
-    <img height="400" alt="preferences" src="../../static/user-settings/setting.svg">
+    <v-img height="400px"
+           contain
+         class="img"
+         alt="preferences"
+           :src="require('../../static/user-settings/setting.svg')"></v-img>
   </v-container>
 </template>
 

@@ -6,12 +6,12 @@
     <v-card-text>
       <v-container>
         <v-text-field
-          outlined
-          type="text"
-          @input="search()"
-          placeholder="Search community"
+          v-model="searchKey"
           append-icon="mdi-magnify"
-          v-model="searchKey">
+          outlined
+          placeholder="Search community"
+          type="text"
+          @input="search()">
         </v-text-field>
         <div class="d-flex justify-end">
           <v-switch
@@ -22,15 +22,16 @@
       </v-container>
 
       <v-container v-if="toggle && pageLoaded" class="card-view">
-      <CommunityCard
-        :community="c"
-        @left="getCommunities"
-        v-for="c in communitiesToShow"
-        :key="c.name" />
+        <CommunityCard
+          v-for="c in communitiesToShow"
+          :key="c.name"
+          :community="c"
+          @left="getCommunities"/>
         <div v-if="communitiesToShow.length === 0" class="text-center">
-          <img alt="empty"
-               height="400px"
-               src="../../static/user-settings/empty.svg" />
+          <v-img :src="require('../../static/user-settings/empty.svg')"
+                 alt="empty"
+                 contain
+                 height="400px"></v-img>
           <h3>It is so quiet here, join into some communities.</h3>
         </div>
       </v-container>
@@ -41,22 +42,23 @@
         <CommunityCardLoader></CommunityCardLoader>
       </v-container>
 
-      <v-container fluid v-else-if="!toggle && pageLoaded" class="grid-com">
+      <v-container v-else-if="!toggle && pageLoaded" class="grid-com" fluid>
         <CommunityItem
-          class="item"
-          :community="c"
-          @left="getCommunities"
           v-for="c in communitiesToShow"
-          :key="c.name" />
-        <div v-if="communitiesToShow.length === 0" class="text-center">
-          <img alt="empty"
-               height="400px"
-               src="../../static/user-settings/empty.svg" />
-          <h3>It is so quiet here, join into some communities.</h3>
-        </div>
+          :key="c.name"
+          :community="c"
+          class="item"
+          @left="getCommunities"/>
+          <div v-if="communitiesToShow.length === 0" class="text-center">
+            <v-img :src="require('../../static/user-settings/empty.svg')"
+                   alt="empty"
+                   contain
+                   height="400px"></v-img>
+            <h3>It is so quiet here, join into some communities.</h3>
+          </div>
       </v-container>
 
-      <v-container fluid v-else-if="!toggle && !pageLoaded" class="grid-com">
+      <v-container v-else-if="!toggle && !pageLoaded" class="grid-com" fluid>
         <CommunityItemLoader></CommunityItemLoader>
         <CommunityItemLoader></CommunityItemLoader>
       </v-container>
@@ -70,6 +72,7 @@ import CommunityCard from '~/components/user-settings/Community-Card'
 import CommunityItem from '~/components/user-settings/Community-Item'
 import CommunityCardLoader from "~/components/user-settings/Community-Card-Loader";
 import CommunityItemLoader from "~/components/user-settings/Community-Item-Loader";
+
 export default {
   name: "UserCommunities",
   components: {CommunityItemLoader, CommunityCardLoader, CommunityItem, CommunityCard},
@@ -104,17 +107,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .card-view {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.card-view {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.grid-com {
+  .item {
+    flex: 1;
   }
-  .grid-com {
-    .item {
-      flex: 1;
-    }
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 </style>

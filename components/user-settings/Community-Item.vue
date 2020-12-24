@@ -1,8 +1,8 @@
 <template>
-  <v-card class="ma-2 pa-2 item"
+  <v-card class="item pa-2 ma-2"
           elevation="0"
           outlined
-          min-width="400px">
+          min-width="250px">
     <v-row>
       <v-col cols="8" class="d-flex">
         <div class="d-flex justify-center align-center">
@@ -10,7 +10,7 @@
             <UserAvatar
               :avatar-src="community.picture"
               :avatar-string="community.name"
-              :size="40"
+              :size="30"
               class="profile-pic"
               color="primary"/>
           </nuxt-link>
@@ -24,6 +24,7 @@
               :loading="loading"
               :color="left? 'accent': 'error'"
               v-bind="attrs"
+              :small="$vuetify.breakpoint.xsOnly"
               v-on="on"
               outlined>
               {{left? 'join': 'leave'}}
@@ -78,4 +79,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 576px) {
+  .item {
+    margin: 10px;
+    padding: 5px;
+  }
+}
 </style>

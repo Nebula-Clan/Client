@@ -1,27 +1,36 @@
 <template>
   <v-card elevation="0">
-    <v-card-title>{{draft.title || 'Untitled'}}</v-card-title>
-    <v-card-subtitle class="primary--text">{{draftDateCreated(draft['date_created'])}}</v-card-subtitle>
+    <v-card-title>{{ draft.title || 'Untitled' }}</v-card-title>
+    <v-card-subtitle class="primary--text">{{ draftDateCreated(draft['date_created']) }}</v-card-subtitle>
     <v-card-text class="d-flex">
-      <img width="150px"
-           v-if="draft['header_image']"
-           class="mx-2 rounded"
-           height="150px"
-           :src="getImageUrl(draft['header_image'])"
-           alt="">
-      <p class="mx-4">
-        {{draft.description || 'No Description'}}
-      </p>
+      <v-row>
+        <v-col md="4" cols="12" class="d-flex">
+          <v-img v-if="draft['header_image']"
+                 :src="getImageUrl(draft['header_image'])"
+                 alt=""
+                 width="200px"
+                 class="mx-2 rounded"
+                 contain>
+          </v-img>
+        </v-col>
+        <v-col md="8" cols="12">
+          <p>
+            {{ draft.description || 'No Description' }}
+          </p>
+        </v-col>
+      </v-row>
+
+
     </v-card-text>
     <v-card-actions class="justify-end">
-      <v-btn icon
+      <v-btn :to="'/new-post?draft=' + draft.id"
              class="mx-2"
-             :to="'/new-post?draft=' + draft.id">
+             icon>
         <v-icon>
           mdi-pencil
         </v-icon>
       </v-btn>
-      <v-dialog v-model="dialog" persistent max-width="290">
+      <v-dialog v-model="dialog" max-width="290" persistent>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
@@ -49,8 +58,7 @@
 </template>
 
 <script>
-import {getImageUrl} from "~/shared-functions/Posts";
-import {draftDateCreated} from "~/shared-functions/Posts";
+import {draftDateCreated, getImageUrl} from "~/shared-functions/Posts";
 
 export default {
   name: "Draft",
@@ -71,15 +79,15 @@ export default {
       }).then(
         () => {
           this.$emit('deleted');
-          this["$notifier"].showMessage({ content: 'Removed!', color: 'success' })
+          this["$notifier"].showMessage({content: 'Removed!', color: 'success'});
+          this.dialog = false;
         }
       ).catch(
         error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
       );
     }
   },
-  computed: {
-  }
+  computed: {}
 }
 </script>
 
