@@ -36,7 +36,7 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
-                  {{item.name}} | {{item.members_number}} <v-icon size="15">mdi-account</v-icon>
+                  {{item.name}} | {{item['members_number']}}
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
