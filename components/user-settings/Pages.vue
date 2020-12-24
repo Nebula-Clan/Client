@@ -33,7 +33,7 @@ export default {
         {icon: 'mdi-account', label: 'Profile', link: '/preferences/profile'},
         {icon: 'mdi-content-save', label: 'Drafts', link: '/preferences/drafts'},
         {icon: 'mdi-account-group', label: 'My Communities', link: '/preferences/communities'},
-        {icon: 'mdi-cog', label: 'Personalization', link: '/preferences/settings'},
+        {icon: 'mdi-cog', label: 'Personalization', link: '/preferences/personalization'},
 
       ]
     }
