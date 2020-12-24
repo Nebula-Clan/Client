@@ -1,15 +1,15 @@
 <template>
   <v-card elevation="0">
     <v-card-title>{{draft.title || 'Untitled'}}</v-card-title>
-    <v-card-subtitle class="primary--text">{{draft.date}}</v-card-subtitle>
+    <v-card-subtitle class="primary--text">{{draftDateCreated(draft['date_created'])}}</v-card-subtitle>
     <v-card-text class="d-flex">
       <img width="150px"
            v-if="draft['header_image']"
            class="mx-2 rounded"
            height="150px"
-           :src="$axios.defaults.baseURL + '/media/' + draft['header_image']"
+           :src="getImageUrl(draft['header_image'])"
            alt="">
-      <p>
+      <p class="mx-4">
         {{draft.description || 'No Description'}}
       </p>
     </v-card-text>
@@ -49,6 +49,9 @@
 </template>
 
 <script>
+import {getImageUrl} from "~/shared-functions/Posts";
+import {draftDateCreated} from "~/shared-functions/Posts";
+
 export default {
   name: "Draft",
   props: ['draft'],
@@ -58,6 +61,8 @@ export default {
     }
   },
   methods: {
+    getImageUrl,
+    draftDateCreated,
     deleteDraft: function () {
       this.$axios.delete('api/draft/delete_draft', {
         params: {
@@ -72,6 +77,8 @@ export default {
         error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
       );
     }
+  },
+  computed: {
   }
 }
 </script>

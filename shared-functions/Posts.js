@@ -9,3 +9,12 @@ export function dateDuration(date) {
     return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
   }
 }
+
+export function getImageUrl(item) {
+  return `${$nuxt.$axios.defaults.baseURL}/media/${item}`;
+}
+
+export function draftDateCreated(date) {
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false};
+  return new Date(date).toLocaleDateString("en-US", options);
+}
