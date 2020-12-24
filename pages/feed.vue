@@ -1,6 +1,8 @@
 <template>
   <v-row class="px-10 py-5">
     <v-col
+      order="3"
+      order-md="1"
       cols="12"
       lg="2"
       md="3"
@@ -9,6 +11,8 @@
       <MenuIconLoader v-show="isPageLoading" :number-of-items="10"/>
     </v-col>
     <v-col
+      order-md="2"
+      order="2"
       cols="12"
       lg="8"
       md="6"
@@ -22,6 +26,8 @@
       <PostQuickViewLoader v-show="isPageLoading" v-for="i in 5" :key="i"/>
     </v-col>
     <v-col
+      order="1"
+      order-md="3"
       cols="12"
       lg="2"
       md="3"
