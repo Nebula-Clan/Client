@@ -71,7 +71,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfile']),
+        ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile', 'addProfileToUserList']),
         onAuthenticate({ data }) {
             data = JSON.parse(data)
             console.log(data)

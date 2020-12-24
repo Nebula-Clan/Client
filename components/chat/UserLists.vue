@@ -148,7 +148,7 @@ export default {
     window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    ...mapActions("modules/chat/chatManager", ["addProfile"]),
+    ...mapActions("modules/chat/chatManager", ["addProfileToUserList"]),
     ...mapActions("modules/chat/search", ["serachWithUsername"]),
     onError({ data }) {
       console.log(data);
@@ -168,7 +168,7 @@ export default {
 
       console.log(data);
       data.data.forEach((item, index) => {
-        this.addProfile(item);
+        this.addProfileToUserList(item);
       });
     },
     reqChats() {

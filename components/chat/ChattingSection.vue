@@ -1,6 +1,12 @@
 <template>
     <v-content style="height:100vh" class="back">
-      <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height">
+      <v-overlay :value="!isLoaded" :absolute="true">
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+      </v-overlay>
+      <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height" ref="profileStatus">
         <v-row no-gutters class="flex-grow-0 flex-shrink-0">
           <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
@@ -9,7 +15,7 @@
             </v-col>
         </v-row>
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
-          <v-col cols="12" class="scrollable" style="overflow-x: hidden" ref="chatList">
+          <v-col cols="12" class="scrollable" style="overflow-x: hidden" ref="chatList" v-on:scroll.passive="handleScroller">
             <v-row v-for="(message, idx) in getMessages" :key="idx">
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
@@ -72,15 +78,19 @@ export default {
         profile: null,
         messages: [],
         observer: null,
-        hasUsername: false
+        hasUsername: false,
+        isLoaded: true,
+        canScrollOnMessage: false
       }
     },
   computed: {
-    ...mapGetters('modules/chat/chatManager',['getWebSocket']),
+    ...mapGetters('modules/chat/chatManager',['getWebSocket', 'getUserListController', 'getSearchListController']),
     getMessages() {
       if (this.profile != undefined) {
+        if (this.canScrollOnMessage) {
           this.scrollToBottom()
-          return this.profile.messageList
+        }
+        return this.profile.messageList
       }
 
       return []
@@ -98,7 +108,6 @@ export default {
     );
   },
   mounted() {
-    this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
     this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
     this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
   },
@@ -112,15 +121,30 @@ export default {
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
      'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
-      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID']),
+      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID', 'getProfileFromSearchList']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
-      this.getProfileByUsername(this.username).then((profile) => {
-        this.profile = profile
-        this.obtainMessages()
-      })
+      this.isLoaded = false
+      this.clearPage()
+
+      if (this.getUserListController.hasProfile(this.username)) {
+        this.getProfileByUsername(this.username).then((profile) => {
+          this.loadProfileAndObtainMessage(profile)
+        })
+      } else if (this.getSearchListController.hasProfile(this.username)) {
+        this.getProfileFromSearchList({
+            username: this.username,
+            transferToUserList: true
+          }).then((profile) => {
+          this.loadProfileAndObtainMessage(profile)
+        })
+      } else {
+
+      }
     },
-    onOpenHandler({ data }) {
+    loadProfileAndObtainMessage(profile) {
+      this.isLoaded = true
+      this.profile = profile
       this.obtainMessages()
     },
     onMessageHandler({ data }) {
@@ -132,7 +156,6 @@ export default {
       let messageJson = data.data
       let isArray = Array.isArray(messageJson)
       this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
-      console.log(isArray)
       if (isArray) {
         this.sortProfileMessages(username)
       }
@@ -219,6 +242,9 @@ export default {
           }, 300)
       });
     },
+    clearPage() {
+      this.profile = null
+    },
     scrollToBottom() {
       this.$nextTick(() => {
         let chatList = this.$refs.chatList
@@ -255,6 +281,15 @@ export default {
       })
       this.getWebSocket.SendRequest(typingMessage)
       console.log('stop')
+    },
+    handleScroller(event) {
+      console.log(`top is ${event.target.scrollTop} and height is ${(event.target.scrollHeight - this.$refs.profileStatus.clientHeight)}`)
+      if (event.target.scrollTop >= (event.target.scrollHeight - this.$refs.profileStatus.clientHeight)) {
+        console.log('haha')
+        this.canScrollOnMessage = true
+      } else {
+        this.canScrollOnMessage = false
+      }
     }
   }
 }

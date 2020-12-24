@@ -6,7 +6,8 @@ const getDefaultState = () => {
     statusMap.set('online', {text: 'online', textColor: 'teal--text text--accent-4', preferred: false})
     statusMap.set('typing', {text: 'typing', textColor: 'blue--text text--darken-1', preferred: true })
     return {
-        profileController: new ProfileListController(),
+        userListController: new ProfileListController(),
+        searchListController: new ProfileListController(),
         websocket: null,
         statusMap: statusMap
     }
@@ -16,18 +17,29 @@ const state = getDefaultState()
   
 const getters = {
     getProfileList: (state) => {
-        return state.profileController.profileList
+        return state.userListController.profileList
     },
     getWebSocket: (state) => {
         return state.websocket
+    },
+    getUserListController: (state) => {
+        return state.userListController
+    },
+    getSearchListController: (state) => {
+        return state.searchListController
     }
 }
   
 const mutations = {
-    addProfileAndParse(state, profileJson) {
+    addProfileToUserListAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
         chatProfile.parseFromJson(profileJson)
-        state.profileController.pushProfileInBack(chatProfile)
+        state.userListController.pushProfileInBack(chatProfile)
+    },
+    addProfileToSearchListAndParse(state, profileJson) {
+        let chatProfile = new ChatProfile()
+        chatProfile.parseFromJson(profileJson)
+        state.userListController.pushProfileInBack(chatProfile)
     },
     addMessageJsonToProfile(state, {findedProfile, messageJson}) {
         findedProfile.pushMessageJson(messageJson)
@@ -57,7 +69,7 @@ const mutations = {
         state.websocket = webScoket
     },
     swapProfileInFront(state, username) {
-        state.profileController.swapProfileToFront(username)
+        state.userListController.swapProfileToFront(username)
     },
     setProfileLastMessage(state, { findedProfile, lastMessage, isJson }) {
         if (isJson) {
@@ -74,15 +86,18 @@ const mutations = {
         if (message !== null && message !== undefined) {
             message.isSeen = true
         }
+    },
+    transferProfileFromSearchListToUserList(state, { findedProfile }) {
+        state.userListController.pushProfileInBack(findedProfile)
     }
 }
   
 const actions = {
     getProfileWithUsername: ({ state, commit}, username) => {
-        return state.profileController.findProfile(username)
+        return state.userListController.findProfile(username)
     },
     pushMessageJsonToProfile({ state, commit}, {username, messageJson, isArray}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -96,7 +111,7 @@ const actions = {
         return true
     },
     pushMessageToProfile({ state, commit}, {username, messageInstance, isArray}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -110,7 +125,7 @@ const actions = {
         return true
     },
     sortProfileMessages({ state, commit }, username) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -118,8 +133,12 @@ const actions = {
         commit('sortProfileMessages', {findedProfile})
         return true
     },
-    addProfile({ state, commit}, profileJson) {
-        commit('addProfileAndParse', profileJson)
+    addProfileToUserList({ state, commit}, profileJson) {
+        commit('addProfileToUserListAndParse', profileJson)
+        return true
+    },
+    addProfileToSearchList({ state, commit}, profileJson) {
+        commit('addProfileToSearchListAndParse', profileJson)
         return true
     },
     setWebSocket({ state, commit}, webSocket) {
@@ -127,7 +146,7 @@ const actions = {
         return true
     },
     getProfileByUsername: ({ state, commit }, username) => {
-        return state.profileController.findProfile(username)
+        return state.userListController.findProfile(username)
     },
     swapProfileToFront: ({ state, commit }, username) => {
         commit('swapProfileInFront', username)
@@ -136,7 +155,7 @@ const actions = {
         return state.statusMap.get(status)
     },
     setProfileStatus({ state, commit }, {username , status}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -145,7 +164,7 @@ const actions = {
         return true
     },
     addUnseenToProfile({ state, commit }, {username , unseenCount}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -154,7 +173,7 @@ const actions = {
         return true
     },
     setObtainMessageStatus({ state, commit }, {username , obtainStatus}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -163,7 +182,7 @@ const actions = {
         return true
     },
     setProfileLastMessage({ state, commit }, {username , lastMessage, isJson}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -172,7 +191,7 @@ const actions = {
         return true
     },
     setValidationOfProfileImg({ state, commit }, {username, isValid}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
@@ -181,14 +200,35 @@ const actions = {
         return true
     },
     seenProfileMessageWithID({ state, commit }, {username, messageID}) {
-        let findedProfile = state.profileController.findProfile(username)
+        let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
 
         commit('seenProfileMessageWithID', { findedProfile, messageID })
         return true
-    }
+    },
+    transferProfileFromSearchListToUserList({ state, commit }, {username, messageID}) {
+        let findedProfile = state.userListController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        commit('transferProfileFromSearchListToUserList', { findedProfile })
+        return true
+    },
+    getProfileFromSearchList({ state, commit }, {username, transferToUserList }) {
+        let findedProfile = state.searchListController.findProfile(username)
+        if (findedProfile == undefined || findedProfile == null) {
+            return false
+        }
+
+        if (transferToUserList) {
+            commit('transferProfileFromSearchListToUserList', { findedProfile })
+        }
+
+        return findedProfile
+    },
 }
 
 
