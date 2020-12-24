@@ -1,31 +1,32 @@
 <template>
   <div>
     <v-row class="header-image">
-      <img v-if="data.banner !== '/media/null'" :src="$axios.defaults.baseURL + data.banner">
+      <img alt="" v-if="data.banner !== '/media/null'" :src="$axios.defaults.baseURL + data.banner">
     </v-row>
     <v-row class="logo elevation-2">
-      <v-col class="d-flex align-center">
-        <div class="d-flex align-center ml-10">
-          <div class="mr-2 d-flex align-center">
+      <v-col order-md="1"  md="4" cols="3" class="d-flex align-center">
+        <div class="d-flex align-center ml-10 col-left">
+          <div class="mr-2 col-left-item d-flex align-center">
             <v-icon color="primary">mdi-calendar</v-icon>
             <span style="font-size: small" class="primary--text">{{getDate()}}</span>
           </div>
-          <div class="ml-2 d-flex align-center">
+          <div class="ml-2 col-left-item d-flex align-center">
             <v-icon color="primary">mdi-account</v-icon>
             <span style="font-size: small" class="primary--text">{{ data.members }}</span>
           </div>
         </div>
       </v-col>
-      <v-col class="text-center d-flex justify-center">
+      <v-col order-md="2"  md="4" cols="6" class="text-center d-flex justify-center">
         <v-avatar class="avatar" size="150">
-          <img :src="$axios.defaults.baseURL + data.logo">
+          <img alt="" :src="$axios.defaults.baseURL + data.logo">
         </v-avatar>
         <h1>{{ data.name }}</h1>
       </v-col>
-      <v-col class="d-flex justify-end align-center">
+      <v-col order-md="3"  md="4" cols="3" class="d-flex justify-end align-center">
         <v-btn
+          :small="$vuetify.breakpoint.xsOnly"
           outlined
-          class="mr-10"
+          class="mr-10 btn-lj"
           :loading="loading"
           :disabled="loading"
           color="primary"
@@ -155,6 +156,19 @@
     }
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  @media screen and (max-width: 576px){
+    .btn-lj {
+      margin: 10px!important;
+    }
+    .col-left {
+      margin: 10px!important;
+      display: inline-grid!important;
+      .col-left-item {
+        margin: 5px!important;
+      }
     }
   }
 </style>
