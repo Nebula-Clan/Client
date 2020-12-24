@@ -20,6 +20,7 @@
       <v-col cols="12">
         <v-container class="pb-0">
           <v-text-field
+            v-model="searchText"
             hide-details
             prepend-inner-icon="mdi-account-search"
             label="Search pepole"
@@ -35,12 +36,14 @@
       <v-col cols="12" class="pb-0">
         <v-container>
           <template v-for="(profile, index) in getChatList" class="pl-0">
-            <Profile
+            <component
+              :is="getComponent"
               :key="(index + 1) * 23"
               class="pl-0"
               :profile="profile"
-              @click.native="loadProfileChat(profile.username)"
-            />
+              :searchedText="searchText"
+              @click.native="loadProfileChat(profile.username)">
+            </component>
             <v-divider :key="(index + 1) * 27" class="ml-14 mr-3"></v-divider>
           </template>
         </v-container>
@@ -53,6 +56,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 import Profile from "~/components/chat/Profile";
+import SearchResultProfile from "~/components/chat/SearchResultProfile";
 
 import { AuthenticationRequestJson } from "~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson";
 import { GetChatUsersRequestJson } from "~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson";
@@ -73,7 +77,12 @@ export default {
         width: 0,
         height: 0
       },
-      readyState: -1
+      readyState: -1,
+      searchText: '',
+      switchToSearchMode: false,
+      searchReqTimeOut: null,
+      timeoutForSearchReq: 2000,
+      maxResults: 10
     };
   },
   computed: {
@@ -81,13 +90,25 @@ export default {
       "getWebSocket",
       "getProfileList"
     ]),
+    ...mapGetters("modules/chat/search", [
+      "getResults"
+    ]),
     userListHeight() {
       return {
         "max-height": this.window.height + "px"
       };
     },
     getChatList() {
+      if (this.switchToSearchMode) {
+        return this.getResults.slice(0, this.maxResults);
+      }
       return this.getProfileList;
+    },
+    getComponent() {
+      if (this.switchToSearchMode) {
+        return SearchResultProfile
+      }
+      return Profile
     }
   },
   watch: {
@@ -96,6 +117,17 @@ export default {
          this.$forceUpdate() 
       },
       deep: true
+    },
+    searchText: {
+      handler: function(val, oldVal) {
+        if (val.length > 0) {
+          this.setSearthTimeout()
+          this.switchToSearchMode = true
+        } else {
+          this.switchToSearchMode = false
+          this.clearSearchTimeout()
+        }
+      }
     }
   },
   created() {
@@ -117,6 +149,7 @@ export default {
   },
   methods: {
     ...mapActions("modules/chat/chatManager", ["addProfile"]),
+    ...mapActions("modules/chat/search", ["serachWithUsername"]),
     onError({ data }) {
       console.log(data);
     },
@@ -143,6 +176,21 @@ export default {
         let getUserReq = new GetChatUsersRequestJson();
         this.getWebSocket.SendRequest(getUserReq);
       }
+    },
+    clearSearchTimeout() {
+      if (this.searchReqTimeOut !== null) {
+        clearTimeout(this.searchReqTimeOut)
+        this.searchReqTimeOut = null
+      }
+    },
+    setSearthTimeout() {
+      this.clearSearchTimeout()
+      this.searchReqTimeOut = setTimeout(() => {
+        this.reqForSearch()
+      }, this.timeoutForSearchReq)
+    },
+    reqForSearch() {
+      this.serachWithUsername(this.searchText)
     }
   }
 };

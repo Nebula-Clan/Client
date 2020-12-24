@@ -144,7 +144,6 @@ export default {
       if (this.profile && this.profile.isObtainedMessages) {
         return
       }
-      console.log('omgggg')
 
       if (this.username != undefined) {
         let getUserMessageReq = new GetUserMessagesRequestJson(this.username, this.profile.numberOfMessage)
@@ -187,7 +186,14 @@ export default {
       console.log(data)
 
       let messageID = data.id
+      let username = data.user.username
 
+      this.seenProfileMessageWithID({
+        username: username, 
+        messageID: messageID
+        }).then((status) => {
+        console.log(status)
+      })
     },
     seenMessage(messageID) {
       this.seenProfileMessageWithID({

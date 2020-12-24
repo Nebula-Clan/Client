@@ -77,6 +77,17 @@ export default {
             this.removeFromObserver()
         }
     },
+    watch: {
+        'message.isSeen': {
+            handler: function(val) {
+                console.log(this.message)
+                console.log(this.getMessgaeStatusIcon)
+                console.log(val)
+                this.$forceUpdate()
+            },
+            deep: true
+        }
+    },
     computed: {
         getClass() {
             if (this.message.isSender) {
