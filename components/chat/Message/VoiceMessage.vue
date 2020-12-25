@@ -12,7 +12,6 @@
             <div class="d-inline-flex ml-2">
                 {{ playedSoFar }} / {{ audioTime }}
             </div>
-            <!-- <input type='file' accept='audio/*' @change='openFile'><br> -->
     </v-container>
 </template>
 
@@ -20,12 +19,12 @@
 import { duration } from './utils/recorder'
 
 export default {
-    // props: {
-    //     audioUrl: {
-    //         required: true,
-    //         type: String
-    //     }
-    // },
+    props: {
+        audioUrl: {
+            required: true,
+            type: String
+        }
+    },
     data() {
         return {
             audio: null,
@@ -40,12 +39,11 @@ export default {
         }
     },
     mounted() {
-
-        // duration(this.audioUrl).then((audioTime) => this.audioTime = audioTime)
+        this.audio = new Audio(this.audioUrl);
+        duration(this.audioUrl).then((audioTime) => this.audioTime = audioTime)
     },
     methods: {
         playOrStop() {
-            console.log(this.audio)
             if (this.isPlaying) {
                 this.audio.pause()
                 this.isPlaying = false

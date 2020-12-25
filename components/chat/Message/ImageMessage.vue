@@ -39,40 +39,6 @@ export default {
         valueOfProgressBar() {
             return (this.playedSoFar / this.audioTime)
         }
-    },
-    mounted() {
-
-        // duration(this.audioUrl).then((audioTime) => this.audioTime = audioTime)
-    },
-    methods: {
-        playOrStop() {
-            console.log(this.audio)
-            if (this.isPlaying) {
-                this.audio.pause()
-                this.isPlaying = false
-            } else {
-                this.audio.play()
-                this.isPlaying = true
-            }
-        },
-        openFile(event) {
-            var input = event.target;
-
-            let reader = new FileReader();
-
-            reader.readAsArrayBuffer(input.files[0])
-            console.log(input.files[0])
-
-            reader.onload = (e) => {
-                let blob = new Blob([new Uint8Array(e.target.result)])
-                this.audio = new Audio(URL.createObjectURL(blob))
-                console.log(this.audio)
-                duration(URL.createObjectURL(blob)).then((audioTime) => this.audioTime = audioTime)
-            }
-            reader.onerror = function(e) {
-                console.log(e)
-            }
-        }
     }
 }
 </script>

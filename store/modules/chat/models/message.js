@@ -15,6 +15,10 @@ class Message {
         this._messageBody = body
     }
 
+    set messageType(type) {
+        this._messageType = type
+    }
+
     set messageUUID(uuid) {
         this._uuid = uuid
     }
@@ -33,6 +37,7 @@ class Message {
         this.isSeen = false
         this.isSender = false
         this.messageBody = ''
+        this.messageType = 0
     }
 
     parseFromJson(json) {
@@ -42,6 +47,7 @@ class Message {
         this.isSender = json.is_sender
         this.messageBody = json.text
         this.messageUUID = json.uuid
+        this.messageType = json.file_type
     }
 
     _praseDateString(dateString) {
@@ -58,6 +64,10 @@ class Message {
 
     get messageBody() {
         return this._messageBody
+    }
+
+    get messageType() {
+        return this._messageType
     }
 
     get messageUUID() {

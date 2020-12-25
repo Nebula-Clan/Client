@@ -11,6 +11,9 @@
         <v-card max-width="350" elevation="3" :class="['card-back', 'text--secondary', 'pa-3', 'card-border', getTriangleClass]">
             <v-card-text :class="getText" v-html="getMessage">
             </v-card-text>
+            <component :is="getMessageComponent" v-bind="messageProps" v-if="isComponentMessage">
+
+            </component>
             <v-card-actions class="pa-0">
                 <div class="mb-0 ml-auto" style="font-size:13px">
                     {{ date() }}
@@ -27,6 +30,7 @@
 <script>
 import VoiceMessage from './VoiceMessage'
 import ImageMessage from './ImageMessage'
+import FileMessage from './FileMessage'
 
 export default {
     props: {
@@ -79,15 +83,45 @@ export default {
     watch: {
         'message.isSeen': {
             handler: function(val) {
-                // console.log(this.message)
-                // console.log(this.getMessgaeStatusIcon)
-                // console.log(val)
                 this.$forceUpdate()
             },
             deep: true
         }
     },
     computed: {
+        isComponentMessage() {
+            if (this.message.messageType !== 0) {
+                return true
+            }
+
+            return false
+        },
+        messageProps() {
+            if (this.message.messageType === 1) {
+                return {
+                    imageSrc: this.$axios.defaults.baseURL + '/media/' + this.message.messageBody
+                }
+            } else if (this.message.messageType === 2) {
+                return {
+                    audioUrl: this.$axios.defaults.baseURL + '/media/' + this.message.messageBody
+                }
+
+            } else if (this.messagemessageType === 3) {
+
+            } 
+
+            return null
+        },
+        getMessageComponent() {
+            if (this.message.messageType === 1) {
+                return ImageMessage
+            } else if (this.message.messageType === 2) {
+                return VoiceMessage
+            } else if (this.message.messageType === 3) {
+                return FileMessage
+            } 
+            return null
+        },
         getClass() {
             if (this.message.isSender) {
                 return 'ml-auto mr-2'
@@ -118,6 +152,10 @@ export default {
             }
         },
         getMessage() {
+            if (this.message.messageType !== 0 ) {
+                return
+            }
+
             if (this.message == undefined || this.message == null) {
                 return this.message
             }

@@ -35,7 +35,9 @@
                     v-if="hasUsername"
                     :show-emoji="true"
                     :show-file="false"
-                    @recMessage="sendMessage"
+                    @sendTextMessage="sendMessage"
+                    @sendFileMessage="sendFile"
+                    @sendVoiceMessage="sendVoice"
                     @typing="typing"
                     @stopTyping="stop"
                     />
@@ -123,6 +125,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('modules/chat/uploadFile', ['uploadMessageWithFile']),
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
      'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
       'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID',
@@ -175,7 +178,8 @@ export default {
         return
       }
       let username = this.username
-      let messageInstance = this.createMessageInstanceWithText(text)
+      let messageInstance = this.createMessageInstance()
+      messageInstance.messageBody = text
       let isArray = false
 
       console.log(messageInstance)
@@ -229,6 +233,32 @@ export default {
       let seenMessage = new SeenMessageRequestJson(messageID)
       this.getWebSocket.SendRequest(seenMessage)
     },
+    sendFile(file) {
+      let fileMessage = this.createMessageInstance()
+      if (file.type.includes('image')) {
+        fileMessage.messageType = 1
+      } else {
+        fileMessage.messageType = 3
+      }
+
+      this.uploadFileMessage(fileMessage, file)
+    },
+    sendVoice(audioBlob) {
+      let voiceMessage = this.createMessageInstance()
+      voiceMessage.messageType = 2
+
+      this.uploadFileMessage(voiceMessage, audioBlob)
+    },
+    uploadFileMessage(messageInstance, file) {
+      this.uploadMessageWithFile({
+        toUsername: this.username,
+        messageInstance: messageInstance,
+        file: file }).then((fileUrl) => {
+          messageInstance.messageBody = fileUrl
+          console.log(messageInstance)
+          this.pushMessageAndScroll(this.username, messageInstance, false)
+        })
+    },
     onMessageSeen(entries) {
       entries.forEach(({ target, isIntersecting}) => {
           if (!isIntersecting) {
@@ -255,11 +285,10 @@ export default {
         chatList.scrollTop = chatList.scrollHeight;
       })
     },
-    createMessageInstanceWithText(text) {
+    createMessageInstance() {
       let messageInstance = new MessageClass()
 
       messageInstance.messageDate = new Date()
-      messageInstance.messageBody = text
       messageInstance.isSeen = false
       messageInstance.isSender = true
       messageInstance.messageUUID = uuidv4()

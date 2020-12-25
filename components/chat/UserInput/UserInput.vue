@@ -4,16 +4,17 @@
       <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" v-model="text"
        style="border-top: 1px solid gray;border-radius:0px" multi-line auto-grow rows="1"
        hide-details flat solo placeholder="Send message ..."
-       @keydown="handleKey">
+       @keydown="handleKey" :disabled="isInputDisable">
       </v-textarea>
     </v-col>
     <v-col cols="12" class="px-3 d-flex mb-2">
-      <v-icon slot="prepend-inner" class="mr-auto" style="filter: contrast(50%);">
-        mdi-attachment
-      </v-icon>
-      <EmojiIcon slot="append" class="ml-auto" @emoji="appendEmoji" />
-      <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessage">
-        mdi-send-outline
+      <v-file-input @[canChoseFile].native.prevent="deleteFile" class="d-flex"
+      style="filter: contrast(50%);" :prepend-icon="fileIcon" hide-input dense
+        v-model="file"
+      ></v-file-input>
+      <EmojiIcon slot="append" class="ml-auto mt-auto mb-auto" @emoji="appendEmoji" />
+      <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessageOrRecord">
+        {{ getSendIcon }}
       </v-icon>
     </v-col>
   </v-row>
@@ -30,6 +31,8 @@ import IconCross from './icons-utils/icons/IconCross'
 import IconOk from './icons-utils/icons/IconOk.vue'
 import IconSend from './icons-utils/icons/IconSend.vue'
 import store from './store/'
+
+import { recordAudio, duration } from '~/components/chat/Message/utils/recorder'
 
 export default {
   components: {
@@ -48,11 +51,57 @@ export default {
       showEmoji: false,
       showFile: true,
       text: null,
-      timeOut: null
+      timeOut: null,
+      uploadedFile: false,
+      file: null,
+      recorder: null
+    }
+  },
+  watch: {
+    file: {
+      handler: function(val, oldval) {
+        if (val !== undefined && val !== null) {
+          this.text = val.name
+          this.uploadedFile = true
+        } else {
+          this.text = null
+          this.uploadedFile = false
+        }
+      }
     }
   },
   computed: {
     isEditing() {
+      return false
+    },
+    fileIcon() {
+      if (this.uploadedFile) {
+        return 'mdi-file-remove-outline'
+      }
+
+      return 'mdi-attachment'
+    },
+    canChoseFile() {
+      if (this.uploadedFile) {
+        return 'click'
+      }
+
+      return null
+    },
+    getSendIcon() {
+      if (this.text === null || this.text === undefined || this.text === '') {
+        return 'mdi-microphone-outline'
+      } else if (this.recorder !== null) {
+        return 'mdi-microphone-settings'
+      }
+
+      return 'mdi-send-outline'
+    },
+    isInputDisable() {
+      if (this.uploadedFile || this.recorder !== null) {
+        return true
+      }
+
       return false
     }
   },
@@ -60,24 +109,71 @@ export default {
     
   },
   methods: {
+    deleteFile() {
+      this.file = null
+    },
     appendEmoji(emoji) {
       this.text += emoji
+    },
+    sendMessageOrRecord() {
+      if (this.text === null || this.text === undefined || this.text === '' || this.recorder !== null) {
+        this.handleRecord()
+      } else {
+        this.sendMessage()
+      }
     },
     sendMessage() {
       if (this.timeOut !== null) {
         clearTimeout(this.timeOut)
         this.timeOut = null
       }
+
+      if (this.uploadedFile) {
+        this.sendFileMessage()
+      } else if (this.recorder !== null) {
+        this.sendVoiceMessage()
+      } else {
+        this.sendTextMessage()
+      }
+    },
+    sendTextMessage() {
       this.$emit('stopTyping')
       
       if (this.text != '' || this.text != null || this.text != undefined) {
-        this.$emit('recMessage', this.text.replace(/^\s+|\s+$/g, ''))
+        this.$emit('sendTextMessage', this.text.replace(/^\s+|\s+$/g, ''))
         this.$nuxt.$emit('hideEmoji')
-        setTimeout(()=> this.text = '', 50)
+        this.cleanUpInput()
       }
     },
-    cancelFile() {
-      this.file = null
+    sendFileMessage() {
+      this.$emit('sendFileMessage', this.file)
+      this.cleanUpInput()
+    },
+    sendVoiceMessage() {
+      this.recorder.then((record) => {
+          record.stop().then(({ audio, audioBlob, audioUrl, play }) => {
+              this.$emit('sendVoiceMessage', audioBlob)
+              this.cleanUpInput()
+          })
+      })
+    },
+    handleRecord() {
+      if (this.recorder !== null) {
+        this.sendMessage()
+      } else {
+        this.startRecordingVoice()
+      }
+    },
+    startRecordingVoice() {
+      this.text = 'Recording...'
+      this.recorder = recordAudio()
+      this.recorder
+      .then((recorder) => {
+        recorder.start()
+      })
+      .catch((err) => {
+        this.cleanUpInput()
+      })
     },
     handleKey(event) {
       console.log(event)
@@ -86,9 +182,6 @@ export default {
         return
       }
       this.handleTyping()
-    },
-    _handleFileSubmit(file) {
-      this.file = file
     },
     handleTyping() {
       if (this.timeOut === null) {
@@ -104,6 +197,13 @@ export default {
           this.timeOut = null
         }, 5000)
       }
+    },
+    cleanUpInput() {
+      setTimeout(()=> { 
+        this.text = ''
+        this.file = null
+        this.recorder = null
+       } , 50)
     }
   }
 }
