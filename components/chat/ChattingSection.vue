@@ -181,12 +181,12 @@ export default {
       data = JSON.parse(data)
       console.log(data)
 
-      let messageID = data.id
+      let messageUUID = data.uuid
       let username = data.user.username
 
       this.seenProfileMessageWithID({
         username: username, 
-        messageID: messageID
+        messageUUID: messageUUID
         }).then((status) => {
         console.log(status)
       })

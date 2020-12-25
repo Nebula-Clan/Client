@@ -81,8 +81,8 @@ const mutations = {
     setValidationOfProfileImg(state, { findedProfile, isValid }) {
         findedProfile.isValidProfileImg = isValid
     },
-    seenProfileMessageWithID(state, { findedProfile, messageID }) {
-        let message = findedProfile.messageList.find(message => message.messageID == messageID)
+    seenProfileMessageWithID(state, { findedProfile, messageUUID }) {
+        let message = findedProfile.messageList.find(message => message.messageUUID == messageUUID)
         if (message !== null && message !== undefined) {
             message.isSeen = true
         }
@@ -199,13 +199,13 @@ const actions = {
         commit('setValidationOfProfileImg', { findedProfile, isValid })
         return true
     },
-    seenProfileMessageWithID({ state, commit }, {username, messageID}) {
+    seenProfileMessageWithID({ state, commit }, {username, messageUUID}) {
         let findedProfile = state.userListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
 
-        commit('seenProfileMessageWithID', { findedProfile, messageID })
+        commit('seenProfileMessageWithID', { findedProfile, messageUUID })
         return true
     },
     transferProfileFromSearchListToUserList({ state, commit }, {username, messageID}) {
