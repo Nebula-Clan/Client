@@ -91,8 +91,18 @@ class ChatProfile {
         this.numberOfMessage = 0
         this.isValidProfileImg = true
     }
+    
+    parseProfileFromJson(json) {
+        this.profileID = json.id
+        this.username = json.username
+        this.firstname = json.first_name
+        this.lastname = json.last_name
+        this.description = json.biology
+        this.profileImageUrl = json.profile_picture
+        this.profileBannerUrl = json.banner_picture
+    }
 
-    parseFromJson(json) {
+    parseProfileWithMessageFromJson(json) {
         this.profileID = json.user.id
         this.username = json.user.username
         this.firstname = json.user.first_name

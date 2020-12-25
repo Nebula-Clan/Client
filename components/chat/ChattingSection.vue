@@ -57,6 +57,7 @@ import ProfileStatus from './ProfileStatus'
 import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
 import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
 import { SeenMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/seenmessagerequestjson'
+import { GetProfileInfoRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getprofileinforequestjson'
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
@@ -65,6 +66,7 @@ import { Message as MessageClass } from '~/store/modules/chat/models/message'
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
 import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
 import { SeenMessageHandler } from '~/store/modules/chat/helper-classes/handlers/seenmessagehandler'
+import { GetProfileInfoResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getprofileinfohandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
@@ -81,7 +83,8 @@ export default {
         observer: null,
         hasUsername: false,
         isLoaded: true,
-        canScrollOnMessage: true
+        canScrollOnMessage: true,
+        isFromSearch: false
       }
     },
   computed: {
@@ -110,6 +113,7 @@ export default {
   },
   mounted() {
     this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
+    this.getWebSocket.AddOnMessageHandler(new GetProfileInfoResponseHandler(this.onGetNewProfileInfo))
   },
   updated() {
     if ((this.username === undefined || this.username === null) && this.hasUsername) {
@@ -121,11 +125,12 @@ export default {
   methods: {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
      'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
-      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID', 'getProfileFromSearchList']),
+      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID',
+        'getProfileFromSearchList', 'addProfileToSearchList', 'getProfileFromSearchListWithUsername']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.clearPage()
-
+      
       if (this.getUserListController.hasProfile(this.username)) {
         this.getProfileByUsername(this.username).then((profile) => {
           this.loadProfileAndObtainMessage(profile)
@@ -135,16 +140,19 @@ export default {
             username: this.username,
             transferToUserList: true
           }).then((profile) => {
-          this.loadProfileAndObtainMessage(profile)
+            this.isFromSearch = true
+            this.loadProfileAndObtainMessage(profile)
         })
       } else {
-
+        this.getWebSocket.SendRequest(new GetProfileInfoRequestJson(this.username))
       }
     },
     loadProfileAndObtainMessage(profile) {
       this.isLoaded = true
       this.profile = profile
-      this.obtainMessages()
+      if (!this.isFromSearch) {
+        this.obtainMessages()
+      }
     },
     obtainMessages() {
       console.log(this.getWebSocket)
@@ -176,6 +184,23 @@ export default {
       this.getWebSocket.SendRequest(sendMessageReq)
 
       this.pushMessageAndScroll(username, messageInstance, isArray)
+    },
+    onGetNewProfileInfo({ data }) {
+      data = JSON.parse(data)
+
+      this.addProfileToSearchList(data.user)
+      .then((status) => {
+        if (status) {
+          this.getProfileFromSearchListWithUsername(this.username)
+          .then((profile) => {
+            this.isFromSearch = true
+            console.log(profile)
+            if (profile !== null && profile !== undefined && profile.username == this.username) {
+              this.loadProfileAndObtainMessage(profile)
+            }
+          })
+        }
+      })
     },
     onSeenMessage({ data }) {
       data = JSON.parse(data)
@@ -221,6 +246,7 @@ export default {
     clearPage() {
       this.profile = null
       this.isLoaded = false
+      this.isFromSearch = false
       this.canScrollOnMessage = true
     },
     scrollToBottom() {

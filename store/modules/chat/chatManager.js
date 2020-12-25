@@ -33,13 +33,13 @@ const getters = {
 const mutations = {
     addProfileToUserListAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
-        chatProfile.parseFromJson(profileJson)
+        chatProfile.parseProfileWithMessageFromJson(profileJson)
         state.userListController.pushProfileInBack(chatProfile)
     },
     addProfileToSearchListAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
-        chatProfile.parseFromJson(profileJson)
-        state.userListController.pushProfileInBack(chatProfile)
+        chatProfile.parseProfileFromJson(profileJson)
+        state.searchListController.pushProfileInBack(chatProfile)
     },
     addMessageJsonToProfile(state, {findedProfile, messageJson}) {
         findedProfile.pushMessageJson(messageJson)
@@ -95,6 +95,9 @@ const mutations = {
 const actions = {
     getProfileWithUsername: ({ state, commit}, username) => {
         return state.userListController.findProfile(username)
+    },
+    getProfileFromSearchListWithUsername: ({ state, commit}, username) => {
+        return state.searchListController.findProfile(username)
     },
     pushMessageJsonToProfile({ state, commit}, {username, messageJson, isArray}) {
         let findedProfile = state.userListController.findProfile(username)
