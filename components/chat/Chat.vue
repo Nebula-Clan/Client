@@ -46,19 +46,23 @@ export default {
         this.websocket.AddOnMessageHandler(new RecieveMessageHandler(this.onRecieveMessage))
         this.websocket.AddOnMessageHandler(new ControlMessageHandler(this.onStatusHandler))
         this.websocket.AddOnMessageHandler(new BaseHandler(this.printData))
-        // this.websocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onGetAllUserMessage))
+        this.websocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onGetAllUserMessage))
 
         this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
+        this.websocket.AddOnCloseHandler(new BaseHandler(this.onClose))
     },
     methods: {
         ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile',
          'addProfileToUserList', 'swapProfileToFront', 'setProfileStatus', 'addUnseenToProfile',
          'setProfileLastMessage', 'sortProfileMessages', 'setObtainMessageStatus']),
         onErrorWebSocket(event) {
-            console.log(event.data)
+            console.log(event)
         },
-        printData({ data }) {
-            console.log(data)
+        printData(event) {
+            console.log(event)
+        },
+        onClose(event) {
+            console.log(event)
         },
         onRecieveMessage({ data }) {
             data = JSON.parse(data)
@@ -103,26 +107,27 @@ export default {
         },
         onGetAllUserMessage({ data }) {
             data = JSON.parse(data)
+            console.log(data)
 
             data.data = JSON.parse(data.data)
             let messageJson = data.data
             let isArray = Array.isArray(messageJson)
-            let username = ''
-            if (isArray) {
-                username = messageJson[0]._from.username
-            } else {
-                username = messageJson._from.username
-            }
+            let for_username = data._user.username
+            console.log(for_username)
 
-            this.pushMessageJsonToProfile({username, messageJson, isArray})
-            .then((sta) => {
-                console.log(sta)
+            this.pushMessageJsonToProfile({
+                username: for_username, 
+                messageJson: messageJson,
+                isArray: isArray})
+            .then((status) => {
                 if (isArray) {
-                    this.sortProfileMessages(username)
+                    this.sortProfileMessages(for_username)
                 }
-                let username = this.username
+
                 let obtainStatus = true
-                this.setObtainMessageStatus({username, obtainStatus})
+                this.setObtainMessageStatus({
+                    username: for_username,
+                    obtainStatus: obtainStatus})
             })
         }
     }

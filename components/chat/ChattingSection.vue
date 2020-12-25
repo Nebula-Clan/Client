@@ -35,7 +35,7 @@
                     v-if="hasUsername"
                     :show-emoji="true"
                     :show-file="false"
-                    @recMessage="recvMessage"
+                    @recMessage="sendMessage"
                     @typing="typing"
                     @stopTyping="stop"
                     />
@@ -48,6 +48,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { v4 as uuidv4 } from 'uuid';
 
 import UserInput from './UserInput/UserInput'
 import Message from './Message/Message'
@@ -80,7 +81,7 @@ export default {
         observer: null,
         hasUsername: false,
         isLoaded: true,
-        canScrollOnMessage: false
+        canScrollOnMessage: true
       }
     },
   computed: {
@@ -108,7 +109,6 @@ export default {
     );
   },
   mounted() {
-    this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
     this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
   },
   updated() {
@@ -124,7 +124,6 @@ export default {
       'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID', 'getProfileFromSearchList']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
-      this.isLoaded = false
       this.clearPage()
 
       if (this.getUserListController.hasProfile(this.username)) {
@@ -147,19 +146,6 @@ export default {
       this.profile = profile
       this.obtainMessages()
     },
-    onMessageHandler({ data }) {
-      data = JSON.parse(data)
-
-      console.log(data)
-      data.data = JSON.parse(data.data)
-      let username = this.username
-      let messageJson = data.data
-      let isArray = Array.isArray(messageJson)
-      this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
-      if (isArray) {
-        this.sortProfileMessages(username)
-      }
-    },
     obtainMessages() {
       console.log(this.getWebSocket)
       console.log(this.profile)
@@ -176,30 +162,20 @@ export default {
         this.setObtainMessageStatus({username, obtainStatus})
       }
     },
-    recvMessage(text) {
+    sendMessage(text) {
       if (text == undefined || text == null || text.length == 0) {
         return
       }
-      let sendMessageReq = new SendMessageRequestJson(text, this.username)
-      this.getWebSocket.SendRequest(sendMessageReq)
-
       let username = this.username
-      let messageInstance = new MessageClass()
+      let messageInstance = this.createMessageInstanceWithText(text)
       let isArray = false
 
-      messageInstance.messageDate = new Date()
-      messageInstance.messageBody = text
-      messageInstance.isSeen = false
-      messageInstance.isSender = true
+      console.log(messageInstance)
 
-      this.pushMessageToProfile({username, messageInstance, isArray})
-      this.swapProfileToFront(username)
-      this.setProfileLastMessage({
-          username: username,
-          lastMessage: messageInstance,
-          isJson: false
-      })
-      this.scrollToBottom()
+      let sendMessageReq = new SendMessageRequestJson(text, username, messageInstance.messageUUID)
+      this.getWebSocket.SendRequest(sendMessageReq)
+
+      this.pushMessageAndScroll(username, messageInstance, isArray)
     },
     onSeenMessage({ data }) {
       data = JSON.parse(data)
@@ -244,12 +220,35 @@ export default {
     },
     clearPage() {
       this.profile = null
+      this.isLoaded = false
+      this.canScrollOnMessage = true
     },
     scrollToBottom() {
       this.$nextTick(() => {
         let chatList = this.$refs.chatList
         chatList.scrollTop = chatList.scrollHeight;
       })
+    },
+    createMessageInstanceWithText(text) {
+      let messageInstance = new MessageClass()
+
+      messageInstance.messageDate = new Date()
+      messageInstance.messageBody = text
+      messageInstance.isSeen = false
+      messageInstance.isSender = true
+      messageInstance.messageUUID = uuidv4()
+
+      return messageInstance
+    },
+    pushMessageAndScroll(username, messageInstance, isArray) {
+      this.pushMessageToProfile({username, messageInstance, isArray})
+      this.swapProfileToFront(username)
+      this.setProfileLastMessage({
+          username: username,
+          lastMessage: messageInstance,
+          isJson: false
+      })
+      this.scrollToBottom()
     },
     getPrev(index) {
       if (index === 0) {
@@ -283,7 +282,6 @@ export default {
       console.log('stop')
     },
     handleScroller(event) {
-      console.log(`top is ${event.target.scrollTop} and height is ${(event.target.scrollHeight - this.$refs.profileStatus.clientHeight)}`)
       if (event.target.scrollTop >= (event.target.scrollHeight - this.$refs.profileStatus.clientHeight)) {
         console.log('haha')
         this.canScrollOnMessage = true

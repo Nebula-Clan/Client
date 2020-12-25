@@ -15,6 +15,10 @@ class Message {
         this._messageBody = body
     }
 
+    set messageUUID(uuid) {
+        this._uuid = uuid
+    }
+
     set isSeen(seen) {
         this._seen = seen
     }
@@ -37,6 +41,7 @@ class Message {
         this.isSeen = json.seen
         this.isSender = json.is_sender
         this.messageBody = json.text
+        this.messageUUID = json.uuid
     }
 
     _praseDateString(dateString) {
@@ -53,6 +58,10 @@ class Message {
 
     get messageBody() {
         return this._messageBody
+    }
+
+    get messageUUID() {
+        return this._uuid
     }
 
     get isSeen() {

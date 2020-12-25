@@ -26,6 +26,7 @@
 
 <script>
 import VoiceMessage from './VoiceMessage'
+import ImageMessage from './ImageMessage'
 
 export default {
     props: {
@@ -59,14 +60,12 @@ export default {
     },
     mounted() {
         if (!this.message.isSeen && !this.message.isSender) {
-            console.log(this.message.messageID)
             this.observer.observe(this.$el)
             this.isUnderObserver = true
         } 
     },
     beforeUpdate() {
         if (!this.isUnderObserver && !this.message.isSeen && !this.message.isSender) {
-            console.log(this.message.messageID)
             this.addToObserver()
         } else if (this.isUnderObserver && this.message.isSeen) {
             this.removeFromObserver()
@@ -80,9 +79,9 @@ export default {
     watch: {
         'message.isSeen': {
             handler: function(val) {
-                console.log(this.message)
-                console.log(this.getMessgaeStatusIcon)
-                console.log(val)
+                // console.log(this.message)
+                // console.log(this.getMessgaeStatusIcon)
+                // console.log(val)
                 this.$forceUpdate()
             },
             deep: true
