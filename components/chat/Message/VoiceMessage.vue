@@ -10,7 +10,7 @@
             <v-icon @click="playOrStop"> mdi-play </v-icon>
         </v-progress-circular>
             <div class="d-inline-flex ml-2">
-                {{ playedSoFar }} / {{ audioTime }}
+                {{ playedSoFarString }} / {{ audioTimeString }}
             </div>
     </v-container>
 </template>
@@ -31,43 +31,78 @@ export default {
             isPlaying: false,
             audioTime: 1,
             playedSoFar: 0,
+            intervalForPlaying: null,
+            lastTime: null
         }
     },
     computed: {
         valueOfProgressBar() {
-            return (this.playedSoFar / this.audioTime)
+            console.log(this.playedSoFar)
+            console.log(this.audioTime)
+            console.log(parseFloat(this.playedSoFar) / parseFloat(this.audioTime))
+            return ((this.playedSoFar / this.audioTime) * 100)
+        },
+        audioTimeString() {
+            if (this.audioTime - Math.floor(this.audioTime) > 0.5) {
+                this.audioTime = Math.ceil(this.audioTime)
+            } else {
+                this.audioTime = Math.floor(this.audioTime)
+            }
+
+            return this.secondToString(this.audioTime)
+        },
+        playedSoFarString() {
+            return this.secondToString((this.playedSoFar / 100))
         }
     },
     mounted() {
         this.audio = new Audio(this.audioUrl);
+        this.audio.onended = this.clearStatus
         duration(this.audioUrl).then((audioTime) => this.audioTime = audioTime)
     },
     methods: {
+        secondToString(time) {
+            let minutes = Math.floor(time / 60)
+            let seconds = time - minutes * 60
+
+            let minutesPart = ''
+            if (minutes < 10) {
+                minutesPart = '0' + minutes.toString()
+            } else {
+                minutesPart = minutes.toString()
+            }
+
+            let secondsPart = ''
+            if (seconds < 10) {
+                secondsPart = '0' + seconds.toString()
+            } else {
+                secondsPart = seconds.toString()
+            }
+
+            return minutesPart + ':' + secondsPart
+        },
         playOrStop() {
             if (this.isPlaying) {
                 this.audio.pause()
                 this.isPlaying = false
+                clearInterval(this.intervalForPlaying)
+                this.intervalForPlaying = null
             } else {
                 this.audio.play()
+                this.lastTime = new Date()
                 this.isPlaying = true
+                this.playedSoFar = 1
+                this.intervalForPlaying = setInterval(() => {
+                    let nowTime = new Date()
+                    this.playedSoFar++
+                    this.lastTime = nowTime
+                }, 1000)
             }
         },
-        openFile(event) {
-            var input = event.target;
-
-            let reader = new FileReader();
-
-            reader.readAsArrayBuffer(input.files[0])
-            console.log(input.files[0])
-
-            reader.onload = (e) => {
-                let blob = new Blob([new Uint8Array(e.target.result)])
-                this.audio = new Audio(URL.createObjectURL(blob))
-                console.log(this.audio)
-                duration(URL.createObjectURL(blob)).then((audioTime) => this.audioTime = audioTime)
-            }
-            reader.onerror = function(e) {
-                console.log(e)
+        clearStatus() {
+            if (this.intervalForPlaying !== null) {
+                clearInterval(this.intervalForPlaying)
+                this.playedSoFar = 0
             }
         }
     }
