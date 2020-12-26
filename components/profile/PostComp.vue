@@ -47,7 +47,7 @@ export default {
     },
     computed: {
         getPostImage() {
-            return this.$axios.defaults.baseURL + this.post.postImageURL
+            return this.$axios.defaults.baseURL + '/media/' + this.post.postImageURL
         },
         hasHashtag() {
           if (!this.post.postHashtags || this.post.postHashtags.length == 0) {
