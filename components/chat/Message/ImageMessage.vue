@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-img max-height="300" max-width="300" :src="imageSrc" contain>
+        <v-img :eager="true" :max-height="maxHeight" :max-width="maxWidth" :src="imageSrc" :lazy-src="preSrc" contain>
             <template v-slot:placeholder>
                 <v-row
                 class="fill-height ma-0"
@@ -33,11 +33,26 @@ export default {
             isPlaying: false,
             audioTime: 1,
             playedSoFar: 0,
+            preSrc: null,
+            maxHeight: 300,
+            maxWidth: 300
         }
+    },
+    created() {
+        this.preSrc = this.getEmptyImageUrl()
     },
     computed: {
         valueOfProgressBar() {
             return (this.playedSoFar / this.audioTime)
+        }
+    },
+    methods: {
+        getEmptyImageUrl() {
+            let canvas = document.createElement("canvas")
+            canvas.width = this.maxWidth
+            canvas.height = this.maxWidth
+
+            return canvas.toDataURL()
         }
     }
 }

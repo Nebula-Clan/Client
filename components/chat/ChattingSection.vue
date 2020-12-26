@@ -89,13 +89,17 @@ export default {
         isFromSearch: false
       }
     },
+    watch: {
+      'profile.messageList' : {
+        handler: function(val, oldval) {
+          this.tryToScroll()
+        }
+      }
+    },
   computed: {
     ...mapGetters('modules/chat/chatManager',['getWebSocket', 'getUserListController', 'getSearchListController']),
     getMessages() {
       if (this.profile != undefined) {
-        if (this.canScrollOnMessage) {
-          this.scrollToBottom()
-        }
         return this.profile.messageList
       }
 
@@ -279,6 +283,11 @@ export default {
       this.isFromSearch = false
       this.canScrollOnMessage = true
     },
+    tryToScroll() {
+      if (this.canScrollOnMessage) {
+        this.scrollToBottom()
+      }
+    },
     scrollToBottom() {
       this.$nextTick(() => {
         let chatList = this.$refs.chatList
@@ -296,14 +305,13 @@ export default {
       return messageInstance
     },
     pushMessageAndScroll(username, messageInstance, isArray) {
-      this.pushMessageToProfile({username, messageInstance, isArray})
+      this.pushMessageToProfile({username, messageInstance, isArray}).then(() => this.scrollToBottom())
       this.swapProfileToFront(username)
       this.setProfileLastMessage({
           username: username,
           lastMessage: messageInstance,
           isJson: false
       })
-      this.scrollToBottom()
     },
     getPrev(index) {
       if (index === 0) {
@@ -338,7 +346,6 @@ export default {
     },
     handleScroller(event) {
       if (event.target.scrollTop >= (event.target.scrollHeight - this.$refs.profileStatus.clientHeight)) {
-        console.log('haha')
         this.canScrollOnMessage = true
       } else {
         this.canScrollOnMessage = false
