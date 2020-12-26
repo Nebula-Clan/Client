@@ -64,6 +64,7 @@ import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/req
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 import { Message as MessageClass } from '~/store/modules/chat/models/message'
+import { FileMessage } from '~/store/modules/chat/models/filemessage'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
 import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
@@ -238,18 +239,20 @@ export default {
       this.getWebSocket.SendRequest(seenMessage)
     },
     sendFile(file) {
-      let fileMessage = this.createMessageInstance()
+      let fileMessage = this.createMessageInstance(true)
       if (file.type.includes('image')) {
         fileMessage.messageType = 1
       } else {
         fileMessage.messageType = 3
       }
+      fileMessage.fileName = file.name
 
       this.uploadFileMessage(fileMessage, file)
     },
     sendVoice(audioBlob) {
-      let voiceMessage = this.createMessageInstance()
+      let voiceMessage = this.createMessageInstance(true)
       voiceMessage.messageType = 2
+      voiceMessage.fileName = 'Voice message'
 
       this.uploadFileMessage(voiceMessage, audioBlob)
     },
@@ -259,6 +262,7 @@ export default {
         messageInstance: messageInstance,
         file: file }).then((fileUrl) => {
           messageInstance.messageBody = fileUrl
+          messageInstance.fileUrl = fileUrl
           console.log(messageInstance)
           this.pushMessageAndScroll(this.username, messageInstance, false)
         })
@@ -294,8 +298,11 @@ export default {
         chatList.scrollTop = chatList.scrollHeight;
       })
     },
-    createMessageInstance() {
+    createMessageInstance(isFile) {
       let messageInstance = new MessageClass()
+      if (isFile) {
+        messageInstance = new FileMessage()
+      }
 
       messageInstance.messageDate = new Date()
       messageInstance.isSeen = false

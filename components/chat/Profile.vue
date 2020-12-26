@@ -48,12 +48,8 @@ export default {
     watch: {
         'profile.lastMessage': {
             handler: function(val, oldVal) {
-                if (!this.hasStatus) {
-                    this.textColor = ''
-                    this.hasStatus = false
-                    this.subtitleText = this.profile.lastMessage.messageBody
-                    this.$forceUpdate()
-                }
+                this.setLastMessage(this.profile.lastMessage)
+                this.$forceUpdate()
             },
             deep: true
         },
@@ -61,13 +57,9 @@ export default {
             handler: function(val, oldVal) {
                 this.getStatus(val).then((status) => {
                     if (status !== undefined && status.preferred) {
-                        this.subtitleText = status.text
-                        this.textColor = status.textColor
-                        this.hasStatus = true
+                        this.setStatus(status.text, status.textColor)
                     } else {
-                        this.subtitleText = this.profile.lastMessage.messageBody
-                        this.textColor = ''
-                        this.hasStatus = false
+                        this.setLastMessage(this.profile.lastMessage)
                     }
                     this.$forceUpdate()
                 })
@@ -76,7 +68,7 @@ export default {
         }
     },
     mounted() {
-        this.subtitleText = this.profile.lastMessage.messageBody
+        this.setLastMessage(this.profile.lastMessage)
     },
     computed: {
         profileAvatar() {
@@ -123,6 +115,22 @@ export default {
                 username: this.profile.username,
                 isValid: false
             })
+        },
+        setStatus(text, textColor) {
+            this.subtitleText = text
+            this.textColor = textColor
+            this.hasStatus = true
+        },
+        setLastMessage(messageInstance) {
+            if (messageInstance.messageType !== 0) {
+                this.textColor = 'blue--text text--lighten-1'
+                this.subtitleText = this.profile.lastMessage.fileName
+                this.hasStatus = true
+            } else {
+                this.textColor = ''
+                this.subtitleText = this.profile.lastMessage.messageBody
+                this.hasStatus = false
+            }
         }
     }
 }

@@ -37,9 +37,6 @@ export default {
     },
     computed: {
         valueOfProgressBar() {
-            console.log(this.playedSoFar)
-            console.log(this.audioTime)
-            console.log(parseFloat(this.playedSoFar) / parseFloat(this.audioTime))
             return ((this.playedSoFar / this.audioTime) * 100)
         },
         audioTimeString() {

@@ -1,6 +1,5 @@
-const { state } = require('~/store/snackbar')
 const { Message } =  require('./message')
-
+const { FileMessage } =  require('./filemessage')
 
 class ChatProfile {
 
@@ -112,14 +111,16 @@ class ChatProfile {
         this.profileBannerUrl = json.user.banner_picture
         this.lastSeen = json.last_seen
         this.numberOfUnseenMessages = json.usneen_messages_count
-        let last_message = new Message()
-        last_message.parseFromJson(json.last_message)
-        this.lastMessage = last_message
+        this.changeLastMessage(json.last_message)
     }
 
     changeLastMessage(messageJson) {
         let lastMessage = new Message()
         lastMessage.parseFromJson(messageJson)
+        if (lastMessage.messageType !== 0) {
+            lastMessage = new FileMessage()
+            lastMessage.parseFromJson(messageJson)
+        }
         this.lastMessage = lastMessage
     }
 
@@ -137,6 +138,10 @@ class ChatProfile {
     pushMessageJson(messageJson) {
         let message = new Message()
         message.parseFromJson(messageJson)
+        if (message.messageType !== 0) {
+            message = new FileMessage()
+            message.parseFromJson(messageJson)
+        }
         this._messageList.push(message) 
         this.numberOfMessage++
     }

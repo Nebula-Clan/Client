@@ -99,15 +99,16 @@ export default {
         messageProps() {
             if (this.message.messageType === 1) {
                 return {
-                    imageSrc: this.$axios.defaults.baseURL + '/media/' + this.message.messageBody
+                    imageSrc: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
                 }
             } else if (this.message.messageType === 2) {
                 return {
-                    audioUrl: this.$axios.defaults.baseURL + '/media/' + this.message.messageBody
+                    audioUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
                 }
-
-            } else if (this.messagemessageType === 3) {
-
+            } else if (this.message.messageType === 3) {
+                return {
+                    fileUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
+                }
             } 
 
             return null
