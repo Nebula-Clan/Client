@@ -34,12 +34,21 @@ const mutations = {
     addProfileToUserListAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
         chatProfile.parseProfileWithMessageFromJson(profileJson)
-        state.userListController.pushProfileInBack(chatProfile)
+        if (!state.userListController.hasProfile(chatProfile.username)) {
+            state.userListController.pushProfileInBack(chatProfile)
+        }
+    },
+    addProfileInstanceToUserList(state, profileInstance) {
+        if (!state.userListController.hasProfile(profileInstance.username)) {
+            state.userListController.pushProfileInBack(profileInstance)
+        }
     },
     addProfileToSearchListAndParse(state, profileJson) {
         let chatProfile = new ChatProfile()
         chatProfile.parseProfileFromJson(profileJson)
-        state.searchListController.pushProfileInBack(chatProfile)
+        if (!state.searchListController.hasProfile(chatProfile.username)) {
+            state.searchListController.pushProfileInBack(chatProfile)
+        }
     },
     addMessageJsonToProfile(state, {findedProfile, messageJson}) {
         findedProfile.pushMessageJson(messageJson)
@@ -87,8 +96,10 @@ const mutations = {
             message.isSeen = true
         }
     },
-    transferProfileFromSearchListToUserList(state, { findedProfile }) {
-        state.userListController.pushProfileInBack(findedProfile)
+    transferProfileFromSearchListToUserList(state, { findedProfile, username }) {
+        if (!state.userListController.hasProfile(username)) {
+            state.userListController.pushProfileInBack(findedProfile)
+        }
     }
 }
   
@@ -138,6 +149,10 @@ const actions = {
     },
     addProfileToUserList({ state, commit}, profileJson) {
         commit('addProfileToUserListAndParse', profileJson)
+        return true
+    },
+    addProfileInstanceToUserList({ state, commit}, profileInstance) {
+        commit('addProfileInstanceToUserList', profileInstance)
         return true
     },
     addProfileToSearchList({ state, commit}, profileJson) {
@@ -211,13 +226,13 @@ const actions = {
         commit('seenProfileMessageWithID', { findedProfile, messageUUID })
         return true
     },
-    transferProfileFromSearchListToUserList({ state, commit }, {username, messageID}) {
-        let findedProfile = state.userListController.findProfile(username)
+    transferProfileFromSearchListToUserList({ state, commit }, { username }) {
+        let findedProfile = state.searchListController.findProfile(username)
         if (findedProfile == undefined || findedProfile == null) {
             return false
         }
 
-        commit('transferProfileFromSearchListToUserList', { findedProfile })
+        commit('transferProfileFromSearchListToUserList', { findedProfile, username })
         return true
     },
     getProfileFromSearchList({ state, commit }, {username, transferToUserList }) {
@@ -227,7 +242,7 @@ const actions = {
         }
 
         if (transferToUserList) {
-            commit('transferProfileFromSearchListToUserList', { findedProfile })
+            commit('transferProfileFromSearchListToUserList', { findedProfile, username })
         }
 
         return findedProfile

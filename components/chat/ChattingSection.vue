@@ -134,7 +134,8 @@ export default {
     ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
      'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
       'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID',
-        'getProfileFromSearchList', 'addProfileToSearchList', 'getProfileFromSearchListWithUsername']),
+        'getProfileFromSearchList', 'addProfileToSearchList', 'getProfileFromSearchListWithUsername',
+          'transferProfileFromSearchListToUserList']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
       this.clearPage()
@@ -146,7 +147,7 @@ export default {
       } else if (this.getSearchListController.hasProfile(this.username)) {
         this.getProfileFromSearchList({
             username: this.username,
-            transferToUserList: true
+            transferToUserList: false
           }).then((profile) => {
             this.isFromSearch = true
             this.loadProfileAndObtainMessage(profile)
@@ -182,6 +183,10 @@ export default {
       if (text == undefined || text == null || text.length == 0) {
         return
       }
+      if (this.isFromSearch) {
+
+      }
+
       let username = this.username
       let messageInstance = this.createMessageInstance()
       messageInstance.messageBody = text
@@ -192,7 +197,7 @@ export default {
       let sendMessageReq = new SendMessageRequestJson(text, username, messageInstance.messageUUID)
       this.getWebSocket.SendRequest(sendMessageReq)
 
-      this.pushMessageAndScroll(username, messageInstance, isArray)
+      this.addMessageToProfile(username, messageInstance, isArray)
     },
     onGetNewProfileInfo({ data }) {
       data = JSON.parse(data)
@@ -264,7 +269,7 @@ export default {
           messageInstance.messageBody = fileUrl
           messageInstance.fileUrl = fileUrl
           console.log(messageInstance)
-          this.pushMessageAndScroll(this.username, messageInstance, false)
+          this.addMessageToProfile(this.username, messageInstance, false)
         })
     },
     onMessageSeen(entries) {
@@ -310,6 +315,20 @@ export default {
       messageInstance.messageUUID = uuidv4()
 
       return messageInstance
+    },
+    addMessageToProfile(username, messageInstance, isArray) {
+      if (this.isFromSearch) {
+        this.transferProfileFromSearchListToUserList({
+          username: username
+          }).then((status) => {
+          if (status) {
+            this.isFromSearch = false
+            this.pushMessageAndScroll(username, messageInstance, isArray)
+          }
+        })
+      } else {
+        this.pushMessageAndScroll(username, messageInstance, isArray)
+      }
     },
     pushMessageAndScroll(username, messageInstance, isArray) {
       this.pushMessageToProfile({username, messageInstance, isArray}).then(() => this.scrollToBottom())

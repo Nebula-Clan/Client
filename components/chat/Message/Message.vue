@@ -107,7 +107,8 @@ export default {
                 }
             } else if (this.message.messageType === 3) {
                 return {
-                    fileUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
+                    fileUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl,
+                    fileName: this.message.fileName
                 }
             } 
 

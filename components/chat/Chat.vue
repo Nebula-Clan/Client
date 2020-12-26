@@ -19,26 +19,32 @@ import ChattingSection from '~/components/chat/ChattingSection'
 
 import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
+import { GetProfileInfoRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getprofileinforequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
 import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
+import { GetProfileInfoResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getprofileinfohandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
 import { RecieveMessageHandler } from '~/store/modules/chat/helper-classes/handlers/recievechathandler'
 import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
 
+import { ChatProfile } from '~/store/modules/chat/models/chatprofile'
+import { forEach } from 'async'
+
 export default {
     data: function() {
         return {
             websocket: null,
-            access_token: ""
+            access_token: "",
+            waiting_users: new Map()
         }
     },
     computed: {
-        ...mapGetters('modules/chat/chatManager',['getWebSocket']),
+        ...mapGetters('modules/chat/chatManager',['getWebSocket', 'getUserListController', 'getSearchListController']),
     },
     created() {
         this.websocket = this.getWebSocket
@@ -47,6 +53,7 @@ export default {
         this.websocket.AddOnMessageHandler(new ControlMessageHandler(this.onStatusHandler))
         this.websocket.AddOnMessageHandler(new BaseHandler(this.printData))
         this.websocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onGetAllUserMessage))
+        this.websocket.AddOnMessageHandler(new GetProfileInfoResponseHandler(this.onGetNewProfileInfo))
 
         this.websocket.AddOnErrorHandler(new BaseHandler(this.onErrorWebSocket))
         this.websocket.AddOnCloseHandler(new BaseHandler(this.onClose))
@@ -54,7 +61,8 @@ export default {
     methods: {
         ...mapActions('modules/chat/chatManager', ['setWebSocket', 'pushMessageJsonToProfile',
          'addProfileToUserList', 'swapProfileToFront', 'setProfileStatus', 'addUnseenToProfile',
-         'setProfileLastMessage', 'sortProfileMessages', 'setObtainMessageStatus']),
+         'setProfileLastMessage', 'sortProfileMessages', 'setObtainMessageStatus',
+          'transferProfileFromSearchListToUserList', 'addProfileInstanceToUserList']),
         onErrorWebSocket(event) {
             console.log(event)
         },
@@ -71,14 +79,22 @@ export default {
             let messageJson = data.message
             let unseenCount = 1
             console.log(messageJson)
-            this.pushMessageJsonToProfile({username, messageJson})
-            this.swapProfileToFront(username)
-            this.addUnseenToProfile({username, unseenCount})
-            this.setProfileLastMessage({
-                username: username,
-                lastMessage: messageJson,
-                isJson: true
-            })
+
+            if (this.getUserListController.hasProfile(username)) {
+                this.addMessageToProfile(username, messageJson, unseenCount)
+            } else if (this.getSearchListController.hasProfile(username)) {
+                this.transferProfileFromSearchListToUserList(username).then((status) => {
+                    if (status) {
+                        this.addMessageToProfile(username, messageJson, unseenCount)
+                    }
+                })
+            } else {
+                if (!this.waiting_users.has(username)) {
+                    this.waiting_users.set(username, [])
+                }
+                this.waiting_users.get(username).push({username, messageJson, unseenCount})
+                this.websocket.SendRequest(new GetProfileInfoRequestJson(username))
+            }
         },
         onStatusHandler({ data }) {
             data = JSON.parse(data)
@@ -129,7 +145,46 @@ export default {
                     username: for_username,
                     obtainStatus: obtainStatus})
             })
-        }
+        },
+        addMessageToProfile(username, messageJson, unseenCount) {
+            this.pushMessageJsonToProfile({username, messageJson})
+            this.swapProfileToFront(username)
+            this.addUnseenToProfile({username, unseenCount})
+            this.setProfileLastMessage({
+                username: username,
+                lastMessage: messageJson,
+                isJson: true
+            })
+        },
+        onGetNewProfileInfo({ data }) {
+            data = JSON.parse(data)
+
+            let chatprofile = new ChatProfile()
+
+            chatprofile.parseProfileFromJson(data.user)
+
+            console.log(chatprofile)
+
+            if (!this.waiting_users.has(chatprofile.username)) {
+                return
+            }
+
+            console.log('hello')
+
+            this.addProfileInstanceToUserList(chatprofile)
+            .then((status) => {
+                if (status) {
+                    console.log('okeye')
+                    let waiting_messages = this.waiting_users.get(chatprofile.username)
+
+                    waiting_messages.forEach((message) => {
+                        this.addMessageToProfile(message.username, message.messageJson, message.unseenCount)
+                    })
+
+                    this.waiting_users.delete(chatprofile.username)
+                }
+            })
+        },
     }
     
 }

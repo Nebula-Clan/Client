@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-icon @click="openNewWindowAndDownload">mdi-cloud-download-outline</v-icon>
+        <v-icon class="mb-1" @click="openNewWindowAndDownload">mdi-cloud-download-outline</v-icon> <span>{{ fileName }}</span>
     </v-container>
 </template>
 
@@ -10,6 +10,10 @@ import { duration } from './utils/recorder'
 export default {
     props: {
         fileUrl: {
+            required: true,
+            type: String
+        },
+        fileName: {
             required: true,
             type: String
         }

@@ -85,6 +85,13 @@ export default {
       maxResults: 10
     };
   },
+  watch: {
+    getProfileList: {
+      handler(val, oldval) {
+        console.log(val)
+      }
+    }
+  },
   computed: {
     ...mapGetters("modules/chat/chatManager", [
       "getWebSocket",
