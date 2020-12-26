@@ -48,16 +48,6 @@
                         outlined/>
                     </v-col>
                     <v-col cols="12">
-                      <div
-                        v-if="draft"
-                        class="d-flex align-center">
-                        <img
-                          class="mb-4 mr-4"
-                          alt="previous"
-                          width="50px"
-                          :src="`${$axios.defaults.baseURL}/media/${post.headerImage}`">
-                        <span>Previous header image</span>
-                      </div>
                       <v-file-input
                         v-model="post.headerImage"
                         accept="image/png, image/jpeg, image/bmp"
@@ -66,6 +56,17 @@
                         show-size
                         prepend-icon="mdi-camera"
                         truncate-length="30"/>
+                      <div
+                        v-if="draft"
+                        class="d-flex align-center">
+                        <span class="mr-4">Current: </span>
+                        <img
+                          class="rounded"
+                          alt="previous"
+                          width="100"
+                          height="100"
+                          :src="`${$axios.defaults.baseURL}/media/${post.headerImage}`" />
+                      </div>
                     </v-col>
                     <v-col cols="12">
                       <v-select
