@@ -1,6 +1,7 @@
 <template>
   <v-row class="px-10 py-5">
 
+
     <!--    <v-sheet-->
     <!--      class="mx-auto"-->
     <!--      max-width="100%">-->
@@ -23,6 +24,7 @@
     <!--      </v-slide-group>-->
     <!--    </v-sheet>-->
 
+
     <v-col
       cols="12"
       xl="1"
@@ -44,24 +46,70 @@
           :key="n"
           class="d-flex child-flex"
           :cols="postColumns">
-          <nuxt-link to="/posts/53">
-            <v-img
-              :src="`https://picsum.photos/500/300?image=${n + 10}`"
-              :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"
-              aspect-ratio="1"
-              class="grey lighten-2 post-cover">
-              <template v-slot:placeholder>
-                <v-row
-                  class="fill-height ma-0"
-                  align="center"
-                  justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"/>
-                </v-row>
-              </template>
-            </v-img>
-          </nuxt-link>
+          <v-hover v-slot="{ hover }">
+            <v-card
+              class="mx-auto"
+              color="grey lighten-4"
+              max-width="600">
+              <v-img
+                :src="`https://picsum.photos/500/300?image=${n + 10}`"
+                :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"
+                aspect-ratio="1"
+                class="rounded-0 grey lighten-2">
+                <v-expand-transition>
+                  <v-card
+                    v-if="hover"
+                    height="100%"
+                    color="rounded-0 primary darken-4"
+                    class="mx-auto">
+                    <v-list-item>
+                      <v-list-item-content>
+
+                        <v-list-item-title class="headline mb-1">
+                          Headline 5
+                        </v-list-item-title>
+
+                        <v-list-item-subtitle>
+                          Greyhound divisely hello coldly fonwderfully. Greyhound divisely hello coldly
+                          fonwderfully. Greyhound divisely hello coldly fonwderfully
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+
+                      <v-list-item-avatar
+                        tile
+                        color="grey"/>
+
+                    </v-list-item>
+
+                    <v-card-actions>
+                      <v-btn
+                        outlined
+                        text>
+                        See more...
+                      </v-btn>
+                    </v-card-actions>
+
+                  </v-card>
+                </v-expand-transition>
+              </v-img>
+            </v-card>
+          </v-hover>
+          <!--                    <v-img-->
+          <!--                      :src="`https://picsum.photos/500/300?image=${n + 10}`"-->
+          <!--                      :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"-->
+          <!--                      aspect-ratio="1"-->
+          <!--                      class="grey lighten-2 post-cover">-->
+          <!--                      <template v-slot:placeholder>-->
+          <!--                        <v-row-->
+          <!--                          class="fill-height ma-0"-->
+          <!--                          align="center"-->
+          <!--                          justify="center">-->
+          <!--                          <v-progress-circular-->
+          <!--                            indeterminate-->
+          <!--                            color="grey lighten-5"/>-->
+          <!--                        </v-row>-->
+          <!--                      </template>-->
+          <!--                    </v-img>-->
         </v-col>
       </v-row>
 
@@ -75,13 +123,15 @@
           <v-list-item-group
             color="primary">
             <v-list-item
+              class="py-1"
               v-for="(chat, i) in recent"
               :key="i">
               <v-list-item-avatar>
                 <UserAvatar :avatar-src="chat.avatar"/>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title v-text="chat.title"/>
+                <v-list-item-title class="text-body-1" v-text="chat.title"/>
+                <v-list-item-title class="mt-1 text-caption" v-text="chat.title"/>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -425,13 +475,5 @@
     position: fixed;
     bottom: 0;
     left: 0;
-  }
-
-  .post-cover {
-    transition: opacity .4s;
-  }
-
-  .post-cover:hover {
-    opacity: 0.5;
   }
 </style>
