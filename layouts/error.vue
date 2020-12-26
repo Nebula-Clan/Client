@@ -10,7 +10,7 @@
       <v-btn
         color="primary"
         outlined
-        to="/">
+        to="/feed">
         Return Home
       </v-btn>
     </div>
