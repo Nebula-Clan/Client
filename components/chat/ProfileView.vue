@@ -72,7 +72,11 @@ export default {
     },
     data() {
         return {
-            bannerImgUrl: ''
+            bannerImgUrl: '',
+            username: null,
+            description: null,
+            fistname: null,
+            lastname: null
         }
     },
     created() {
@@ -95,26 +99,32 @@ export default {
             return ([
                 {
                     infoTitle: 'Username',
-                    infoValue: this.profile.username,
+                    infoValue: this.username,
                     color: 'deep-purple lighten-1',
                 },
                 {
                     infoTitle: 'Bio',
-                    infoValue: this.profile.description,
+                    infoValue: this.description,
                     color: 'green',
                 },
                 {
                     infoTitle: 'Firstname',
-                    infoValue: this.profile.firstname,
+                    infoValue: this.firstname,
                     color: 'deep-purple lighten-1',
                 },
                 {
                     infoTitle: 'LastName',
-                    infoValue: this.profile.lastname,
+                    infoValue: this.lastname,
                     color: 'green',
                 }
             ])
         }
+    },
+    created() {
+        this.username = this.getProperText(this.profile.username, 'has no username')
+        this.description = this.getProperText(this.profile.description, 'has no description')
+        this.firstname = this.getProperText(this.profile.firstname, 'has no firstname')
+        this.lastname = this.getProperText(this.profile.lastname, 'has no lastname')
     },
     methods: {
         cancelOverlay() {
@@ -122,6 +132,13 @@ export default {
         },
         imgError() {
             this.bannerImgUrl = '/images/login-background.jpg'
+        },
+        getProperText(text, substituteText) {
+            if (text !== null && text !== undefined & text.length !== 0) {
+                return text
+            }
+
+            return substituteText
         }
     }
 }
