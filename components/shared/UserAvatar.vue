@@ -5,12 +5,8 @@
     :color="avatarSrc !== null ? '' : color">
     <img
       v-if="avatarSrc !== null"
-      :src="avatarSrc"
+      :src="$axios.defaults.baseURL + avatarSrc"
       :alt="avatarString">
-<!--    <img-->
-<!--      v-if="avatarSrc !== null"-->
-<!--      :src="$axios.defaults.baseURL + avatarSrc"-->
-<!--      :alt="avatarString">-->
     <span v-else class="white--text headline">{{ string }}</span>
   </v-avatar>
 </template>

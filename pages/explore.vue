@@ -113,6 +113,7 @@
     }),
     mounted() {
       this.fetchPosts();
+      this.fetchPeople();
       this.fetchCategories();
     },
     computed: {
@@ -163,6 +164,13 @@
         })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
+      fetchPeople(){
+        this.getExplorePeople()
+        .then(({data}) => {
+          this.people = data.users_finded
+        })
+        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      }
     }
   }
 </script>
