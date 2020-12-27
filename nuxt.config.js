@@ -27,12 +27,12 @@ export default {
     '@/assets/quill/quill.core.css',
     '@/assets/quill/quill.snow.css',
     '@/assets/quill/quill.bubble.css',
-],
+  ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '~plugins/quill', ssr: false },
-    { src: '~plugins/notifier', ssr: false},
+    { src: '~plugins/notifier', ssr: false },
     { src: "@/plugins/aos", mode: "client" },
   ],
 
@@ -105,7 +105,7 @@ export default {
   },
 
   router: {
-    base: '/'
+    base: '/Huddle-Client/'
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
