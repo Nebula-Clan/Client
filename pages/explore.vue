@@ -42,7 +42,7 @@
 
       <ExplorePosts v-show="menuName === 'ALL'" :posts="posts"/>
       <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people"/>
-      <ExploreHashtags v-show="menuName === 'HASHTAGS'"/>
+      <ExploreHashtags v-show="menuName === 'HASHTAGS'" :hashtags="hashtags"/>
       <ExploreCategories v-show="menuName==='CATEGORIES'" :categories="categories"/>
 
     </v-col>
@@ -109,11 +109,13 @@
       pageIndex: 0,
       posts: [],
       people: [],
-      categories: []
+      categories: [],
+      hashtags: []
     }),
     mounted() {
       this.fetchPosts();
       this.fetchPeople();
+      this.fetchHashtags();
       this.fetchCategories();
     },
     computed: {
@@ -164,11 +166,19 @@
         })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
-      fetchPeople(){
+      fetchPeople() {
         this.getExplorePeople()
-        .then(({data}) => {
+        .then(({ data }) => {
           this.people = data.users_finded
         })
+        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+      fetchHashtags() {
+        this.$axios.$get("api/hashtag/similarity?&text=a").then(
+          response => {
+            this.hashtags = response.hashtags
+          }
+        )
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       }
     }

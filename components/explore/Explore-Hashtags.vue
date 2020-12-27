@@ -8,13 +8,13 @@
       <v-list-item-group
         color="primary">
         <v-list-item
-          v-for="n in 25"
-          :key="n">
+          v-for="(tag, index) in hashtags"
+          :key="index">
           <v-icon class="py-2 pr-4" size="35">
             mdi-tag-outline
           </v-icon>
           <v-list-item-content>
-            {{`Tag number ${n}`}}
+            {{`#${tag.text}`}}
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -24,7 +24,8 @@
 
 <script>
   export default {
-    name: "Explore-Hashtags"
+    name: "Explore-Hashtags",
+    props: ['hashtags']
   }
 </script>
 
