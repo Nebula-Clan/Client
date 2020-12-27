@@ -1,8 +1,8 @@
 <template>
   <v-row>
     <v-col
-      v-for="n in 30"
-      :key="n"
+      v-for="(post, index) in posts"
+      :key="index"
       class="d-flex child-flex"
       :cols="postColumns">
       <v-hover v-slot="{ hover }">
@@ -10,8 +10,8 @@
           class="mx-auto"
           color="grey lighten-4">
           <v-img
-            :src="`https://picsum.photos/500/300?image=${n + 10}`"
-            :lazy-src="`https://picsum.photos/10/6?image=${n + 10}`"
+            :src="`${$axios.defaults.baseURL}/media/${post.header_image}`"
+            :lazy-src="`https://picsum.photos/10/6?image=${index%30 + 10}`"
             aspect-ratio="1"
             class="rounded-0 grey lighten-2">
             <v-expand-transition>
@@ -24,24 +24,28 @@
                   <v-list-item-content>
 
                     <v-list-item-title class="headline mb-1">
-                      Headline 5
+                      {{post.title}}
                     </v-list-item-title>
 
                     <v-list-item-subtitle>
-                      Greyhound divisely hello coldly fonwderfully. Greyhound divisely hello coldly
-                      fonwderfully. Greyhound divisely hello coldly fonwderfully
+                      {{post.description}}
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
-                  <v-list-item-avatar
-                    tile
-                    color="grey"/>
+                  <UserAvatar
+                    color="primary"
+                    size="50"
+                    :avatar-src="post.author.profile_picture"
+                    :avatar-string="post.author.username"/>
 
                 </v-list-item>
 
-                <v-card-actions>
+                <v-card-actions
+                  class="see-more">
                   <v-btn
+                    class="see-more-btn pa-2"
                     outlined
+                    :to="`/posts/${post.id}`"
                     text>
                     See more...
                   </v-btn>
@@ -57,8 +61,12 @@
 </template>
 
 <script>
+  import UserAvatar from "../shared/UserAvatar";
+
   export default {
     name: "Explore-Posts",
+    components: { UserAvatar },
+    props: ['posts'],
     computed: {
       postColumns() {
         switch (this.$vuetify.breakpoint.name) {
@@ -78,6 +86,15 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .see-more {
+    position: absolute;
+    bottom: 0;
+    right: 0;
 
+    .see-more-btn {
+      border: 3px solid white;
+    }
+
+  }
 </style>

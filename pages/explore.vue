@@ -40,10 +40,10 @@
       md="10"
       sm="12">
 
-      <ExplorePosts v-if="menuName === 'ALL'"/>
-      <ExplorePeople v-else-if="menuName === 'PEOPLE'"/>
-      <ExploreHashtags v-else-if="menuName === 'HASHTAGS'"/>
-      <ExploreCategories v-else-if="menuName==='CATEGORIES'"/>
+      <ExplorePosts v-show="menuName === 'ALL'" :posts="posts"/>
+      <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people"/>
+      <ExploreHashtags v-show="menuName === 'HASHTAGS'"/>
+      <ExploreCategories v-show="menuName==='CATEGORIES'" :categories="categories"/>
 
     </v-col>
 
@@ -95,6 +95,7 @@
   import ExplorePeople from "../components/explore/Explore-People";
   import ExploreHashtags from "../components/explore/Explore-Hashtags";
   import ExploreCategories from "../components/explore/Explore-Categories";
+  import {mapActions} from "vuex";
 
   const ALL = "ALL";
   const PEOPLE = "PEOPLE";
@@ -106,7 +107,14 @@
     components: { ExploreCategories, ExploreHashtags, ExplorePeople, ExplorePosts },
     data: () => ({
       pageIndex: 0,
+      posts: [],
+      people: [],
+      categories: []
     }),
+    mounted() {
+      this.fetchPosts();
+      this.fetchCategories();
+    },
     computed: {
       menuName() {
         switch (this.pageIndex) {
@@ -137,6 +145,25 @@
         }
       },
     },
+    methods: {
+      ...mapActions('modules/category/category', ['getAllCategories']),
+      ...mapActions('modules/explore', ['getExplorePosts']),
+      ...mapActions('modules/explore', ['getExplorePeople']),
+      fetchPosts() {
+        this.getExplorePosts()
+        .then(({ data }) => {
+          this.posts = data.posts;
+        })
+        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+      fetchCategories() {
+        this.getAllCategories()
+        .then(({ data }) => {
+          this.categories = data.categories;
+        })
+        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+    }
   }
 </script>
 
