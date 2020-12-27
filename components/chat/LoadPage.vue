@@ -52,7 +52,7 @@ export default {
     },
     created() {
         if (this.$auth.user !== null && this.$auth.user !== undefined && this.$auth.user.username !== '') {
-            let websocket = new HuddleChatWebSocket(`ws://188.40.212.205:8000/ws/chat/${this.$auth.user.username}`)
+            let websocket = new HuddleChatWebSocket(`ws://172.245.10.238:8000/ws/chat/${this.$auth.user.username}`)
 
             websocket.AddOnMessageHandler(new AuthenticationResponseHandler(this.onAuthenticate))
 

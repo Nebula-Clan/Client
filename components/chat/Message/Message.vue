@@ -64,11 +64,13 @@ export default {
     },
     mounted() {
         if (!this.message.isSeen && !this.message.isSender) {
-            this.observer.observe(this.$el)
-            this.isUnderObserver = true
+            this.addToObserver()
         } 
     },
     beforeUpdate() {
+        
+    },
+    updated() {
         if (!this.isUnderObserver && !this.message.isSeen && !this.message.isSender) {
             this.addToObserver()
         } else if (this.isUnderObserver && this.message.isSeen) {
@@ -82,8 +84,10 @@ export default {
     },
     watch: {
         'message.isSeen': {
-            handler: function(val) {
-                this.$forceUpdate()
+            handler: function(val, oldVal) {
+                if (val !== oldVal) {
+                    this.$forceUpdate()
+                }
             },
             deep: true
         }

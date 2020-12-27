@@ -146,16 +146,6 @@ export default {
                     obtainStatus: obtainStatus})
             })
         },
-        addMessageToProfile(username, messageJson, unseenCount) {
-            this.pushMessageJsonToProfile({username, messageJson})
-            this.swapProfileToFront(username)
-            this.addUnseenToProfile({username, unseenCount})
-            this.setProfileLastMessage({
-                username: username,
-                lastMessage: messageJson,
-                isJson: true
-            })
-        },
         onGetNewProfileInfo({ data }) {
             data = JSON.parse(data)
 
@@ -183,6 +173,17 @@ export default {
 
                     this.waiting_users.delete(chatprofile.username)
                 }
+            })
+        },
+        addMessageToProfile(username, messageJson, unseenCount) {
+            this.pushMessageJsonToProfile({username, messageJson})
+            this.swapProfileToFront(username)
+            console.log('ha2')
+            this.addUnseenToProfile({username, unseenCount})
+            this.setProfileLastMessage({
+                username: username,
+                lastMessage: messageJson,
+                isJson: true
             })
         },
     }

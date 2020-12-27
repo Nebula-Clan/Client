@@ -216,33 +216,6 @@ export default {
         }
       })
     },
-    onSeenMessage({ data }) {
-      data = JSON.parse(data)
-      console.log(data)
-
-      let messageUUID = data.uuid
-      let username = data.user.username
-
-      this.seenProfileMessageWithID({
-        username: username, 
-        messageUUID: messageUUID
-        }).then((status) => {
-        console.log(status)
-      })
-    },
-    seenMessage(messageID) {
-      this.seenProfileMessageWithID({
-        username: this.username, 
-        messageID: messageID}).then((status) => {
-        if (status) {
-          let unseenCount = -1
-          let username = this.username
-          this.addUnseenToProfile({username, unseenCount})
-        }
-      })
-      let seenMessage = new SeenMessageRequestJson(messageID)
-      this.getWebSocket.SendRequest(seenMessage)
-    },
     sendFile(file) {
       let fileMessage = this.createMessageInstance(true)
       if (file.type.includes('image')) {
@@ -272,11 +245,43 @@ export default {
           this.addMessageToProfile(this.username, messageInstance, false)
         })
     },
+    onSeenMessage({ data }) {
+      data = JSON.parse(data)
+      console.log(data)
+
+      let messageUUID = data.uuid
+      let username = data.user.username
+
+      this.seenProfileMessageWithID({
+        username: username, 
+        messageIdentifier: messageUUID,
+        isMessageUUID: true
+        }).then((status) => {
+        console.log(status)
+      })
+    },
+    seenMessage(messageID) {
+      this.seenProfileMessageWithID({
+        username: this.username, 
+        messageIdentifier: messageID,
+        isMessageUUID: false}).then((status) => {
+          console.log(status)
+        if (status) {
+          let unseenCount = -1
+          let username = this.username
+          this.addUnseenToProfile({username, unseenCount})
+        }
+      })
+      let seenMessage = new SeenMessageRequestJson(messageID)
+      this.getWebSocket.SendRequest(seenMessage)
+    },
     onMessageSeen(entries) {
       entries.forEach(({ target, isIntersecting}) => {
           if (!isIntersecting) {
             return;
           }
+
+          console.log('h3')
         
           this.observer.unobserve(target);
         
