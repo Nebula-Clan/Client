@@ -170,6 +170,7 @@ export default {
       this.recorder
       .then((recorder) => {
         recorder.start()
+        this.$emit('recording')
       })
       .catch((err) => {
         this.cleanUpInput()

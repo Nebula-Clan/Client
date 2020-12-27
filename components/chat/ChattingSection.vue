@@ -39,7 +39,8 @@
                     @sendFileMessage="sendFile"
                     @sendVoiceMessage="sendVoice"
                     @typing="typing"
-                    @stopTyping="stop"
+                    @stopTyping="onlineStatus"
+                    @recording="recordingVoiceStatus"
                     />
                 </v-container>
             </v-col>
@@ -225,6 +226,7 @@ export default {
       }
       fileMessage.fileName = file.name
 
+      this.sendingFileStatus()
       this.uploadFileMessage(fileMessage, file)
     },
     sendVoice(audioBlob) {
@@ -232,6 +234,7 @@ export default {
       voiceMessage.messageType = 2
       voiceMessage.fileName = 'Voice message'
 
+      this.sendingVoiceStatus()
       this.uploadFileMessage(voiceMessage, audioBlob)
     },
     uploadFileMessage(messageInstance, file) {
@@ -243,6 +246,7 @@ export default {
           messageInstance.fileUrl = fileUrl
           console.log(messageInstance)
           this.addMessageToProfile(this.username, messageInstance, false)
+          this.onlineStatus()
         })
     },
     onSeenMessage({ data }) {
@@ -359,15 +363,27 @@ export default {
       }
       return 0
     },
+    sendingFileStatus() {
+      this.sendStatus("sending file")
+    },
+    sendingVoiceStatus() {
+      this.sendStatus("sending voice")
+    },
+    recordingVoiceStatus() {
+      this.sendStatus("recording voice")
+    },
     typing() {
+      this.sendStatus("typing")
+    },
+    sendStatus(statusText) {
       let typingMessage = new ControlMessageRequestJson(this.profile.username, {
         type: "status",
-        status: "typing"
+        status: statusText
       })
       this.getWebSocket.SendRequest(typingMessage)
-      console.log('submit')
+      console.log(statusText)
     },
-    stop() {
+    onlineStatus() {
       let typingMessage = new ControlMessageRequestJson(this.profile.username, {
         type: "status",
         status: "online"
