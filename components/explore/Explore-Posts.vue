@@ -52,7 +52,8 @@
                 <v-card-text>
                   {{$vuetify.breakpoint.xsOnly
                   ? post.description.substring(0,40) + "..."
-                  : $vuetify.breakpoint.lgAndUp ? post.description : post.description.substring(0,100) }}
+                  : $vuetify.breakpoint.lgAndUp ? post.description.substring(0,200) + "..." :
+                  post.description.substring(0,100) + "..." }}
                 </v-card-text>
 
                 <v-card-actions
