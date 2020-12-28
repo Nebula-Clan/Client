@@ -4,7 +4,7 @@
     <v-card-subtitle class="primary--text">{{ draftDateCreated(draft['date_created']) }}</v-card-subtitle>
     <v-card-text class="d-flex">
       <v-row>
-        <v-col md="4" cols="12" class="d-flex">
+        <v-col md="4" cols="12" class="d-flex" v-if="draft['header_image']">
           <v-img v-if="draft['header_image']"
                  :src="getImageUrl(draft['header_image'])"
                  alt=""

@@ -188,7 +188,8 @@ export default {
       ).finally(
         () => {
           this.loading = false
-          this.getProfile();
+          // this.getProfile();
+          location.reload();
         }
       );
     },

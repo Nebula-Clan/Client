@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-2 pa-1" elevation="2">
+  <v-card class="mb-2 pa-1 layout-post" elevation="2">
     <v-row>
       <v-col class="ml-5">
         <v-row class="pb-1">
@@ -128,7 +128,15 @@
         <NewComment :is-loading-to-send="isLoadingToSendComment" :submit-comment="replyComment"/>
       </div>
     </v-expand-transition>
-
+    <div class="report" v-if="post.is_reported" id="report">
+      <p>This post has been reported by several users. It may contain inappropriate content.</p>
+      <v-btn
+        @click="showPost"
+        color="accent"
+        outlined>
+        Show post
+      </v-btn>
+    </div>
   </v-card>
 </template>
 
@@ -211,11 +219,40 @@
           this.showErrorWithMessage(error);
         })
       },
+      showPost: function () {
+        // document.getElementById('report').setAttribute('display', 'none')
+        this.post.is_reported = false;
+      }
+    },
+    mounted() {
+      // if (this.post.id === 88) {
+      //   this.post.is_reported = true
+      // }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+
+.layout-post {
+  position: relative;
+  .report {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, .8);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(15px);
+    padding: 50px;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
   .header-image {
     text-align: center;
 
