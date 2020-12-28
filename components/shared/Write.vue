@@ -57,14 +57,15 @@ export default {
     return {
       text: null,
       post: {
+        id: '',
         title: '',
         description: '',
         contentType: 'OT',
         category: '',
         content: '',
         headerImage: null,
-        hashtags: [],
-        communityName: null
+        communityName: '',
+        hashtags: []
       },
     }
   },
