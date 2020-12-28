@@ -7,7 +7,7 @@ const getDefaultState = () => {
     statusMap.set('typing', {text: 'typing', textColor: 'blue--text text--darken-1', preferred: true })
     statusMap.set('recording voice', {text: 'recording voice', textColor: 'blue--text text--darken-1', preferred: true })
     statusMap.set('sending voice', {text: 'sending voice', textColor: 'blue--text text--darken-1', preferred: true })
-    statusMap.set('sending file', {text: 'sending voice', textColor: 'blue--text text--darken-1', preferred: true })
+    statusMap.set('sending file', {text: 'sending file', textColor: 'blue--text text--darken-1', preferred: true })
     return {
         userListController: new ProfileListController(),
         searchListController: new ProfileListController(),

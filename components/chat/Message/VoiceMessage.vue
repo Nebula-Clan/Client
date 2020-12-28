@@ -49,7 +49,7 @@ export default {
             return this.secondToString(this.audioTime)
         },
         playedSoFarString() {
-            return this.secondToString((this.playedSoFar / 100))
+            return this.secondToString(this.playedSoFar)
         }
     },
     mounted() {

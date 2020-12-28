@@ -242,6 +242,7 @@ export default {
         toUsername: this.username,
         messageInstance: messageInstance,
         file: file }).then((fileUrl) => {
+          console.log(fileUrl)
           messageInstance.messageBody = fileUrl
           messageInstance.fileUrl = fileUrl
           console.log(messageInstance)

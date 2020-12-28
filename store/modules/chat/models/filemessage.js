@@ -22,11 +22,15 @@ class FileMessage extends Message {
     parseFromJson(json) {
         super.parseFromJson(json)
         this.fileUrl = this.messageBody
-        this.fileName = this.splitFileNameFromUrl(this.fileUrl)
+        if (this.messageType !== 2) {
+            this.fileName = this.splitFileNameFromUrl(this.fileUrl)
+        } else {
+            this.fileName = 'Voice message'
+        }
     }
 
     splitFileNameFromUrl(url) {
-        let tokenUrl = url.split("_")
+        let tokenUrl = url.split("_Huddle_")
         return tokenUrl[tokenUrl.length - 1]
     }
 

@@ -81,6 +81,10 @@ export default {
     },
     created() {
         this.bannerImgUrl = this.$axios.defaults.baseURL + this.profile.profileBannerUrl
+        this.username = this.getProperText(this.profile.username, 'has no username')
+        this.description = this.getProperText(this.profile.description, 'has no bio')
+        this.firstname = this.getProperText(this.profile.firstname, 'has no firstname')
+        this.lastname = this.getProperText(this.profile.lastname, 'has no lastname')
     },
     computed: {
         getProfileFirstChar() {
@@ -119,12 +123,6 @@ export default {
                 }
             ])
         }
-    },
-    created() {
-        this.username = this.getProperText(this.profile.username, 'has no username')
-        this.description = this.getProperText(this.profile.description, 'has no description')
-        this.firstname = this.getProperText(this.profile.firstname, 'has no firstname')
-        this.lastname = this.getProperText(this.profile.lastname, 'has no lastname')
     },
     methods: {
         cancelOverlay() {
