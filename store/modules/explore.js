@@ -3,14 +3,21 @@ const state = {};
 const getters = {};
 
 const actions = {
-  getExplorePosts({ commit }, data) {
+  explorePosts({ commit }, data) {
     return this.$axios.get('/api/explorer/get_posts', {
       params: {
         category_filter: data.category
       }
     })
   },
-  getExplorePeople({ commit }, data) {
+  explorePostsWithHashtag({ commit }, data) {
+    return this.$axios.get('api/explorer/posts_by_hashtag', {
+      params: {
+        hashtag: data.hashtag
+      }
+    })
+  },
+  explorePeople({ commit }, data) {
     return this.$axios.get('api/search/search_in_users', {
       params: {
         key: data.keyword === undefined ? "" : data.keyword

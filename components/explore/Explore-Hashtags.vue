@@ -14,19 +14,25 @@
     <span class="ml-3 text-h4">Hashtags</span>
     <v-divider class="mt-4"/>
     <v-list dense>
-      <v-list-item-group
-        color="primary">
-        <v-list-item
-          v-for="(tag, index) in hashtags"
-          :key="index">
-          <v-icon class="py-2 pr-4" size="35">
-            mdi-tag-outline
-          </v-icon>
-          <v-list-item-content>
-            {{`#${tag.text}`}}
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
+      <nuxt-link
+        v-for="(tag, index) in hashtags"
+        :key="index"
+        class="text-decoration-none"
+        :to="`/explore?hashtag=${tag.text}`">
+        <v-list-item-group
+          color="primary">
+          <v-list-item
+            v-for="(tag, index) in hashtags"
+            :key="index">
+            <v-icon class="py-2 pr-4" size="35">
+              mdi-tag-outline
+            </v-icon>
+            <v-list-item-content>
+              {{`#${tag.text}`}}
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </nuxt-link>
     </v-list>
   </v-card>
   <NoResult text="hashtag" v-else/>

@@ -185,12 +185,13 @@
     },
     methods: {
       ...mapActions('modules/category/category', ['getAllCategories']),
-      ...mapActions('modules/explore', ['getExplorePosts']),
-      ...mapActions('modules/explore', ['getExplorePeople']),
+      ...mapActions('modules/explore', ['explorePosts']),
+      ...mapActions('modules/explore', ['explorePeople']),
       ...mapActions('modules/explore', ['searchPosts']),
       ...mapActions('modules/explore', ['searchHashtags']),
       ...mapActions('modules/explore', ['searchCategories']),
       ...mapActions('modules/explore', ['searchCommunities']),
+      ...mapActions('modules/explore', ['explorePostsWithHashtag']),
       explore() {
         this.loading = {
           isPostLoading: true,
@@ -207,15 +208,27 @@
       },
       fetchPosts() {
         if (this.isKeywordEmpty(this.$route.query)) {
-          let category = this.isCategoryEmpty(this.$route.query) ? "" : this.$route.query.category;
-          this.getExplorePosts({
-            category
-          })
-          .then(({ data }) => {
-            this.posts = data.posts;
-            this.loading.isPostLoading = false;
-          })
-          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+          if (!this.isHashtagEmpty(this.$route.query)) {
+            let hashtag = this.$route.query.hashtag;
+            this.explorePostsWithHashtag({
+              hashtag
+            })
+            .then(({ data }) => {
+              this.posts = data.posts;
+              this.loading.isPostLoading = false;
+            })
+            .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+          } else {
+            let category = this.isCategoryEmpty(this.$route.query) ? "" : this.$route.query.category;
+            this.explorePosts({
+              category
+            })
+            .then(({ data }) => {
+              this.posts = data.posts;
+              this.loading.isPostLoading = false;
+            })
+            .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+          }
         } else {
           this.searchPosts({
             keyword: this.$route.query.keyword
@@ -248,7 +261,7 @@
       },
       fetchPeople() {
         let keyword = this.isKeywordEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
-        this.getExplorePeople({
+        this.explorePeople({
           keyword
         })
         .then(({ data }) => {
@@ -290,6 +303,12 @@
         if (queries.keyword === undefined) return true;
         if (queries.keyword === null) return true;
         return queries.keyword === "";
+      },
+      isHashtagEmpty(queries) {
+        if (queries === undefined) return true;
+        if (queries.hashtag === undefined) return true;
+        if (queries.hashtag === null) return true;
+        return queries.hashtag === "";
       }
     },
     watch: {
@@ -301,6 +320,7 @@
         this.explore();
       },
       '$route.query.hashtag': function () {
+        this.pageIndex = 0;
         this.explore();
       },
     }
