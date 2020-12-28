@@ -1,5 +1,6 @@
 <template>
   <v-card
+    v-if="hashtags.length > 0"
     class="mx-auto pt-2"
     max-width="100%"
     tile>
@@ -20,11 +21,15 @@
       </v-list-item-group>
     </v-list>
   </v-card>
+  <NoResult text="hashtag" v-else/>
 </template>
 
 <script>
+  import NoResult from "../shared/No-Result";
+
   export default {
     name: "Explore-Hashtags",
+    components: { NoResult },
     props: ['hashtags']
   }
 </script>

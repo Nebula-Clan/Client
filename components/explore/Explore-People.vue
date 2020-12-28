@@ -1,5 +1,6 @@
 <template>
   <v-card
+    v-if="people.length > 0"
     class="mx-auto pt-2"
     max-width="100%"
     tile>
@@ -23,14 +24,16 @@
       </v-list-item-group>
     </v-list>
   </v-card>
+  <NoResult text="user" v-else/>
 </template>
 
 <script>
   import UserAvatar from "../shared/UserAvatar";
+  import NoResult from "../shared/No-Result";
 
   export default {
     name: "Explore-People",
-    components: { UserAvatar },
+    components: { NoResult, UserAvatar },
     props: ['people'],
   }
 </script>

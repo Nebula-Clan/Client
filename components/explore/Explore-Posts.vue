@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="posts.length > 0">
     <v-col
       v-for="(post, index) in posts"
       :key="index"
@@ -58,14 +58,16 @@
       </v-hover>
     </v-col>
   </v-row>
+  <NoResult text="post" v-else/>
 </template>
 
 <script>
   import UserAvatar from "../shared/UserAvatar";
+  import NoResult from "../shared/No-Result";
 
   export default {
     name: "Explore-Posts",
-    components: { UserAvatar },
+    components: { NoResult, UserAvatar },
     props: ['posts'],
     computed: {
       postColumns() {
