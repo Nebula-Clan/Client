@@ -2,7 +2,7 @@
   <v-row :class="[marginSize, avatar]" max-width="250">
     <v-col cols="12">
       <Avatar class="avatar-border" :substituteChar="firstCharOfProfileNickname" :avatarUrl="getProfileImage"
-              :timeOut="12000" :avatarSize="avatarSize" :textSize="textClassForError"/>
+            :eager="true" :timeOut="12000" :avatarSize="avatarSize" :textSize="textClassForError"/>
     </v-col>
     <v-col cols="12" class="pb-0 ml-5">
       <v-row>

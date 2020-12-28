@@ -1,5 +1,5 @@
 <template>
-  <div class="sc-user-input--picker-wrapper">
+  <div>
     <EmojiPicker v-if="isActive" :on-blur="_handlePickerBlur" @emojiClicked="nofityClickedEmoji" />
     <v-icon  @click="isActive = !isActive" style="filter: contrast(50%);">
       mdi-emoticon-outline
@@ -19,6 +19,9 @@ export default {
       isActive: false
     }
   },
+  mounted() {
+    this.$nuxt.$on('hideEmoji', this.hideEmojiPicker)
+  },
   methods: {
     _openPicker(e) {
       this.isActive = !this.isActive
@@ -28,6 +31,9 @@ export default {
     },
     nofityClickedEmoji(emoji) {
       this.$emit('emoji', emoji)
+    },
+    hideEmojiPicker() {
+      this.isActive = false
     }
   }
 }

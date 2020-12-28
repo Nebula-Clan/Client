@@ -1,26 +1,39 @@
 <template>
     <v-list-item two-line class="back-status">
         <v-list-item-content class="py-1">
-            <v-list-item-title > {{ getProfileName }} </v-list-item-title>
+            <v-list-item-title style="cursor: pointer;" @click="profileViewOverlay = true"> 
+                {{ getProfileName }} 
+            </v-list-item-title>
             <v-list-item-subtitle :class="getLastSeenTextColor"> {{ getLastSeen }} </v-list-item-subtitle>
         </v-list-item-content>
-        <v-list-item-action>
-            <v-icon>mdi-dots-vertical</v-icon>
-        </v-list-item-action>
+        <v-overlay
+        :z-index="99"
+        :value="profileViewOverlay"
+        opacity="0.8"
+        >
+            <ProfileView :profile="profile" @cancel="profileViewOverlay = false"  />
+        </v-overlay>
     </v-list-item>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
+import ProfileView from './ProfileView'
+
 export default {
     props: {
         profile: {
             type: Object,
-            require: false
+            require: true
         }
     },
     data() {
         return {
-            isOnline: false
+            textColor: '',
+            hasStatus: false,
+            statusText: 'last seen recently',
+            profileViewOverlay: false
         }
     },
     computed: {
@@ -32,29 +45,34 @@ export default {
             return ''
         },
         getLastSeen() {
-            console.log(this.profile)
-            if (this.profile != undefined && 
-            this.profile.lastSeen != null && 
-            this.profile.lastSeen != undefined) {
-                if (this.profile.lastSeen === 'online') {
-                    this.isOnline = true
-                    return 'online'
+            if (this.profile !== undefined && this.profile !== null) {
+                if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                    this.getStatus(this.profile.profileStatus).then((status) => {
+                        if (status !== undefined) {
+                            this.setStatus(status.text, status.textColor, true)
+                        } else {
+                            this.lastSeenStatus()
+                        }
+                    })
+                } else if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                    this.lastSeenStatus()
                 } else {
-                    return `${this.getTimeElapse(this.profile.lastSeen)} ago`
+                    this.setStatus('last seen recently', '', false)
                 }
             }
-
-            return 'last seen recently'
+            
+            return this.statusText
         },
         getLastSeenTextColor() {
-            if (this.isOnline) {
-                return 'teal--text text--accent-4'
+            if (this.hasStatus) {
+                return this.textColor
             } else {
                 return ''
             }
         }
     },
     methods: {
+        ...mapActions('modules/chat/chatManager', ['getStatus']),
         getTimeElapse(time) {
             const unixTime = time.getTime()
             const now = new Date().getTime()
@@ -64,6 +82,17 @@ export default {
             return Math.floor((now - unixTime) / 36e+5) + ' h'
             } else {
             return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+            }
+        },
+        setStatus(statusText, textColor, hasStatus) {
+            this.textColor = textColor
+            this.hasStatus = hasStatus
+            this.statusText = statusText
+        },
+        lastSeenStatus() {
+            if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                let lastSeen = `${this.getTimeElapse(this.profile.lastSeen)} ago`
+                this.setStatus(lastSeen, '', false)
             }
         }
     }

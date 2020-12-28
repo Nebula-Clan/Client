@@ -3,16 +3,18 @@
     <v-col cols="12" class="px-0">
       <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" v-model="text"
        style="border-top: 1px solid gray;border-radius:0px" multi-line auto-grow rows="1"
-       hide-details flat solo placeholder="Send message ...">
+       hide-details flat solo placeholder="Send message ..."
+       @keydown="handleKey" :disabled="isInputDisable">
       </v-textarea>
     </v-col>
     <v-col cols="12" class="px-3 d-flex mb-2">
-      <v-icon slot="prepend-inner" class="mr-auto" style="filter: contrast(50%);">
-        mdi-attachment
-      </v-icon>
-      <EmojiIcon slot="append" class="ml-auto" @emoji="appendEmoji" />
-      <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessage">
-        mdi-send-outline
+      <v-file-input @[canChoseFile].native.prevent="deleteFile" class="d-flex"
+      style="filter: contrast(50%);" :prepend-icon="fileIcon" hide-input dense
+        v-model="file"
+      ></v-file-input>
+      <EmojiIcon slot="append" class="ml-auto mt-auto mb-auto" @emoji="appendEmoji" />
+      <v-icon slot="append" class="ml-3" color="green darken-2" @click="sendMessageOrRecord">
+        {{ getSendIcon }}
       </v-icon>
     </v-col>
   </v-row>
@@ -30,6 +32,8 @@ import IconOk from './icons-utils/icons/IconOk.vue'
 import IconSend from './icons-utils/icons/IconSend.vue'
 import store from './store/'
 
+import { recordAudio, duration } from '~/components/chat/Message/utils/recorder'
+
 export default {
   components: {
     EmojiIcon,
@@ -46,151 +50,161 @@ export default {
       inputActive: false,
       showEmoji: false,
       showFile: true,
-      text: null
-    }
-  },
-  computed: {
-    editMessageId() {
-      return this.isEditing && store.state.editMessage.id
-    },
-    isEditing() {
-      return false
+      text: null,
+      timeOut: null,
+      uploadedFile: false,
+      file: null,
+      recorder: null
     }
   },
   watch: {
-    editMessageId(m) {
-      if (store.state.editMessage != null && store.state.editMessage != undefined) {
-        this.$refs.userInput.focus()
-        this.$refs.userInput.textContent = store.state.editMessage.data.text
-      } else {
-        this.$refs.userInput.textContent = ''
+    file: {
+      handler: function(val, oldval) {
+        if (val !== undefined && val !== null) {
+          this.text = val.name
+          this.uploadedFile = true
+        } else {
+          this.text = ''
+          this.uploadedFile = false
+        }
       }
     }
   },
-  mounted() {
-    this.$root.$on('focusUserInput', () => {
-      if (this.$refs.userInput) {
-        this.focusUserInput()
+  computed: {
+    isEditing() {
+      return false
+    },
+    fileIcon() {
+      if (this.uploadedFile) {
+        return 'mdi-file-remove-outline'
       }
-    })
+
+      return 'mdi-attachment'
+    },
+    canChoseFile() {
+      if (this.uploadedFile) {
+        return 'click'
+      }
+
+      return null
+    },
+    getSendIcon() {
+      if (this.text === null || this.text === undefined || this.text === '') {
+        return 'mdi-microphone-outline'
+      } else if (this.recorder !== null) {
+        return 'mdi-microphone-settings'
+      }
+
+      return 'mdi-send-outline'
+    },
+    isInputDisable() {
+      if (this.uploadedFile || this.recorder !== null) {
+        return true
+      }
+
+      return false
+    }
+  },
+  mounted() {
+    
   },
   methods: {
+    deleteFile() {
+      this.file = null
+    },
     appendEmoji(emoji) {
       this.text += emoji
     },
-    sendMessage() {
-      if (this.text != '' || this.text != null || this.text != undefined) {
-        this.$emit('recMessage', this.text)
-        this.text = null
+    sendMessageOrRecord() {
+      if (this.text === null || this.text === undefined || this.text === '' || this.recorder !== null) {
+        this.handleRecord()
+      } else {
+        this.sendMessage()
       }
     },
-    cancelFile() {
-      this.file = null
-    },
-    setInputActive(onoff) {
-      this.inputActive = onoff
-    },
-    handleKey(event) {
-      if (event.keyCode === 13 && !event.shiftKey) {
-        if (!this.isEditing) {
-          this._submitText(event)
-        } else {
-          this._editText(event)
-        }
-        this._editFinish()
-        event.preventDefault()
-      } else if (event.keyCode === 27) {
-        this._editFinish()
-        event.preventDefault()
+    sendMessage() {
+      if (this.timeOut !== null) {
+        clearTimeout(this.timeOut)
+        this.timeOut = null
       }
 
-      this.$emit('onType')
+      if (this.uploadedFile) {
+        this.sendFileMessage()
+      } else if (this.recorder !== null) {
+        this.sendVoiceMessage()
+      } else {
+        this.sendTextMessage()
+      }
     },
-    focusUserInput() {
-      this.$nextTick(() => {
-        this.$refs.userInput.focus()
+    sendTextMessage() {
+      this.$emit('stopTyping')
+      
+      if (this.text != '' || this.text != null || this.text != undefined) {
+        this.$emit('sendTextMessage', this.text.replace(/^\s+|\s+$/g, ''))
+        this.$nuxt.$emit('hideEmoji')
+        this.cleanUpInput()
+      }
+    },
+    sendFileMessage() {
+      this.$emit('sendFileMessage', this.file)
+      this.cleanUpInput()
+    },
+    sendVoiceMessage() {
+      this.recorder.then((record) => {
+          record.stop().then(({ audio, audioBlob, audioUrl, play }) => {
+              this.$emit('sendVoiceMessage', audioBlob)
+              this.cleanUpInput()
+          })
       })
     },
-    _submitSuggestion(suggestion) {
-      this.onSubmit({author: 'me', type: 'text', data: {text: suggestion}})
-    },
-    _checkSubmitSuccess(success) {
-      if (Promise !== undefined) {
-        Promise.resolve(success).then(
-          function (wasSuccessful) {
-            if (wasSuccessful === undefined || wasSuccessful) {
-              this.file = null
-              this.$refs.userInput.innerHTML = ''
-            }
-          }.bind(this)
-        )
+    handleRecord() {
+      if (this.recorder !== null) {
+        this.sendMessage()
       } else {
+        this.startRecordingVoice()
+      }
+    },
+    startRecordingVoice() {
+      this.text = 'Recording...'
+      this.recorder = recordAudio()
+      this.recorder
+      .then((recorder) => {
+        recorder.start()
+        this.$emit('recording')
+      })
+      .catch((err) => {
+        this.cleanUpInput()
+      })
+    },
+    handleKey(event) {
+      console.log(event)
+      if (event.key === 'Enter' && !event.shiftKey) {
+        this.sendMessage()
+        return
+      }
+      this.handleTyping()
+    },
+    handleTyping() {
+      if (this.timeOut === null) {
+        this.$emit('typing')
+        this.timeOut = setTimeout(() => {
+          this.$emit('stopTyping')
+          this.timeOut = null
+        }, 5000)
+      } else {
+        clearTimeout(this.timeOut)
+        this.timeOut = setTimeout(() => {
+          this.$emit('stopTyping')
+          this.timeOut = null
+        }, 5000)
+      }
+    },
+    cleanUpInput() {
+      setTimeout(()=> { 
+        this.text = ''
         this.file = null
-        this.$refs.userInput.innerHTML = ''
-      }
-    },
-    _submitText(event) {
-      const text = this.$refs.userInput.textContent
-      const file = this.file
-      if (file) {
-        this._submitTextWhenFile(event, text, file)
-      } else {
-        if (text && text.length > 0) {
-          this._checkSubmitSuccess(
-            this.onSubmit({
-              author: 'me',
-              type: 'text',
-              data: {text}
-            })
-          )
-        }
-      }
-    },
-    _submitTextWhenFile(event, text, file) {
-      if (text && text.length > 0) {
-        this._checkSubmitSuccess(
-          this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: {text, file}
-          })
-        )
-      } else {
-        this._checkSubmitSuccess(
-          this.onSubmit({
-            author: 'me',
-            type: 'file',
-            data: {file}
-          })
-        )
-      }
-    },
-    _editText(event) {
-      const text = this.$refs.userInput.textContent
-      if (text && text.length) {
-        this.$emit('edit', {
-          author: 'me',
-          type: 'text',
-          id: store.state.editMessage.id,
-          data: {text}
-        })
-        this._editFinish()
-      }
-    },
-    _handleEmojiPicked(emoji) {
-      this._checkSubmitSuccess(
-        this.onSubmit({
-          author: 'me',
-          type: 'emoji',
-          data: {emoji}
-        })
-      )
-    },
-    _handleFileSubmit(file) {
-      this.file = file
-    },
-    _editFinish() {
-      store.setState('editMessage', null)
+        this.recorder = null
+       } , 50)
     }
   }
 }

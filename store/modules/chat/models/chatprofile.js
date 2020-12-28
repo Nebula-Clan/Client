@@ -1,5 +1,5 @@
 const { Message } =  require('./message')
-
+const { FileMessage } =  require('./filemessage')
 
 class ChatProfile {
 
@@ -35,9 +35,18 @@ class ChatProfile {
         this._bannerUrl = bannerUrl
     }
 
+    set profileStatus(status) {
+        this._status = status
+    }
+
+    set numberOfMessage(number) {
+        this._numberOfMessages = number
+    }
+
     set lastSeen(lastSeenString) {
         if (lastSeenString === 'online') {
             this._lastSeen = 'online'
+            this.profileStatus = 'online'
         } else if (lastSeenString != null) {
             this._lastSeen = new Date(lastSeenString)
         }
@@ -49,6 +58,18 @@ class ChatProfile {
 
     set messageList(mList) {
         this._messageList = mList
+    }
+
+    set isObtainedMessages(isObtained) {
+        this._isObtained = isObtained
+    }
+
+    set numberOfUnseenMessages(unseenMessageCount) {
+        this._unseenMessageCount = unseenMessageCount
+    }
+
+    set isValidProfileImg(isValid) {
+        this._isValidProfileImg = isValid
     }
 
     constructor() {
@@ -63,9 +84,24 @@ class ChatProfile {
         this.lastSeen = null
         this.lastMessage = ''
         this.messageList = []
+        this.profileStatus = null
+        this.numberOfUnseenMessages = 0
+        this.isObtainedMessages = false
+        this.numberOfMessage = 0
+        this.isValidProfileImg = true
+    }
+    
+    parseProfileFromJson(json) {
+        this.profileID = json.id
+        this.username = json.username
+        this.firstname = json.first_name
+        this.lastname = json.last_name
+        this.description = json.biology
+        this.profileImageUrl = json.profile_picture
+        this.profileBannerUrl = json.banner_picture
     }
 
-    parseFromJson(json) {
+    parseProfileWithMessageFromJson(json) {
         this.profileID = json.user.id
         this.username = json.user.username
         this.firstname = json.user.first_name
@@ -74,13 +110,23 @@ class ChatProfile {
         this.profileImageUrl = json.user.profile_picture
         this.profileBannerUrl = json.user.banner_picture
         this.lastSeen = json.last_seen
-        let last_message = new Message()
-        last_message.parseFromJson(json.last_message)
-        this.lastMessage = last_message
+        this.numberOfUnseenMessages = json.usneen_messages_count
+        this.changeLastMessage(json.last_message)
+    }
+
+    changeLastMessage(messageJson) {
+        let lastMessage = new Message()
+        lastMessage.parseFromJson(messageJson)
+        if (lastMessage.messageType !== 0) {
+            lastMessage = new FileMessage()
+            lastMessage.parseFromJson(messageJson)
+        }
+        this.lastMessage = lastMessage
     }
 
     pushMessage(messageInstance) {
         this._messageList.push(messageInstance)
+        this.numberOfMessage++
     }
 
     pushMessageArray(messagerArr) {
@@ -92,7 +138,12 @@ class ChatProfile {
     pushMessageJson(messageJson) {
         let message = new Message()
         message.parseFromJson(messageJson)
+        if (message.messageType !== 0) {
+            message = new FileMessage()
+            message.parseFromJson(messageJson)
+        }
         this._messageList.push(message) 
+        this.numberOfMessage++
     }
 
     pushMessageArrayJson(messagerArrJson) {
@@ -144,6 +195,10 @@ class ChatProfile {
         return this._bannerUrl
     }
 
+    get profileStatus() {
+        return this._status
+    }
+
     get lastSeen() {
         return this._lastSeen
     }
@@ -154,6 +209,22 @@ class ChatProfile {
 
     get messageList() {
         return this._messageList
+    }
+
+    get isObtainedMessages() {
+        return this._isObtained
+    }
+
+    get numberOfUnseenMessages() {
+        return this._unseenMessageCount
+    }
+
+    get numberOfMessage() {
+        return this._numberOfMessages
+    }
+
+    get isValidProfileImg() {
+        return this._isValidProfileImg
     }
 }
 

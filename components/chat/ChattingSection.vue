@@ -1,22 +1,29 @@
 <template>
     <v-content style="height:100vh" class="back">
-      <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height">
+      <v-overlay :value="!isLoaded" :absolute="true">
+        <v-progress-circular
+          indeterminate
+          size="64"
+        ></v-progress-circular>
+      </v-overlay>
+      <v-container fluid pa-0 class="d-flex flex-column flex-grow-1 fill-parent-height" ref="profileStatus">
         <v-row no-gutters class="flex-grow-0 flex-shrink-0">
           <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
-                    <ProfileStatus :profile="profile" />
+                    <ProfileStatus v-if="hasUsername" :profile="profile" />
                 </v-container>
             </v-col>
         </v-row>
         <v-row no-gutters class="top-row flex-grow-1 flex-shrink-1">
-          <v-col cols="12" class="scrollable" style="overflow-x: hidden" ref="chatList">
+          <v-col cols="12" class="scrollable" style="overflow-x: hidden" ref="chatList" v-on:scroll.passive="handleScroller">
             <v-row v-for="(message, idx) in getMessages" :key="idx">
                 <v-col cols="12" class="d-inline-flex py-1">
                   <Message class="ml-3" 
                   :profile="profile"
                   :message="message"
                   :previousId="getPrev(idx)"
-                  :currentId="getCur(idx)" />
+                  :currentId="getCur(idx)"
+                  :observer="observer" />
                 </v-col>
             </v-row>
           </v-col>
@@ -25,13 +32,15 @@
           <v-col cols="12" style="position: relative;">
                 <v-container class="pa-0">
                     <UserInput
+                    v-if="hasUsername"
                     :show-emoji="true"
-                    :on-submit="s"
-                    :suggestions="sug()"
                     :show-file="false"
-                    :placeholder="'ssfsdf'"
-                    :colors="colors"
-                    @recMessage="recvMessage"
+                    @sendTextMessage="sendMessage"
+                    @sendFileMessage="sendFile"
+                    @sendVoiceMessage="sendVoice"
+                    @typing="typing"
+                    @stopTyping="onlineStatus"
+                    @recording="recordingVoiceStatus"
                     />
                 </v-container>
             </v-col>
@@ -42,18 +51,26 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { v4 as uuidv4 } from 'uuid';
 
 import UserInput from './UserInput/UserInput'
 import Message from './Message/Message'
 import ProfileStatus from './ProfileStatus'
 
 import { AuthenticationRequestJson } from '~/store/modules/chat/helper-classes/requestJson/authenticationrequestjson'
+import { ControlMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/controlmessagerequestjson'
+import { SeenMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/seenmessagerequestjson'
+import { GetProfileInfoRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getprofileinforequestjson'
 import { GetChatUsersRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getchatusersrequestjson'
 import { GetUserMessagesRequestJson } from '~/store/modules/chat/helper-classes/requestJson/getusermessagesrequestjson'
 import { SendMessageRequestJson } from '~/store/modules/chat/helper-classes/requestJson/sendmessagerequestjson'
 import { Message as MessageClass } from '~/store/modules/chat/models/message'
+import { FileMessage } from '~/store/modules/chat/models/filemessage'
 
 import { BaseHandler } from '~/store/modules/chat/helper-classes/handlers/basehandler'
+import { ControlMessageHandler } from '~/store/modules/chat/helper-classes/handlers/controlmessagehandler'
+import { SeenMessageHandler } from '~/store/modules/chat/helper-classes/handlers/seenmessagehandler'
+import { GetProfileInfoResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getprofileinfohandler'
 import { AuthenticationResponseHandler } from '~/store/modules/chat/helper-classes/handlers/authenticationhandler'
 import { GetUserChatResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getuserchathandler'
 import { GetUserMessageResponseHandler } from '~/store/modules/chat/helper-classes/handlers/getusermessageshandler'
@@ -67,61 +84,25 @@ export default {
         readyState: -1,
         profile: null,
         messages: [],
-        participants: [
-            {
-            id: 'user1',
-            name: 'Matteo',
-            imageUrl: 'https://avatars3.githubusercontent.com/u/1915989?s=230&v=4'
-            },
-            {
-            id: 'user2',
-            name: 'Support',
-            imageUrl: 'https://avatars3.githubusercontent.com/u/37018832?s=200&v=4'
-            }
-        ], // the list of all the participant of the conversation. `name` is the user name, `id` is used to establish the author of a message, `imageUrl` is supposed to be the user avatar.
-        titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
-        messageList: [
-            { type: 'text', author: `me`, data: { text: `Say yes!` } },
-            { type: 'text', author: `user1`, data: { text: `No.` } }
-        ], // the list of the messages to show, can be paginated and adjusted dynamically
-        newMessagesCount: 0,
-        isChatOpen: false, // to determine whether the chat window should be open or closed
-        showTypingIndicator: '', // when set to a value matching the participant.id it shows the typing indicator for the specific user
-        colors: {
-            header: {
-            bg: '#4e8cff',
-            text: '#ffffff'
-            },
-            launcher: {
-            bg: '#4e8cff'
-            },
-            messageList: {
-            bg: '#ffffff'
-            },
-            sentMessage: {
-            bg: '#4e8cff',
-            text: '#ffffff'
-            },
-            receivedMessage: {
-            bg: '#eaeaea',
-            text: '#222222'
-            },
-            userInput: {
-            bg: '#f4f7f9',
-            text: '#565867'
-            }
-        }, // specifies the color scheme for the component
-        alwaysScrollToBottom: false, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
-        messageStyling: true // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
+        observer: null,
+        hasUsername: false,
+        isLoaded: true,
+        canScrollOnMessage: true,
+        isFromSearch: false
+      }
+    },
+    watch: {
+      'profile.messageList' : {
+        handler: function(val, oldval) {
+          this.tryToScroll()
         }
-      },
+      }
+    },
   computed: {
-    ...mapGetters('modules/chat/chatManager',['getWebSocket']),
+    ...mapGetters('modules/chat/chatManager',['getWebSocket', 'getUserListController', 'getSearchListController']),
     getMessages() {
-      console.log('hallo')
       if (this.profile != undefined) {
-          this.scrollToBottom()
-          return this.profile.messageList
+        return this.profile.messageList
       }
 
       return []
@@ -129,65 +110,244 @@ export default {
   },
   created() {
     this.$nuxt.$on('loadProfileChats', this.onLoadProfileChatsHandler)
+
+    this.observer = new IntersectionObserver(
+      this.messageIsInView, 
+      {
+        root: this.$el,
+        threshold: 1.0,
+      }
+    );
   },
   mounted() {
-    this.getWebSocket.AddOnOpenHandler(new BaseHandler(this.onOpenHandler))
-    this.getWebSocket.AddOnMessageHandler(new GetUserMessageResponseHandler(this.onMessageHandler))
-
-    this.readyState = this.getWebSocket.readyState
+    this.getWebSocket.AddOnMessageHandler(new SeenMessageHandler(this.onSeenMessage))
+    this.getWebSocket.AddOnMessageHandler(new GetProfileInfoResponseHandler(this.onGetNewProfileInfo))
+  },
+  updated() {
+    if ((this.username === undefined || this.username === null) && this.hasUsername) {
+      this.hasUsername = false
+    } else {
+      this.hasUsername = true
+    }
   },
   methods: {
-    ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile', 'getProfileByUsername', 'sortProfileMessages']),
+    ...mapActions('modules/chat/uploadFile', ['uploadMessageWithFile']),
+    ...mapActions('modules/chat/chatManager', ['pushMessageJsonToProfile', 'pushMessageToProfile',
+     'getProfileByUsername', 'sortProfileMessages', 'swapProfileToFront', 'addUnseenToProfile',
+      'setObtainMessageStatus', 'setProfileLastMessage', 'seenProfileMessageWithID',
+        'getProfileFromSearchList', 'addProfileToSearchList', 'getProfileFromSearchListWithUsername',
+          'transferProfileFromSearchListToUserList']),
     onLoadProfileChatsHandler(profileUsername) {
       this.username = profileUsername
-      this.getProfileByUsername(this.username).then((profile) => {this.profile = profile})
-      this.obtainMessages()
+      this.clearPage()
+      
+      if (this.getUserListController.hasProfile(this.username)) {
+        this.getProfileByUsername(this.username).then((profile) => {
+          this.loadProfileAndObtainMessage(profile)
+        })
+      } else if (this.getSearchListController.hasProfile(this.username)) {
+        this.getProfileFromSearchList({
+            username: this.username,
+            transferToUserList: false
+          }).then((profile) => {
+            this.isFromSearch = true
+            this.loadProfileAndObtainMessage(profile)
+        })
+      } else {
+        this.getWebSocket.SendRequest(new GetProfileInfoRequestJson(this.username))
+      }
     },
-    onOpenHandler({ data }) {
-      this.obtainMessages()
-    },
-    onMessageHandler({ data }) {
-      data = JSON.parse(data)
-
-      console.log(data)
-      data.data = JSON.parse(data.data)
-      let username = this.username
-      let messageJson = data.data
-      let isArray = Array.isArray(messageJson)
-      this.pushMessageJsonToProfile({username, messageJson, isArray}).then(() => this.scrollToBottom())
-      console.log(isArray)
-      if (isArray) {
-        this.sortProfileMessages(username)
+    loadProfileAndObtainMessage(profile) {
+      this.isLoaded = true
+      this.profile = profile
+      if (!this.isFromSearch) {
+        this.obtainMessages()
       }
     },
     obtainMessages() {
       console.log(this.getWebSocket)
-      console.log(this.username)
-      if (this.getWebSocket.readyState == 1 && this.username != undefined) {
-        let getUserMessageReq = new GetUserMessagesRequestJson(this.username)
+      console.log(this.profile)
+      if (this.profile && this.profile.isObtainedMessages) {
+        return
+      }
+
+      if (this.username != undefined) {
+        let getUserMessageReq = new GetUserMessagesRequestJson(this.username, this.profile.numberOfMessage)
         this.getWebSocket.SendRequest(getUserMessageReq)
+
+        let username = this.username
+        let obtainStatus = true
+        this.setObtainMessageStatus({username, obtainStatus})
       }
     },
-    recvMessage(text) {
-      let sendMessageReq = new SendMessageRequestJson(text, this.username)
-      this.getWebSocket.SendRequest(sendMessageReq)
+    sendMessage(text) {
+      console.log('salam')
+      if (text == undefined || text == null || text.length == 0) {
+        return
+      }
+      if (this.isFromSearch) {
+
+      }
 
       let username = this.username
-      let messageInstance = new MessageClass()
+      let messageInstance = this.createMessageInstance()
+      messageInstance.messageBody = text
       let isArray = false
 
-      messageInstance.messageDate = new Date()
-      messageInstance.messageBody = text
-      messageInstance.isSeen = false
-      messageInstance.isSender = true
+      console.log(messageInstance)
 
-      this.pushMessageToProfile({username, messageInstance, isArray})
-      this.scrollToBottom()
+      let sendMessageReq = new SendMessageRequestJson(text, username, messageInstance.messageUUID)
+      this.getWebSocket.SendRequest(sendMessageReq)
+
+      this.addMessageToProfile(username, messageInstance, isArray)
+    },
+    onGetNewProfileInfo({ data }) {
+      data = JSON.parse(data)
+
+      this.addProfileToSearchList(data.user)
+      .then((status) => {
+        if (status) {
+          this.getProfileFromSearchListWithUsername(this.username)
+          .then((profile) => {
+            this.isFromSearch = true
+            console.log(profile)
+            if (profile !== null && profile !== undefined && profile.username == this.username) {
+              this.loadProfileAndObtainMessage(profile)
+            }
+          })
+        }
+      })
+    },
+    sendFile(file) {
+      let fileMessage = this.createMessageInstance(true)
+      if (file.type.includes('image')) {
+        fileMessage.messageType = 1
+      } else {
+        fileMessage.messageType = 3
+      }
+      fileMessage.fileName = file.name
+
+      this.sendingFileStatus()
+      this.uploadFileMessage(fileMessage, file)
+    },
+    sendVoice(audioBlob) {
+      let voiceMessage = this.createMessageInstance(true)
+      voiceMessage.messageType = 2
+      voiceMessage.fileName = 'Voice message'
+
+      this.sendingVoiceStatus()
+      this.uploadFileMessage(voiceMessage, audioBlob)
+    },
+    uploadFileMessage(messageInstance, file) {
+      this.uploadMessageWithFile({
+        toUsername: this.username,
+        messageInstance: messageInstance,
+        file: file }).then((fileUrl) => {
+          console.log(fileUrl)
+          messageInstance.messageBody = fileUrl
+          messageInstance.fileUrl = fileUrl
+          console.log(messageInstance)
+          this.addMessageToProfile(this.username, messageInstance, false)
+          this.onlineStatus()
+        })
+    },
+    onSeenMessage({ data }) {
+      data = JSON.parse(data)
+      console.log(data)
+
+      let messageUUID = data.uuid
+      let username = data.user.username
+
+      this.seenProfileMessageWithID({
+        username: username, 
+        messageIdentifier: messageUUID,
+        isMessageUUID: true
+        }).then((status) => {
+        console.log(status)
+      })
+    },
+    seenMessage(messageID) {
+      this.seenProfileMessageWithID({
+        username: this.username, 
+        messageIdentifier: messageID,
+        isMessageUUID: false}).then((status) => {
+          console.log(status)
+        if (status) {
+          let unseenCount = -1
+          let username = this.username
+          this.addUnseenToProfile({username, unseenCount})
+        }
+      })
+      let seenMessage = new SeenMessageRequestJson(messageID)
+      this.getWebSocket.SendRequest(seenMessage)
+    },
+    messageIsInView(entries) {
+      entries.forEach(({ target, isIntersecting}) => {
+          if (!isIntersecting) {
+            return;
+          }
+
+          console.log('h3')
+        
+          this.observer.unobserve(target);
+        
+          setTimeout(() => {
+            let messageID = target.getAttribute("message-id");
+            this.seenMessage(messageID)
+          }, 300)
+      });
+    },
+    clearPage() {
+      this.profile = null
+      this.isLoaded = false
+      this.isFromSearch = false
+      this.canScrollOnMessage = true
+    },
+    tryToScroll() {
+      if (this.canScrollOnMessage) {
+        this.scrollToBottom()
+      }
     },
     scrollToBottom() {
       this.$nextTick(() => {
         let chatList = this.$refs.chatList
         chatList.scrollTop = chatList.scrollHeight;
+      })
+    },
+    createMessageInstance(isFile) {
+      let messageInstance = new MessageClass()
+      if (isFile) {
+        messageInstance = new FileMessage()
+      }
+
+      messageInstance.messageDate = new Date()
+      messageInstance.isSeen = false
+      messageInstance.isSender = true
+      messageInstance.messageUUID = uuidv4()
+
+      return messageInstance
+    },
+    addMessageToProfile(username, messageInstance, isArray) {
+      if (this.isFromSearch) {
+        this.transferProfileFromSearchListToUserList({
+          username: username
+          }).then((status) => {
+          if (status) {
+            this.isFromSearch = false
+            this.pushMessageAndScroll(username, messageInstance, isArray)
+          }
+        })
+      } else {
+        this.pushMessageAndScroll(username, messageInstance, isArray)
+      }
+    },
+    pushMessageAndScroll(username, messageInstance, isArray) {
+      this.pushMessageToProfile({username, messageInstance, isArray}).then(() => this.scrollToBottom())
+      this.swapProfileToFront(username)
+      this.setProfileLastMessage({
+          username: username,
+          lastMessage: messageInstance,
+          isJson: false
       })
     },
     getPrev(index) {
@@ -205,12 +365,40 @@ export default {
       }
       return 0
     },
-    s() {
-        console.log('submit')
+    sendingFileStatus() {
+      this.sendStatus("sending file")
     },
-    sug() {
-        console.log('sug')
-        return []
+    sendingVoiceStatus() {
+      this.sendStatus("sending voice")
+    },
+    recordingVoiceStatus() {
+      this.sendStatus("recording voice")
+    },
+    typing() {
+      this.sendStatus("typing")
+    },
+    sendStatus(statusText) {
+      let typingMessage = new ControlMessageRequestJson(this.profile.username, {
+        type: "status",
+        status: statusText
+      })
+      this.getWebSocket.SendRequest(typingMessage)
+      console.log(statusText)
+    },
+    onlineStatus() {
+      let typingMessage = new ControlMessageRequestJson(this.profile.username, {
+        type: "status",
+        status: "online"
+      })
+      this.getWebSocket.SendRequest(typingMessage)
+      console.log('stop')
+    },
+    handleScroller(event) {
+      if (event.target.scrollTop >= (event.target.scrollHeight - this.$refs.profileStatus.clientHeight)) {
+        this.canScrollOnMessage = true
+      } else {
+        this.canScrollOnMessage = false
+      }
     }
   }
 }
