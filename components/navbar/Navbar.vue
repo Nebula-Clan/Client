@@ -3,7 +3,7 @@
     <v-row v-if="$auth.user" class="align-center toolbar px-4">
       <v-col cols="2" md="4" class="search-col">
         <v-menu
-          v-if="$vuetify.breakpoint.xsOnly"
+          v-if="$vuetify.breakpoint.mdAndDown"
           :close-on-content-click="false"
           offset-y
           transition="slide-x-transition">
@@ -20,23 +20,25 @@
           <v-list class="pa-2">
             <v-text-field
               hide-details
-              placeholder="hashtags, people, etc..."
+              placeholder="Search..."
               outlined
               v-model="searchKey"
               @click:append="search"
+              @keyup.enter.native="search"
               append-icon="mdi-magnify"
               dense>
             </v-text-field>
           </v-list>
         </v-menu>
         <v-text-field
+          v-else
           style="width: max-content"
-          class="search"
           v-model="searchKey"
           outlined
-          placeholder="Search ..."
+          placeholder="Search..."
           dense
           @click:append="search"
+          @keyup.enter.native="search"
           hide-details
           append-icon="mdi-magnify">
         </v-text-field>
@@ -148,6 +150,7 @@ export default {
     getProfileInfo: function () {
     },
     search: function () {
+      this.searchKey = "";
       this.$router.push({path: '/explore', query: {keyword: this.searchKey}});
     }
   }
@@ -163,9 +166,6 @@ export default {
 @media screen and (max-width: 576px) {
   .toolbar {
     padding: 0;
-    .search{
-      display: none;
-    }
     .nav-btn {
       margin: unset;
     }
