@@ -21,34 +21,12 @@
             <v-btn
               v-bind="attrs"
               v-on="on"
-              icon>
-              <v-icon>mdi-help-circle</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a question</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
               icon
               to="/new-post">
               <v-icon>mdi-newspaper</v-icon>
             </v-btn>
           </template>
           <span>Create an article</span>
-        </v-tooltip>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-poll</v-icon>
-            </v-btn>
-          </template>
-          <span>Create a poll</span>
         </v-tooltip>
       </v-col>
       <v-col class="text-right" cols="6">
