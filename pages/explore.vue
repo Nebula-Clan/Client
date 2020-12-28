@@ -24,7 +24,6 @@
     <!--      </v-slide-group>-->
     <!--    </v-sheet>-->
 
-
     <v-col
       cols="12"
       xl="1"
@@ -39,6 +38,17 @@
       lg="10"
       md="10"
       sm="12">
+
+      <v-chip
+        v-if="!isEmpty(this.$route.query)"
+        class="mb-4 "
+        color="blue darken-2"
+        label>
+        <v-icon left>
+          mdi-magnify
+        </v-icon>
+        {{this.$route.query.keyword}}
+      </v-chip>
 
       <ExplorePosts v-show="menuName === 'ALL'" :posts="posts"/>
       <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people"/>
@@ -113,10 +123,7 @@
       hashtags: []
     }),
     mounted() {
-      this.fetchPosts();
-      this.fetchPeople();
-      this.fetchHashtags();
-      this.fetchCategories();
+      this.explore();
     },
     computed: {
       menuName() {
@@ -153,6 +160,14 @@
       ...mapActions('modules/explore', ['getExplorePosts']),
       ...mapActions('modules/explore', ['getExplorePeople']),
       ...mapActions('modules/explore', ['searchPosts']),
+      ...mapActions('modules/explore', ['searchHashtags']),
+      ...mapActions('modules/explore', ['searchCategories']),
+      explore() {
+        this.fetchPosts();
+        this.fetchPeople();
+        this.fetchHashtags();
+        this.fetchCategories();
+      },
       fetchPosts() {
         if (this.isEmpty(this.$route.query)) {
           this.getExplorePosts()
@@ -165,18 +180,27 @@
             keyword: this.$route.query.keyword
           })
           .then(({ data }) => {
-            console.log(data.posts_finded);
             this.posts = data.posts_finded;
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
         }
       },
       fetchCategories() {
-        this.getAllCategories()
-        .then(({ data }) => {
-          this.categories = data.categories;
-        })
-        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        if (this.isEmpty(this.$route.query)) {
+          this.getAllCategories()
+          .then(({ data }) => {
+            this.categories = data.categories;
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        } else {
+          this.searchCategories({
+            keyword: this.$route.query.keyword
+          })
+          .then(({ data }) => {
+            this.categories = data.categories;
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        }
       },
       fetchPeople() {
         let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
@@ -189,9 +213,12 @@
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
       fetchHashtags() {
-        this.$axios.$get("api/hashtag/similarity?&text=a").then(
-          response => {
-            this.hashtags = response.hashtags
+        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        this.searchHashtags({
+          keyword
+        })
+        .then(({ data }) => {
+            this.hashtags = data.hashtags
           }
         )
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
@@ -202,6 +229,11 @@
         if (queries.keyword === null) return true;
         return queries.keyword === "";
       }
+    },
+    watch: {
+      '$route.query.keyword': function () {
+        this.explore();
+      },
     }
   }
 </script>

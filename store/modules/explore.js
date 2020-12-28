@@ -20,6 +20,20 @@ const actions = {
       }
     })
   },
+  searchHashtags({ commit }, data) {
+    return this.$axios.get("api/hashtag/similarity", {
+      params: {
+        text: data.keyword === undefined ? "" : data.keyword
+      }
+    });
+  },
+  searchCategories({ commit }, data) {
+    return this.$axios.get("api/search/search_in_categories", {
+      params: {
+        key: data.keyword,
+      }
+    });
+  }
 };
 
 const mutations = {};
