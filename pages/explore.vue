@@ -152,12 +152,24 @@
       ...mapActions('modules/category/category', ['getAllCategories']),
       ...mapActions('modules/explore', ['getExplorePosts']),
       ...mapActions('modules/explore', ['getExplorePeople']),
+      ...mapActions('modules/explore', ['searchPosts']),
       fetchPosts() {
-        this.getExplorePosts()
-        .then(({ data }) => {
-          this.posts = data.posts;
-        })
-        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        if (this.isEmpty(this.$route.query)) {
+          this.getExplorePosts()
+          .then(({ data }) => {
+            this.posts = data.posts;
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        } else {
+          this.searchPosts({
+            keyword: this.$route.query.keyword
+          })
+          .then(({ data }) => {
+            console.log(data.posts_finded);
+            this.posts = data.posts_finded;
+          })
+          .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+        }
       },
       fetchCategories() {
         this.getAllCategories()
@@ -167,7 +179,10 @@
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
       fetchPeople() {
-        this.getExplorePeople()
+        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        this.getExplorePeople({
+          keyword
+        })
         .then(({ data }) => {
           this.people = data.users_finded
         })
@@ -180,6 +195,12 @@
           }
         )
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+      isEmpty(queries) {
+        if (queries === undefined) return true;
+        if (queries.keyword === undefined) return true;
+        if (queries.keyword === null) return true;
+        return queries.keyword === "";
       }
     }
   }

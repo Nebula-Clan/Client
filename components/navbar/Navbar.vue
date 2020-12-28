@@ -34,7 +34,7 @@
           class="search"
           v-model="searchKey"
           outlined
-          placeholder="hashtags, people, etc..."
+          placeholder="Search ..."
           dense
           @click:append="search"
           hide-details

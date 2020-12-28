@@ -9,10 +9,17 @@ const actions = {
   getExplorePeople({ commit }, data) {
     return this.$axios.get('api/search/search_in_users', {
       params: {
-        key: ""
+        key: data.keyword === undefined ? "" : data.keyword
       }
     })
-  }
+  },
+  searchPosts({ commit }, data) {
+    return this.$axios.get('/api/search/search_in_posts', {
+      params: {
+        key: data.keyword,
+      }
+    })
+  },
 };
 
 const mutations = {};
