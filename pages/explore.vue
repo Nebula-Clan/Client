@@ -50,10 +50,10 @@
         {{this.$route.query.keyword}}
       </v-chip>
 
-      <ExplorePosts v-show="menuName === 'ALL'" :posts="posts"/>
-      <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people"/>
-      <ExploreHashtags v-show="menuName === 'HASHTAGS'" :hashtags="hashtags"/>
-      <ExploreCategories v-show="menuName==='CATEGORIES'" :categories="categories"/>
+      <ExplorePosts v-show="menuName === 'ALL'" :posts="posts" :is-loading="isPageLoading"/>
+      <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people" :is-loading="isPageLoading"/>
+      <ExploreHashtags v-show="menuName === 'HASHTAGS'" :hashtags="hashtags" :is-loading="isPageLoading"/>
+      <ExploreCategories v-show="menuName==='CATEGORIES'" :categories="categories" :is-loading="isPageLoading"/>
 
     </v-col>
 
@@ -117,15 +117,31 @@
     components: { ExploreCategories, ExploreHashtags, ExplorePeople, ExplorePosts },
     data: () => ({
       pageIndex: 0,
+
       posts: [],
       people: [],
       categories: [],
-      hashtags: []
+      hashtags: [],
+
+      loading: {
+        isPostLoading: true,
+        isCategoryLoading: true,
+        isHashtagsLoading: true,
+        isUsersLoading: true
+      },
     }),
     mounted() {
       this.explore();
     },
     computed: {
+      isPageLoading() {
+        for (const [key, value] of Object.entries(this.loading)) {
+          if (value) {
+            return true;
+          }
+        }
+        return false
+      },
       menuName() {
         switch (this.pageIndex) {
           case 0:
@@ -163,6 +179,12 @@
       ...mapActions('modules/explore', ['searchHashtags']),
       ...mapActions('modules/explore', ['searchCategories']),
       explore() {
+        this.loading = {
+          isPostLoading: true,
+          isCategoryLoading: true,
+          isHashtagsLoading: true,
+          isUsersLoading: true
+        };
         this.fetchPosts();
         this.fetchPeople();
         this.fetchHashtags();
@@ -173,6 +195,7 @@
           this.getExplorePosts()
           .then(({ data }) => {
             this.posts = data.posts;
+            this.loading.isPostLoading = false;
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
         } else {
@@ -181,6 +204,7 @@
           })
           .then(({ data }) => {
             this.posts = data.posts_finded;
+            this.loading.isPostLoading = false;
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
         }
@@ -190,6 +214,7 @@
           this.getAllCategories()
           .then(({ data }) => {
             this.categories = data.categories;
+            this.loading.isCategoryLoading = false;
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
         } else {
@@ -198,6 +223,7 @@
           })
           .then(({ data }) => {
             this.categories = data.categories;
+            this.loading.isCategoryLoading = false;
           })
           .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
         }
@@ -208,7 +234,8 @@
           keyword
         })
         .then(({ data }) => {
-          this.people = data.users_finded
+          this.people = data.users_finded;
+          this.loading.isUsersLoading = false;
         })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
@@ -218,9 +245,9 @@
           keyword
         })
         .then(({ data }) => {
-            this.hashtags = data.hashtags
-          }
-        )
+          this.hashtags = data.hashtags;
+          this.loading.isHashtagsLoading = false;
+        })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
       isEmpty(queries) {

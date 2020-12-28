@@ -1,5 +1,16 @@
 <template>
-  <v-row v-if="posts.length > 0">
+  <v-row v-if="isLoading">
+    <v-col
+      v-for="index in 24"
+      :key="index"
+      class="d-flex child-flex"
+      :cols="postColumns">
+      <v-skeleton-loader
+        elevation="2"
+        type="image"/>
+    </v-col>
+  </v-row>
+  <v-row v-else-if="posts.length > 0">
     <v-col
       v-for="(post, index) in posts"
       :key="index"
@@ -68,7 +79,7 @@
   export default {
     name: "Explore-Posts",
     components: { NoResult, UserAvatar },
-    props: ['posts'],
+    props: ['posts', 'isLoading'],
     computed: {
       postColumns() {
         switch (this.$vuetify.breakpoint.name) {

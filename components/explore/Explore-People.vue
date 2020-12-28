@@ -1,10 +1,18 @@
 <template>
   <v-card
-    v-if="people.length > 0"
+    v-if="isLoading"
     class="mx-auto pt-2"
     max-width="100%"
     tile>
-    <span class="ml-2 pt-2 text-caption">Accounts</span>
+    <MenuIconLoader :number-of-items="40"/>
+  </v-card>
+  <v-card
+    v-else-if="people.length > 0"
+    class="mx-auto pt-4"
+    max-width="100%"
+    tile>
+    <span class="ml-3 text-h4">Accounts</span>
+    <v-divider class="mt-4"/>
     <v-list dense>
       <v-list-item-group
         color="primary">
@@ -30,11 +38,12 @@
 <script>
   import UserAvatar from "../shared/UserAvatar";
   import NoResult from "../shared/No-Result";
+  import MenuIconLoader from "../homepage/Menu-Icon-Loader";
 
   export default {
     name: "Explore-People",
-    components: { NoResult, UserAvatar },
-    props: ['people'],
+    components: { MenuIconLoader, NoResult, UserAvatar },
+    props: ['people', 'isLoading'],
   }
 </script>
 
