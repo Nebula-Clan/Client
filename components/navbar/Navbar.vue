@@ -150,8 +150,8 @@ export default {
     getProfileInfo: function () {
     },
     search: function () {
-      this.searchKey = "";
       this.$router.push({path: '/explore', query: {keyword: this.searchKey}});
+      this.searchKey = "";
     }
   }
 }
