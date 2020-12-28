@@ -3,7 +3,7 @@
     <v-row v-if="$auth.user" class="align-center toolbar px-4">
       <v-col cols="2" md="4" class="search-col">
         <v-menu
-          v-if="$vuetify.breakpoint.xsOnly"
+          v-if="$vuetify.breakpoint.mdAndDown"
           :close-on-content-click="false"
           offset-y
           transition="slide-x-transition">
@@ -20,23 +20,25 @@
           <v-list class="pa-2">
             <v-text-field
               hide-details
-              placeholder="hashtags, people, etc..."
+              placeholder="Search..."
               outlined
               v-model="searchKey"
               @click:append="search"
+              @keyup.enter.native="search"
               append-icon="mdi-magnify"
               dense>
             </v-text-field>
           </v-list>
         </v-menu>
         <v-text-field
+          v-else
           style="width: max-content"
-          class="search"
           v-model="searchKey"
           outlined
-          placeholder="hashtags, people, etc..."
+          placeholder="Search..."
           dense
           @click:append="search"
+          @keyup.enter.native="search"
           hide-details
           append-icon="mdi-magnify">
         </v-text-field>
@@ -53,7 +55,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="nav-btn"
-              to="/"
+              to="/explore"
               icon
               dark
               v-bind="attrs"
@@ -85,7 +87,7 @@
               icon
               v-bind="attrs"
               v-on="on">
-              <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"></UserAvatar>
+              <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"/>
             </v-btn>
           </template>
           <v-list dense>
@@ -113,7 +115,7 @@
     </v-row>
     <v-row v-else class="align-center toolbar px-4">
       <v-toolbar-title>Huddle</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer/>
       <v-btn icon to="/login">
         <v-icon>
           mdi-login
@@ -149,6 +151,7 @@ export default {
     },
     search: function () {
       this.$router.push({path: '/explore', query: {keyword: this.searchKey}});
+      this.searchKey = "";
     }
   }
 }
@@ -163,9 +166,6 @@ export default {
 @media screen and (max-width: 576px) {
   .toolbar {
     padding: 0;
-    .search{
-      display: none;
-    }
     .nav-btn {
       margin: unset;
     }

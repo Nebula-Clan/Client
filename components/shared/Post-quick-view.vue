@@ -9,7 +9,7 @@
           <nuxt-link
             style="text-decoration: none"
             v-if="post.category !== null"
-            :to="`/explore/category?category=${post.category.title}&order=new`">
+            :to="`/explore?category=${post.category.title}`">
             <v-sheet
               outlined
               elevation="1"
@@ -65,7 +65,7 @@
           nuxt
           :key="i"
           v-for="(tag, i) in post.hashtags"
-          :to="'/search/hashtag?keyword=' + tag.text + '&sort=latest'"
+          :to="`/explore?hashtag=${tag.text}`"
           outlined
           small
           class="mx-1"
@@ -169,11 +169,11 @@
         } else {
           return ''
         }
+      },
+      postDateDuration() {
+        return dateDuration(this.post.date_created)
+      }
     },
-    postDateDuration() {
-      return dateDuration(this.post.date_created)
-    }
-  },
     methods: {
       ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
       ...mapActions('modules/comment/post_comment', ['replyToPost']),
@@ -181,26 +181,26 @@
       likePost() {
         if (!this.like) {
           this.submitLikeAtPostWithID(this.post.id)
-            .then(({ data }) => {
-              this.like = true
-              this.dislike = false
-            })
-            .catch((error) => {
-              if (error.response.status == 403) {
-                this.showErrorWithMessage('Please Login in or Sign Up')
-              }
-            })
+          .then(({ data }) => {
+            this.like = true
+            this.dislike = false
+          })
+          .catch((error) => {
+            if (error.response.status == 403) {
+              this.showErrorWithMessage('Please Login in or Sign Up')
+            }
+          })
         } else {
           this.deleteLikeAtPostWithID(this.post.id)
-            .then(({ data }) => {
-              this.like = false
-              this.dislike = true
-            })
-            .catch((error) => {
-              if (error.response.status == 403) {
-                this.showErrorWithMessage('Please Login in or Sign Up')
-              }
-            })
+          .then(({ data }) => {
+            this.like = false
+            this.dislike = true
+          })
+          .catch((error) => {
+            if (error.response.status == 403) {
+              this.showErrorWithMessage('Please Login in or Sign Up')
+            }
+          })
         }
       },
       showErrorWithMessage(message) {

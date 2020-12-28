@@ -19,7 +19,7 @@
             nuxt
             :key="i"
             v-for="(tag, i) in post.postHashtags"
-            :to="'/search/hashtag?keyword=' + tag + '&sort=latest'"
+            :to="`/explore?hashtag=${tag.text}`"
             outlined
             class="mx-1"
             :color="chipsColors[i]"

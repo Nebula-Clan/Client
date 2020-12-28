@@ -2,7 +2,7 @@
   <v-app dark>
     <Navbar />
     <v-main >
-      <nuxt></nuxt>
+      <nuxt/>
       <Snackbar/>
       <GoUpFAB/>
     </v-main>
