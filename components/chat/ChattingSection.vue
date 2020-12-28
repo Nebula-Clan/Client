@@ -112,7 +112,7 @@ export default {
     this.$nuxt.$on('loadProfileChats', this.onLoadProfileChatsHandler)
 
     this.observer = new IntersectionObserver(
-      this.onMessageSeen, 
+      this.messageIsInView, 
       {
         root: this.$el,
         threshold: 1.0,
@@ -280,7 +280,7 @@ export default {
       let seenMessage = new SeenMessageRequestJson(messageID)
       this.getWebSocket.SendRequest(seenMessage)
     },
-    onMessageSeen(entries) {
+    messageIsInView(entries) {
       entries.forEach(({ target, isIntersecting}) => {
           if (!isIntersecting) {
             return;

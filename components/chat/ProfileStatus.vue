@@ -1,7 +1,9 @@
 <template>
     <v-list-item two-line class="back-status">
         <v-list-item-content class="py-1">
-            <v-list-item-title @click="profileViewOverlay = true"> {{ getProfileName }} </v-list-item-title>
+            <v-list-item-title style="cursor: pointer;" @click="profileViewOverlay = true"> 
+                {{ getProfileName }} 
+            </v-list-item-title>
             <v-list-item-subtitle :class="getLastSeenTextColor"> {{ getLastSeen }} </v-list-item-subtitle>
         </v-list-item-content>
         <v-overlay
