@@ -70,9 +70,13 @@ export default {
                 description: this.description
             }).then((status) => {
                 this.cancel()
-                this.$notifier.showMessage({content: 'Report submited successfully', color: 'success'});
+                this.$notifier.showMessage({content: 'Report submited successfully', color: 'success'})
             }).catch((error) => {
-                this.$notifier.showMessage({content: 'You cannot report once more', color: 'error'});
+                if (error.response.status == 406) {
+                    this.$notifier.showMessage({content: 'You cannot report once more', color: 'error'})
+                } else {
+                    this.$notifier.showMessage({content: 'Something went wrong pleas try again later', color: 'error'})
+                }
             })
         },
     }
