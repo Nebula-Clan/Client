@@ -33,6 +33,13 @@ const actions = {
         key: data.keyword,
       }
     });
+  },
+  searchCommunities({ commit }, data) {
+    return this.$axios.get("/api/search/search_in_communities", {
+      params: {
+        key: data.keyword === undefined ? "o" : data.keyword
+      }
+    });
   }
 };
 

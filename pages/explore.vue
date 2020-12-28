@@ -52,6 +52,7 @@
 
       <ExplorePosts v-show="menuName === 'ALL'" :posts="posts" :is-loading="isPageLoading"/>
       <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people" :is-loading="isPageLoading"/>
+      <ExploreCommunities v-show="menuName === 'COMMUNITIES'" :communities="communities" :is-loading="isPageLoading"/>
       <ExploreHashtags v-show="menuName === 'HASHTAGS'" :hashtags="hashtags" :is-loading="isPageLoading"/>
       <ExploreCategories v-show="menuName==='CATEGORIES'" :categories="categories" :is-loading="isPageLoading"/>
 
@@ -80,6 +81,11 @@
 
           <v-btn>
             <span class="pt-1">People</span>
+            <v-icon>mdi-account-outline</v-icon>
+          </v-btn>
+
+          <v-btn>
+            <span class="pt-1">Communities</span>
             <v-icon>mdi-account-multiple-outline</v-icon>
           </v-btn>
 
@@ -106,20 +112,23 @@
   import ExploreHashtags from "../components/explore/Explore-Hashtags";
   import ExploreCategories from "../components/explore/Explore-Categories";
   import {mapActions} from "vuex";
+  import ExploreCommunities from "../components/explore/Explore-Communities";
 
   const ALL = "ALL";
   const PEOPLE = "PEOPLE";
+  const COMMUNITIES = "COMMUNITIES";
   const HASHTAGS = "HASHTAGS";
   const CATEGORIES = "CATEGORIES";
 
   export default {
     name: "explore",
-    components: { ExploreCategories, ExploreHashtags, ExplorePeople, ExplorePosts },
+    components: { ExploreCommunities, ExploreCategories, ExploreHashtags, ExplorePeople, ExplorePosts },
     data: () => ({
       pageIndex: 0,
 
       posts: [],
       people: [],
+      communities: [],
       categories: [],
       hashtags: [],
 
@@ -127,7 +136,8 @@
         isPostLoading: true,
         isCategoryLoading: true,
         isHashtagsLoading: true,
-        isUsersLoading: true
+        isUsersLoading: true,
+        isCommunitiesLoading: true
       },
     }),
     mounted() {
@@ -149,8 +159,10 @@
           case 1:
             return PEOPLE;
           case 2:
-            return HASHTAGS;
+            return COMMUNITIES;
           case 3:
+            return HASHTAGS;
+          case 4:
             return CATEGORIES;
           default:
             return;
@@ -178,15 +190,18 @@
       ...mapActions('modules/explore', ['searchPosts']),
       ...mapActions('modules/explore', ['searchHashtags']),
       ...mapActions('modules/explore', ['searchCategories']),
+      ...mapActions('modules/explore', ['searchCommunities']),
       explore() {
         this.loading = {
           isPostLoading: true,
           isCategoryLoading: true,
+          isCommunitiesLoading: true,
           isHashtagsLoading: true,
           isUsersLoading: true
         };
         this.fetchPosts();
         this.fetchPeople();
+        this.fetchCommunities();
         this.fetchHashtags();
         this.fetchCategories();
       },
@@ -247,6 +262,17 @@
         .then(({ data }) => {
           this.hashtags = data.hashtags;
           this.loading.isHashtagsLoading = false;
+        })
+        .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
+      },
+      fetchCommunities() {
+        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        this.searchCommunities({
+          keyword
+        })
+        .then(({ data }) => {
+          this.communities = data.communities;
+          this.loading.isCommunitiesLoading = false;
         })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
