@@ -4,7 +4,11 @@ const getters = {};
 
 const actions = {
   getExplorePosts({ commit }, data) {
-    return this.$axios.get('/api/explorer/get_posts', {})
+    return this.$axios.get('/api/explorer/get_posts', {
+      params: {
+        category_filter: data.category
+      }
+    })
   },
   getExplorePeople({ commit }, data) {
     return this.$axios.get('api/search/search_in_users', {
@@ -37,7 +41,7 @@ const actions = {
   searchCommunities({ commit }, data) {
     return this.$axios.get("/api/search/search_in_communities", {
       params: {
-        key: data.keyword === undefined ? "o" : data.keyword
+        key: data.keyword === undefined ? "" : data.keyword
       }
     });
   }

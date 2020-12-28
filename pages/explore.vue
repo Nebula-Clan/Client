@@ -40,7 +40,7 @@
       sm="12">
 
       <v-chip
-        v-if="!isEmpty(this.$route.query)"
+        v-if="!isKeywordEmpty(this.$route.query)"
         class="mb-4 "
         color="blue darken-2"
         label>
@@ -206,8 +206,11 @@
         this.fetchCategories();
       },
       fetchPosts() {
-        if (this.isEmpty(this.$route.query)) {
-          this.getExplorePosts()
+        if (this.isKeywordEmpty(this.$route.query)) {
+          let category = this.isCategoryEmpty(this.$route.query) ? "" : this.$route.query.category;
+          this.getExplorePosts({
+            category
+          })
           .then(({ data }) => {
             this.posts = data.posts;
             this.loading.isPostLoading = false;
@@ -225,7 +228,7 @@
         }
       },
       fetchCategories() {
-        if (this.isEmpty(this.$route.query)) {
+        if (this.isKeywordEmpty(this.$route.query)) {
           this.getAllCategories()
           .then(({ data }) => {
             this.categories = data.categories;
@@ -244,7 +247,7 @@
         }
       },
       fetchPeople() {
-        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        let keyword = this.isKeywordEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
         this.getExplorePeople({
           keyword
         })
@@ -255,7 +258,7 @@
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
       fetchHashtags() {
-        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        let keyword = this.isKeywordEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
         this.searchHashtags({
           keyword
         })
@@ -266,7 +269,7 @@
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
       fetchCommunities() {
-        let keyword = this.isEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
+        let keyword = this.isKeywordEmpty(this.$route.query) ? undefined : this.$route.query.keyword;
         this.searchCommunities({
           keyword
         })
@@ -276,7 +279,13 @@
         })
         .catch(error => this.$notifier.showMessage({ content: error.message, color: 'error' }))
       },
-      isEmpty(queries) {
+      isCategoryEmpty(queries) {
+        if (queries === undefined) return true;
+        if (queries.category === undefined) return true;
+        if (queries.category === null) return true;
+        return queries.category === "";
+      },
+      isKeywordEmpty(queries) {
         if (queries === undefined) return true;
         if (queries.keyword === undefined) return true;
         if (queries.keyword === null) return true;
@@ -285,6 +294,13 @@
     },
     watch: {
       '$route.query.keyword': function () {
+        this.explore();
+      },
+      '$route.query.category': function () {
+        this.pageIndex = 0;
+        this.explore();
+      },
+      '$route.query.hashtag': function () {
         this.explore();
       },
     }

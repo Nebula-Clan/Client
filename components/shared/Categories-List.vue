@@ -5,7 +5,7 @@
         v-for="(category, i) in categories"
         :key="i"
         class="text-decoration-none"
-        :to="`/explore/category?category=${category.title}&sort=new`">
+        :to="`/explore?category=${category.title}`">
         <v-list-item :class="avatarPadding === undefined ? '' :  avatarPadding">
           <v-list-item-icon>
             <v-icon v-if="avatarSize===undefined" v-text="category.icon"/>
