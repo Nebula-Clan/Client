@@ -49,6 +49,26 @@
         </v-icon>
         {{this.$route.query.keyword}}
       </v-chip>
+      <v-chip
+        v-else-if="!isCategoryEmpty(this.$route.query)"
+        class="mb-4 "
+        color="blue darken-2"
+        label>
+        <v-icon left>
+          mdi-tag-faces
+        </v-icon>
+        {{this.$route.query.category}}
+      </v-chip>
+      <v-chip
+        v-else-if="!isHashtagEmpty(this.$route.query)"
+        class="mb-4 "
+        color="blue darken-2"
+        label>
+        <v-icon left>
+          mdi-tag-multiple
+        </v-icon>
+        {{this.$route.query.hashtag}}
+      </v-chip>
 
       <ExplorePosts v-show="menuName === 'ALL'" :posts="posts" :is-loading="isPageLoading"/>
       <ExplorePeople v-show="menuName === 'PEOPLE'" :people="people" :is-loading="isPageLoading"/>

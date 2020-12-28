@@ -34,22 +34,26 @@
                 <v-list-item>
                   <v-list-item-content>
 
-                    <v-list-item-title class="headline mb-1">
+                    <v-list-item-title class="headline mb-1 mt-4">
                       {{post.title}}
                     </v-list-item-title>
 
-                    <v-list-item-subtitle>
-                      {{post.description}}
-                    </v-list-item-subtitle>
                   </v-list-item-content>
 
                   <UserAvatar
                     color="primary"
                     size="50"
+                    class="mt-4"
                     :avatar-src="post.author.profile_picture"
                     :avatar-string="post.author.username"/>
 
                 </v-list-item>
+
+                <v-card-text>
+                  {{$vuetify.breakpoint.xsOnly
+                  ? post.description.substring(0,40) + "..."
+                  : $vuetify.breakpoint.lgAndUp ? post.description : post.description.substring(0,100) }}
+                </v-card-text>
 
                 <v-card-actions
                   class="see-more">
