@@ -156,6 +156,19 @@
       this.fetchFollowers();
       this.fetchFollowings();
     },
+    watch: {
+      getStatusOfReq: {
+        handler: function(val, oldVal) {
+          console.log(val)
+          if (val === true) {
+            this.errorTime = setTimeout(() => {
+              this.hasError = true
+            }, 20000)
+            this.isCompleted = true
+          }
+        }
+      }
+    },
     computed: {
       ...mapGetters('modules/profile/profilePosts', ['getPosts']),
       ...mapGetters('modules/profile/profileComments', ['getComments']),
@@ -177,15 +190,6 @@
       },
       profile() {
         return this.getProfile
-      },
-      watchReqUntilCompleted() {
-        if (this.getStatusOfReq) {
-          this.errorTime = setTimeout(() => {
-            this.hasError = true
-          }, 20000)
-          this.isCompleted = true
-        }
-        return this.isCompleted
       },
       getProfileBanner() {
         if (this.hasError) {

@@ -37,6 +37,10 @@ class Post {
         this._date = date
     }
 
+    set isReported(reportstatus) {
+        this._isReported = reportstatus
+    }
+
     get postID() {
         return this._id
     }
@@ -69,15 +73,19 @@ class Post {
         return this._isLiked
     }
 
+    get isReported() {
+        return this._isReported
+    }
+
     parsePostFromJson(json) {
         this.postID = json.id
         this.postTitle = json.title
         this.postImageURL = json.header_image
         this.postDescription = json.description
         this.postAuthor = json.author.first_name
-        this.postDescription = json.description
         this.postDate = json.date_created
         this.isLiked = json.is_liked
+        this.isReported = json.is_reported
         json.hashtags.forEach((item) => {
             this.postHashtags = item.text
         })

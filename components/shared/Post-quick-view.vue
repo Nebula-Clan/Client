@@ -32,17 +32,19 @@
       <v-col
         class="text-right"
         cols="2">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-          <span>More</span>
-        </v-tooltip>
+        <v-menu>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on" class="ml-auto">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+            </template>
+            <v-list elevation="24">
+                <v-list-item>
+                    <v-icon>mdi-flag</v-icon>
+                    <v-list-item-title class="ml-1" style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
+                </v-list-item>
+            </v-list>
+        </v-menu>
       </v-col>
     </v-row>
 
@@ -120,6 +122,14 @@
           <span>Comment</span>
         </v-tooltip>
       </v-col>
+
+      <v-overlay
+      :z-index="99"
+      :value="reportOverlay"
+      opacity="0.8"
+      >
+          <Report @cancel="reportOverlay = !reportOverlay" :postID="post.id"/>
+      </v-overlay>
     </v-row>
 
     <!-- Replay  -->
@@ -145,6 +155,7 @@
   import UserAvatar from "../shared/UserAvatar";
   import {dateDuration} from "~/shared-functions/Posts";
   import NewComment from "../comment/NewComment";
+  import Report from '~/components/shared/Report'
 
   export default {
     name: 'Post-quick-view',
@@ -154,6 +165,7 @@
       return {
         isCommentToPostExpanded: false,
         isLoadingToSendComment: false,
+        reportOverlay: false,
 
         chipsColors: [
           'blue', 'red', 'green', 'purple', 'orange'
