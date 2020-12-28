@@ -64,7 +64,7 @@ export default {
           this.text = val.name
           this.uploadedFile = true
         } else {
-          this.text = null
+          this.text = ''
           this.uploadedFile = false
         }
       }

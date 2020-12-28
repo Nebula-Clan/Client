@@ -181,6 +181,7 @@ export default {
       }
     },
     sendMessage(text) {
+      console.log('salam')
       if (text == undefined || text == null || text.length == 0) {
         return
       }

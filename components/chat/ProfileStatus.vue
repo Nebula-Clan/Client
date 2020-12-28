@@ -45,28 +45,22 @@ export default {
             return ''
         },
         getLastSeen() {
-            if (this.profile != undefined && 
-            this.profile.lastSeen != null && 
-            this.profile.lastSeen != undefined &&
-            this.profile.profileStatus != null && 
-            this.profile.profileStatus != undefined) {
-                this.getStatus(this.profile.profileStatus).then((status) => {
-                    if (status !== undefined) {
-                        this.hasStatus = true
-                        this.textColor = status.textColor
-                        this.statusText = status.text
-                    } else {
-                        this.textColor = ''
-                        this.hasStatus = false
-                        this.statusText = `${this.getTimeElapse(this.profile.lastSeen)} ago`
-                    }
-                })
-            } else {
-                this.textColor = ''
-                this.hasStatus = false
-                this.statusText = 'last seen recently'
+            if (this.profile !== undefined && this.profile !== null) {
+                if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                    this.getStatus(this.profile.profileStatus).then((status) => {
+                        if (status !== undefined) {
+                            this.setStatus(status.text, status.textColor, true)
+                        } else {
+                            this.lastSeenStatus()
+                        }
+                    })
+                } else if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                    this.lastSeenStatus()
+                } else {
+                    this.setStatus('last seen recently', '', false)
+                }
             }
-
+            
             return this.statusText
         },
         getLastSeenTextColor() {
@@ -88,6 +82,17 @@ export default {
             return Math.floor((now - unixTime) / 36e+5) + ' h'
             } else {
             return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
+            }
+        },
+        setStatus(statusText, textColor, hasStatus) {
+            this.textColor = textColor
+            this.hasStatus = hasStatus
+            this.statusText = statusText
+        },
+        lastSeenStatus() {
+            if (this.profile.profileStatus !== null && this.profile.profileStatus !== undefined) {
+                let lastSeen = `${this.getTimeElapse(this.profile.lastSeen)} ago`
+                this.setStatus(lastSeen, '', false)
             }
         }
     }
