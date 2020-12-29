@@ -211,7 +211,11 @@
     created() {
       this.username = this.$route.params.username;
       console.log(this.$route);
-      this.getProfileInfo(this.username);
+      this.getProfileInfo(this.username).catch((error) => {
+        if (error.response.status == 404) {
+          this.$nuxt.error({statusCode: 404, message: 'profile not found'})
+        }
+      })
       let query = this.$route.query.show;
       this.switchToProperTab(query);
       console.log(this.$route.params.username);
@@ -233,9 +237,7 @@
             user.isFollowLoading = false;
             return user;
           });
-        }).catch((error) => {
-          this.$notifier.showMessage({ content: error.message, color: 'error' })
-        });
+        })
       },
       fetchFollowers() {
         this.getFollowers({
@@ -246,9 +248,7 @@
             user.isFollowLoading = false;
             return user;
           });
-        }).catch((error) => {
-          this.$notifier.showMessage({ content: error.message, color: 'error' })
-        });
+        })
       },
       switchToProperTab(query) {
         if (query) {
@@ -345,6 +345,11 @@
         this.userListDialog.isEnabled = true;
         this.userListDialog.title = "Followings";
         this.userListDialog.userList = this.profileInfo.followings;
+      },
+      redirectToNotFound() {
+        this.$router.push({
+            path: '/404'
+        })
       }
     }
   }
