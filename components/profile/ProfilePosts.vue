@@ -1,7 +1,7 @@
 <template>
      <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card :min-width="postWidth" :id="postID">
+            <v-card :min-width="postWidth" :id="postID" class="layout-post">
                 <v-card-title>
                     <v-row>
                         <v-col class="ml-5">
@@ -48,7 +48,7 @@
                         :value="reportOverlay"
                         opacity="0.8"
                         >
-                            <ProfileReport @cancel="reportOverlay = !reportOverlay" />
+                            <Report @cancel="reportOverlay = !reportOverlay" :postID="postID"/>
                         </v-overlay>
 
                         <v-overlay
@@ -71,6 +71,15 @@
                         <v-icon style="cursor: pointer">mdi-comment</v-icon>
                     </v-btn>
                 </v-card-actions>
+                <div class="report" v-if="isReportedPost" id="report">
+                    <p>This post has been reported by several users. It may contain inappropriate content.</p>
+                    <v-btn
+                        @click="showPost"
+                        color="accent"
+                        outlined>
+                        Show post
+                    </v-btn>
+                </div>
             </v-card>
         </v-row>
     </v-container>
@@ -80,7 +89,7 @@
 <script>
 import { mapActions } from 'vuex'
 
-import ProfileReport from './ProfileReport'
+import Report from '~/components/shared/Report'
 import OverlayListOfProfile from './OverlayListOfProfile'
 import PostComp from './PostComp'
 
@@ -100,7 +109,8 @@ export default {
             zIndex: 99,
             isMounted: false,
             hack: 0,
-            listOfProfileLikedPost: []
+            listOfProfileLikedPost: [],
+            isReported: false
         }
     },
     computed: {
@@ -137,9 +147,13 @@ export default {
             } else {
             return Math.floor((now - unixTime) / (36e+5 * 24)) + ' day(s)'
             }
+        },
+        isReportedPost() {
+            return this.isReported
         }
     },
     mounted() {
+        this.isReported = this.post.isReported
         this.vCardWidth =  this.$refs.VCardParent.clientWidth
         this.isMounted = true
         if (this.post.isLiked) {
@@ -195,11 +209,34 @@ export default {
         },
         showErrorWithMessage(message) {
             this.$notifier.showMessage({content: message, color: 'error'});
+        },
+        showPost: function () {
+            this.isReported = false;
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.layout-post {
+    position: relative;
+    .report {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        left: 0;
+        background-color: rgba(0, 0, 0, .8);
+        -webkit-backdrop-filter: blur(1px);
+        backdrop-filter: blur(15px);
+        padding: 50px;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
 
 </style>

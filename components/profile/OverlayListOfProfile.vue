@@ -13,6 +13,7 @@
                 <v-card-text>
                     <v-divider/>
                     <v-virtual-scroll
+                        v-if="profiles.length !== 0"
                         :bench="10"
                         :items="profiles"
                         width="400"
@@ -23,6 +24,11 @@
                                 <ProfileCard :profile="item" />
                             </template>
                     </v-virtual-scroll>
+                    <div v-else style="width:400px">
+                        <p class="text-center">
+                            No one
+                        </p>
+                    </div>
                 </v-card-text>
             </v-row>
         </v-card>

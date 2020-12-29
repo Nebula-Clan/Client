@@ -1,5 +1,17 @@
 <template>
-  <div>
+  <div v-if="isPageLoading">
+    <ProfileHeaderLoader/>
+    <v-row>
+      <v-col cols="12" lg="3" sm="12">
+      </v-col>
+      <v-col cols="12" lg="6" sm="12">
+        <PostQuickViewLoader v-for="i in 5" :key="i"/>
+      </v-col>
+      <v-col cols="12" lg="3" sm="12">
+      </v-col>
+    </v-row>
+  </div>
+  <div v-else>
     <v-row>
       <v-img :src="getProfileBanner" lazy-src="/images/login-background.jpg"
              :eager="true" @load="imageLoaded" max-height="450">
@@ -117,6 +129,8 @@
   import ProfileLikes from '@/components/profile/ProfileLikes'
   import UserAvatar from "../../components/shared/UserAvatar";
   import UserListDialog from "../../components/shared/User-List-Dialog";
+  import PostQuickViewLoader from "../../components/homepage/Post-Quick-View-Loader";
+  import ProfileHeaderLoader from "../../components/profile/Profile-Header-Loader";
 
   export default {
     data: () => {
@@ -144,10 +158,18 @@
         profileInfo: {
           followers: [],
           followings: [],
-        }
+        },
+
+
+        loading: {
+          isFollowersLoading: true,
+          isFollowingLoading: true,
+        },
       }
     },
     components: {
+      ProfileHeaderLoader,
+      PostQuickViewLoader,
       UserAvatar,
       ProfileDescription,
       UserListDialog
@@ -155,6 +177,19 @@
     mounted() {
       this.fetchFollowers();
       this.fetchFollowings();
+    },
+    watch: {
+      getStatusOfReq: {
+        handler: function (val, oldVal) {
+          console.log(val)
+          if (val === true) {
+            this.errorTime = setTimeout(() => {
+              this.hasError = true
+            }, 20000)
+            this.isCompleted = true
+          }
+        }
+      }
     },
     computed: {
       ...mapGetters('modules/profile/profilePosts', ['getPosts']),
@@ -178,15 +213,6 @@
       profile() {
         return this.getProfile
       },
-      watchReqUntilCompleted() {
-        if (this.getStatusOfReq) {
-          this.errorTime = setTimeout(() => {
-            this.hasError = true
-          }, 20000)
-          this.isCompleted = true
-        }
-        return this.isCompleted
-      },
       getProfileBanner() {
         if (this.hasError) {
           return this.bannerImageForError
@@ -202,12 +228,25 @@
           this.componentObjects = this.getLikes
         }
         return this.componentObjects
-      }
+      },
+      isPageLoading() {
+        for (const [key, value] of Object.entries(this.loading)) {
+          if (value) {
+            return true;
+          }
+        }
+        return false;
+      },
     },
     created() {
       this.username = this.$route.params.username;
       console.log(this.$route);
-      this.getProfileInfo(this.username);
+      this.getProfileInfo(this.username)
+      .catch((error) => {
+        if (error.response.status == 404) {
+          this.$nuxt.error({ statusCode: 404, message: 'profile not found' })
+        }
+      });
       let query = this.$route.query.show;
       this.switchToProperTab(query);
       console.log(this.$route.params.username);
@@ -224,27 +263,25 @@
         this.getFollowings({
           username: this.$route.params.username
         }).then(({ data }) => {
+          this.loading.isFollowingLoading = false;
           this.profileInfo.followings = data.user_followings;
           this.profileInfo.followings.map((user) => {
             user.isFollowLoading = false;
             return user;
           });
-        }).catch((error) => {
-          this.$notifier.showMessage({ content: error.message, color: 'error' })
-        });
+        })
       },
       fetchFollowers() {
         this.getFollowers({
           username: this.$route.params.username
         }).then(({ data }) => {
+          this.loading.isFollowersLoading = false;
           this.profileInfo.followers = data.user_followers;
           this.profileInfo.followers.map((user) => {
             user.isFollowLoading = false;
             return user;
           });
-        }).catch((error) => {
-          this.$notifier.showMessage({ content: error.message, color: 'error' })
-        });
+        })
       },
       switchToProperTab(query) {
         if (query) {
@@ -341,6 +378,11 @@
         this.userListDialog.isEnabled = true;
         this.userListDialog.title = "Followings";
         this.userListDialog.userList = this.profileInfo.followings;
+      },
+      redirectToNotFound() {
+        this.$router.push({
+          path: '/404'
+        })
       }
     }
   }

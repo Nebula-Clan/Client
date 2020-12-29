@@ -106,15 +106,15 @@ export default {
         messageProps() {
             if (this.message.messageType === 1) {
                 return {
-                    imageSrc: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
+                    imageSrc: this.$axios.defaults.baseURL + '/' + this.message.fileUrl
                 }
             } else if (this.message.messageType === 2) {
                 return {
-                    audioUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl
+                    audioUrl: this.$axios.defaults.baseURL + '/' + this.message.fileUrl
                 }
             } else if (this.message.messageType === 3) {
                 return {
-                    fileUrl: this.$axios.defaults.baseURL + '/media/' + this.message.fileUrl,
+                    fileUrl: this.$axios.defaults.baseURL + '/' + this.message.fileUrl,
                     fileName: this.message.fileName
                 }
             } 
