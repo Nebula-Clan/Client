@@ -67,6 +67,21 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="nav-btn"
+              to="/new-post"ا
+              icon
+              dark
+              :ripple="true"
+              v-bind="attrs"
+              v-on="on">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>New Post</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="nav-btn"
               to="/my-chats"
               icon
               dark

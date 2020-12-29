@@ -47,9 +47,9 @@
     </v-row>
 
     <v-row>
-      <v-col v-if="post.header_image && post.header_image !== '/media/undefined'" class="mx-5 header-image">
+      <v-col v-if="post.header_image && post.header_image !== '/media/undefined'" class="mx-5 header-image text-center">
         <img alt="image"
-             :src="$axios.defaults.baseURL + '/media/' + post.header_image">
+               :src="$axios.defaults.baseURL + '/media/' + post.header_image">
       </v-col>
     </v-row>
 
@@ -257,8 +257,8 @@
     text-align: center;
 
     img {
-      width: 90%;
-      height: 250px;
+      max-width: 100%;
+      height: 350px;
       border-radius: 5px;
     }
   }
