@@ -89,6 +89,11 @@
             </v-btn>
           </template>
           <v-list dense>
+            <v-list-item class="d-block my-2">
+              <h3>{{$auth.user.username}}</h3>
+              <h6>{{$auth.user.first_name}} {{$auth.user.last_name}}</h6>
+            </v-list-item>
+            <hr>
             <v-list-item :to="'/profile/'+$auth.user.username">
               <v-list-item-icon>
                 <v-icon>mdi-account</v-icon>
