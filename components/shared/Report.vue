@@ -22,6 +22,7 @@
             </v-container>
             <v-container>
                 <v-textarea
+                outlined
                 filled
                 v-model="description"
                 name="input-7-4"
