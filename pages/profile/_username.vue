@@ -264,21 +264,21 @@
         this.getProfilePosts(this.username)
         .catch((error) => {
           this.showErrorWithMessage('Something went wrong')
-        })
+        });
         this.comp = ProfilePosts
       },
       switchToComments() {
         this.getProfileComments(this.username)
         .catch((error) => {
           this.showErrorWithMessage('Something went wrong')
-        })
+        });
         this.comp = ProfileComments
       },
       switchToLikes() {
         this.getProfileLikes(this.username)
         .catch((error) => {
           this.showErrorWithMessage('Something went wrong')
-        })
+        });
         this.comp = ProfileLikes
       },
       componentArgs(index) {

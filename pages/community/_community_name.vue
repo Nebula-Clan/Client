@@ -51,34 +51,34 @@
 </template>
 
 <script>
-import Intro from "@/components/community/Header";
-import People from "@/components/community/People";
-import PostQuickView from '@/components/shared/Post-quick-view'
-import About from "@/components/community/About";
-import Write from "@/components/shared/Write";
-import WriteLoader from "../../components/homepage/Write-Loader";
-import HeaderLoader from "../../components/community/Header-Loader";
-import PostQuickViewLoader from "../../components/homepage/Post-Quick-View-Loader";
+  import Intro from "@/components/community/Header";
+  import People from "@/components/community/People";
+  import PostQuickView from '@/components/shared/Post-quick-view'
+  import About from "@/components/community/About";
+  import Write from "@/components/shared/Write";
+  import WriteLoader from "../../components/homepage/Write-Loader";
+  import HeaderLoader from "../../components/community/Header-Loader";
+  import PostQuickViewLoader from "../../components/homepage/Post-Quick-View-Loader";
 
-export default {
-  name: "communityName",
-  components: {
-    PostQuickViewLoader,
-    HeaderLoader,
-    WriteLoader,
-    Write,
-    About,
-    People,
-    Intro,
-    PostQuickView
-  },
-  data() {
-    return {
-      introData: null,
-      isUserJoined: false,
-      members: null,
-      posts: null,
-      name: null,
+  export default {
+    name: "communityName",
+    components: {
+      PostQuickViewLoader,
+      HeaderLoader,
+      WriteLoader,
+      Write,
+      About,
+      People,
+      Intro,
+      PostQuickView
+    },
+    data() {
+      return {
+        introData: null,
+        isUserJoined: false,
+        members: null,
+        posts: null,
+        name: null,
 
       loading: {
         isPostLoading: true,
@@ -115,33 +115,38 @@ export default {
             since: response.data.community.date_created,
             about: response.data.community.about
           };
-          this.loading.isCommunityLoading = false
-          this.loading.isPostLoading = false
-        }).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'}));
-    },
-    getPosts() {
-      this.$axios.get(`api/community/community_posts?name=${this.name}`).then(
-        response => this.posts = response.data.posts
-      ).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'})
-      );
-    },
-    getPeople() {
-      this.$axios.get('api/community/community_members?name=' + this.name).then(
-        response => {
-          this.members = response.data.members;
-          const user = this.members.filter(u => u.username === this.$auth.user.username);
-          this.isUserJoined = user.length === 1;
-        }).catch(
-        e => this.$notifier.showMessage({content: e.message, color: 'error'}));
-    },
-    refreshPage: function () {
-      this.getPeople();
-      this.getInfo();
+          this.loading.isCommunityLoading = false;
+          this.loading.isPostLoading = false;
+        })
+        .catch(e => {
+          return this.$nuxt.error({ statusCode: 404, message: e.message })
+        });
+      },
+      getPosts() {
+        this.$axios.get(`api/community/community_posts?name=${this.name}`)
+        .then(
+          response => this.posts = response.data.posts
+        ).catch(
+          e => this.$nuxt.error({ statusCode: 404, message: e.message })
+        );
+      },
+      getPeople() {
+        this.$axios.get('api/community/community_members?name=' + this.name)
+        .then(
+          response => {
+            this.members = response.data.members;
+            const user = this.members.filter(u => u.username === this.$auth.user.username);
+            this.isUserJoined = user.length === 1;
+          })
+        .catch(
+          e => this.$nuxt.error({ statusCode: 404, message: e.message }))
+      },
+      refreshPage: function () {
+        this.getPeople();
+        this.getInfo();
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>

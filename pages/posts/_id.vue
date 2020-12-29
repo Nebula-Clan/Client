@@ -117,24 +117,28 @@
       ...mapActions('modules/post', ['getFullPost']),
       ...mapActions('modules/comment/post_comment', ['getComments']),
       fetchComments() {
-        this.getComments({postId: this.$route.params.id}).then(({data}) => {
+        this.getComments({ postId: this.$route.params.id })
+        .then(({ data }) => {
           this.comments = data.comments;
           this.isCommentLoading = false;
-        }).catch((error) => {
-          console.log(error)
+        })
+        .catch((err) => {
+          return this.$nuxt.error({ statusCode: 404, message: err.message })
         })
       },
       fetchPostContent() {
         this.getFullPost({
           id: this.$route.params.id,
-        }).then(({data}) => {
+        })
+        .then(({ data }) => {
           this.post = data.post;
           this.author = data.post.author;
           this.postContent += data.post.post_content.content_text;
           this.isPostContentLoading = false;
-        }).catch((error) => {
-          console.log(error);
-        });
+        })
+        .catch((err) => {
+          return this.$nuxt.error({ statusCode: 404, message: err.message })
+        })
       }
     }
   }

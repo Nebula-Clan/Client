@@ -1,6 +1,6 @@
 export function dateDuration(date) {
-  const unixTime = new Date(date).getTime()
-  const now = new Date().getTime()
+  const unixTime = new Date(date).getTime();
+  const now = new Date().getTime();
   if (now - unixTime < 36e+5) {
     return Math.floor((now - unixTime) / 60000) + ' m'
   } else if (now - unixTime > 36e+5 && now - unixTime < 36e+5 * 24) {
