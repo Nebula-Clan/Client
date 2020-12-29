@@ -33,6 +33,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
+              :disabled="text.length === 0"
               v-bind="attrs"
               v-on="on"
               icon
@@ -55,7 +56,7 @@ export default {
   props: ['community'],
   data() {
     return {
-      text: null,
+      text: '',
       post: {
         id: '',
         title: '',

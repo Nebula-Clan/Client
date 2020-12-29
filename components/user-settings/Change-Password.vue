@@ -6,12 +6,14 @@
           v-model="password.currentPassword"
           :rules="rules"
           counter
+          type="password"
           label="Current Password"
           outlined>
         </v-text-field>
         <v-text-field
           v-model="password.newPassword"
           :rules="rules"
+          type="password"
           counter
           label="New Password"
           outlined>
@@ -22,6 +24,7 @@
           v-model="password.repeatNewPassword"
           :rules="confirmPasswordRules"
           counter
+          type="password"
           label="Repeat Password"
           outlined>
         </v-text-field>

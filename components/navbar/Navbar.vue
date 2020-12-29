@@ -47,7 +47,7 @@
         <nuxt-link to="/feed"
                    style="width: min-content"
                    class="text-decoration-none white--text">
-          <v-toolbar-title>Huddle</v-toolbar-title>
+          <v-img class="icon" :src="require('../../static/logo.png')" contain height="40"></v-img>
         </nuxt-link>
       </v-col>
       <v-col cols="5" md="4" class="d-flex nav-action justify-end">
@@ -64,6 +64,21 @@
             </v-btn>
           </template>
           <span>Explore</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="nav-btn"
+              to="/new-post"
+              icon
+              dark
+              :ripple="true"
+              v-bind="attrs"
+              v-on="on">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>New Post</span>
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
@@ -91,6 +106,11 @@
             </v-btn>
           </template>
           <v-list dense>
+            <v-list-item class="d-block my-2">
+              <h3>{{$auth.user.username}}</h3>
+              <h6>{{$auth.user.first_name}} {{$auth.user.last_name}}</h6>
+            </v-list-item>
+            <hr>
             <v-list-item :to="'/profile/'+$auth.user.username">
               <v-list-item-icon>
                 <v-icon>mdi-account</v-icon>
@@ -114,8 +134,10 @@
       </v-col>
     </v-row>
     <v-row v-else class="align-center toolbar px-4">
-      <v-toolbar-title>Huddle</v-toolbar-title>
-      <v-spacer/>
+      <v-toolbar-title>
+        <v-img class="icon" width="100px" :src="require('../../static/logo.png')" contain height="40"></v-img>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
       <v-btn icon to="/login">
         <v-icon>
           mdi-login
@@ -168,6 +190,12 @@ export default {
     padding: 0;
     .nav-btn {
       margin: unset;
+    }
+    @media screen and (max-width: 576px) {
+      .icon {
+        height: 25px!important;
+        width: 100px;
+      }
     }
   }
 }
