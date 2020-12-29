@@ -258,7 +258,7 @@
 
     img {
       max-width: 100%;
-      height: 350px;
+      max-height: 350px;
       border-radius: 5px;
     }
   }

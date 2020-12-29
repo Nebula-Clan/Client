@@ -1,17 +1,7 @@
 <template>
-  <v-row class="px-10 py-5">
-    <v-col
-      cols="12"
-      lg="1"
-      md="1"
-      sm="2">
-      <!--      <Categories/>-->
-    </v-col>
-    <v-col
-      cols="12"
-      lg="10"
-      md="10"
-      sm="8">
+  <v-row class="py-5">
+    <v-col :cols="(12-postColumns)/2"/>
+    <v-col :cols="postColumns">
       <PostView
         v-show="!isPostContentLoading"
         :post="post"
@@ -69,13 +59,7 @@
         </v-card>
       </div>
     </v-col>
-    <v-col
-      cols="12"
-      lg="1"
-      md="1"
-      sm="2">
-      <br>
-    </v-col>
+    <v-col :cols="(12-postColumns)/2"/>
   </v-row>
 </template>
 
@@ -112,6 +96,22 @@
     mounted() {
       this.fetchComments();
       this.fetchPostContent();
+    },
+    computed: {
+      postColumns() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs':
+            return 12;
+          case 'sm':
+            return 12;
+          case 'md':
+            return 10;
+          case 'lg':
+            return 10;
+          case 'xl':
+            return 10;
+        }
+      }
     },
     methods: {
       ...mapActions('modules/post', ['getFullPost']),

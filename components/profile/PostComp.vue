@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-row>
       <v-row v-if="hasImage">
         <v-col class="mx-5 header-image">
           <img alt="image"
@@ -28,7 +28,7 @@
           </v-chip>
         </v-col>
       </v-row>
-    </v-container>
+    </v-row>
 </template>
 
 <script>
@@ -75,7 +75,7 @@ export default {
   text-align: center;
   img {
     width: 90%;
-    height: 250px;
+    max-height: 350px;
     border-radius: 5px;
   }
 }
