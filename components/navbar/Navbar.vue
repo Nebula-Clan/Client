@@ -132,7 +132,9 @@
       </v-col>
     </v-row>
     <v-row v-else class="align-center toolbar px-4">
-      <v-toolbar-title>Huddle</v-toolbar-title>
+      <v-toolbar-title>
+        <v-img class="icon" width="100px" :src="require('../../static/logo.png')" contain height="40"></v-img>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon to="/login">
         <v-icon>
