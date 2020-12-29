@@ -45,7 +45,7 @@
         <nuxt-link to="/feed"
                    style="width: min-content"
                    class="text-decoration-none white--text">
-          <v-toolbar-title>Huddle</v-toolbar-title>
+          <v-img class="icon" :src="require('../../static/logo.png')" contain height="40"></v-img>
         </nuxt-link>
       </v-col>
       <v-col cols="5" md="4" class="d-flex nav-action justify-end">
@@ -67,7 +67,7 @@
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               class="nav-btn"
-              to="/new-post"ا
+              to="/new-post"
               icon
               dark
               :ripple="true"
@@ -188,6 +188,12 @@ export default {
     }
     .nav-btn {
       margin: unset;
+    }
+    @media screen and (max-width: 576px) {
+      .icon {
+        height: 25px!important;
+        width: 100px;
+      }
     }
   }
 }
