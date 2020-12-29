@@ -3,7 +3,7 @@
     <v-list-item two-line>
       <v-list-item-avatar size="50" :style="classForImageError">
         <Avatar :substituteChar="firstChar" :avatarUrl="getProfileImageUrl"
-                :timeOut="12000" :avatarSize="50" :textSize="textClassForError"/>
+                :timeOut="5000" :avatarSize="50" :textSize="textClassForError"/>
       </v-list-item-avatar>
       <v-list-item-content class="ml-1">
         <v-list-item-title v-text="profile.firstname + profile.lastname"/>

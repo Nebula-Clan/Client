@@ -43,6 +43,10 @@
                     <v-icon>mdi-flag</v-icon>
                     <v-list-item-title class="ml-1" style="cursor: pointer" @click="reportOverlay = !reportOverlay">Report</v-list-item-title >
                 </v-list-item>
+                <v-list-item>
+                    <v-icon>mdi-heart</v-icon>
+                    <v-list-item-title class="ml-1" style="cursor: pointer" @click="showListOfLikes">List of likes</v-list-item-title >
+                </v-list-item>
             </v-list>
         </v-menu>
       </v-col>
@@ -130,6 +134,14 @@
       >
           <Report @cancel="reportOverlay = !reportOverlay" :postID="post.id"/>
       </v-overlay>
+
+      <v-overlay
+      :z-index="99"
+      :value="likesOverlay"
+      opacity="0.8"
+      >
+          <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+      </v-overlay>
     </v-row>
 
     <!-- Replay  -->
@@ -156,6 +168,7 @@
   import {dateDuration} from "~/shared-functions/Posts";
   import NewComment from "../comment/NewComment";
   import Report from '~/components/shared/Report'
+  import OverlayListOfProfile from '~/components/profile/OverlayListOfProfile'
 
   export default {
     name: 'Post-quick-view',
@@ -166,6 +179,8 @@
         isCommentToPostExpanded: false,
         isLoadingToSendComment: false,
         reportOverlay: false,
+        likesOverlay: false,
+        listOfProfileLikedPost: [],
 
         chipsColors: [
           'blue', 'red', 'green', 'purple', 'orange'
@@ -187,7 +202,7 @@
     }
   },
     methods: {
-      ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'deleteLikeAtPostWithID']),
+      ...mapActions('modules/profile/profileLikes', ['submitLikeAtPostWithID', 'getProfilesThatLikedPostByID', 'deleteLikeAtPostWithID']),
       ...mapActions('modules/comment/post_comment', ['replyToPost']),
 
       likePost() {
@@ -234,7 +249,18 @@
       showPost: function () {
         // document.getElementById('report').setAttribute('display', 'none')
         this.post.is_reported = false;
-      }
+      },
+      showListOfLikes() {
+          this.getProfilesThatLikedPostByID(this.post.id)
+          .then((res) => {
+              console.log(res)
+              this.listOfProfileLikedPost = res
+              this.likesOverlay = !this.likesOverlay
+          })
+          .catch((error) => {
+              console.log(error)
+          })
+      },
     },
     mounted() {
       // if (this.post.id === 88) {
