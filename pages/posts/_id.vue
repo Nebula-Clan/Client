@@ -87,7 +87,7 @@
     data: () => ({
       post: '',
       author: '',
-      postContent: `<style>img{width: 100%;}</style>`,
+      postContent: `<style>p img{display: block;margin-left: auto;margin-right: auto;max-width: 50%;}</style>`,
       comments: [],
 
       isPostContentLoading: true,
