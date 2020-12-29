@@ -197,7 +197,11 @@ export default {
       }, this.timeoutForSearchReq)
     },
     reqForSearch() {
-      this.serachWithUsername(this.searchText)
+      this.serachWithUsername(
+        {
+          searchText: this.searchText,
+          exceptusername: this.$auth.user.username
+        })
     }
   }
 };

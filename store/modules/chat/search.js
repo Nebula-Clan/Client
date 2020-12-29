@@ -42,7 +42,7 @@ const mutations = {
 }
 
 const actions = {
-    serachWithUsername({state, commit}, searchText) {
+    serachWithUsername({state, commit}, { searchText, exceptusername}) {
         return this.$axios.get('api/search/search_in_users', {
             params: {
                 'key': searchText
@@ -57,6 +57,9 @@ const actions = {
                 let similarity = 0
                 profile.parseFromJson(profileJson)
                 let convertedProfile = convertToChatProfile(profile)
+                if (convertedProfile.username === exceptusername) {
+                    return
+                }
                 similarity += index(searchText.split(''), convertedProfile.username.split(''))
                 similarity += index(searchText.split(''), convertedProfile.firstname.split(''))
                 similarity += index(searchText.split(''), convertedProfile.lastname.split(''))

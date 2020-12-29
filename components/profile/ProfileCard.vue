@@ -6,7 +6,7 @@
                 :timeOut="5000" :avatarSize="50" :textSize="textClassForError"/>
       </v-list-item-avatar>
       <v-list-item-content class="ml-1">
-        <v-list-item-title v-text="profile.firstname + profile.lastname"/>
+        <v-list-item-title v-text="profile.firstname + ' ' +profile.lastname"/>
         <v-list-item-subtitle v-text="profile.username"/>
       </v-list-item-content>
     </v-list-item>
