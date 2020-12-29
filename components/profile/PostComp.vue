@@ -74,8 +74,8 @@ export default {
 .header-image {
   text-align: center;
   img {
-    width: 90%;
-    height: 250px;
+    max-width: 100%;
+    max-height: 350px;
     border-radius: 5px;
   }
 }
