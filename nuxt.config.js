@@ -5,7 +5,7 @@ export default {
   ssr: false,
 
   // Target (https://go.nuxtjs.dev/config-target)
-  target: 'static',
+  target: 'server',
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -27,6 +27,7 @@ export default {
     '@/assets/quill/quill.core.css',
     '@/assets/quill/quill.snow.css',
     '@/assets/quill/quill.bubble.css',
+    '@/assets/styles/theme.scss'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
@@ -112,7 +113,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: '#BB86FC',
@@ -122,6 +123,9 @@ export default {
           warning: colors.amber.base,
           error: '#B71C1C',
           success: colors.green.accent4
+        },
+        light: {
+          primary: '#BB86FC'
         }
       }
     }

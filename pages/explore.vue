@@ -99,9 +99,9 @@
             <v-icon>mdi-compass</v-icon>
           </v-btn>
 
-          <v-btn>
+          <v-btn >
             <span class="pt-1">People</span>
-            <v-icon>mdi-account-outline</v-icon>
+            <v-icon >mdi-account-outline</v-icon>
           </v-btn>
 
           <v-btn>

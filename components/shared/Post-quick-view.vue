@@ -4,7 +4,7 @@
       <v-col class="ml-5">
         <v-row class="pb-1">
           <nuxt-link
-            class="text-decoration-none white--text"
+            class="text-decoration-none link"
             :to="'/posts/' + post.id"
           >
             <h2>{{ post.title }}</h2>
@@ -101,7 +101,7 @@
     <v-row class="mx-2">
       <v-col>
         <nuxt-link
-          class="text-decoration-none white--text d-flex"
+          class="text-decoration-none link d-flex"
           :to="'/profile/' + post.author.username"
         >
           <div>
