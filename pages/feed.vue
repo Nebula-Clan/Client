@@ -147,7 +147,7 @@ export default {
             return
           }
 
-          if (bottomOfWindow && !this.loading.olderContent) {
+          if (bottomOfWindow && !this.isLoadingOlderContent) {
             this.pageNumber += 1;
             this.isLoadingOlderContent = true;
             this.getPosts();
