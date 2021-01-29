@@ -1,5 +1,5 @@
 <template>
-  <v-container class="row4 pa-0" fluid>
+  <v-container class="row4 pa-0 white--text" fluid>
     <v-container class="pa-10 title text-center" cols="12" fluid>
       <h2>Search in different categories, you call it!</h2>
     </v-container>

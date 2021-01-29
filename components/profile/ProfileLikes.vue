@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="postWidth">
+            <v-card elevation="2" :min-width="postWidth">
                 <v-container>
                     <v-card-title>
                         {{ nickname + ' Liked ' +  replyType + ' ' + replyObjectOwnerNickname}}

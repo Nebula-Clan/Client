@@ -32,11 +32,11 @@
           </template>
           <v-card>
             <v-card-title class="headline">Leave ?</v-card-title>
-            <v-card-text>Are you sure to leave ?</v-card-text>
+            <v-card-text>Are you sure you want to leave ?</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="error darken-1" outlined text @click="dialog = false">Cancel</v-btn>
-              <v-btn color="accent darken-1" outlined text @click="leave">Yes</v-btn>
+              <v-btn color="accent darken-1" outlined text @click="dialog = false">Cancel</v-btn>
+              <v-btn color="error darken-1" outlined text @click="leave">Yes</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>

@@ -98,8 +98,11 @@
     }
   }
 
+  .theme--dark {
+    
+  }
   .logo {
-    background-color: #23241f;
+    // background-color: #23241f;
     height: 100px;
     position: relative;
 

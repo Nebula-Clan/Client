@@ -1,5 +1,5 @@
 <template>
-  <v-container class="row2 pa-0" fluid>
+  <v-container class="row2 pa-0 white--text" fluid>
     <v-container class="purple darken-2 pa-10 title text-center"
                  fluid>
       <h2>Explore what's happening in the world</h2>
@@ -43,6 +43,7 @@ export default {
   padding-top: 0;
   display: flex;
   flex-direction: column;
+  background-color: #121212;;
 
   .title {
     h2 {

@@ -3,14 +3,26 @@
     <v-card-title>Personalization</v-card-title>
     <v-card-subtitle>Edit settings for better experience</v-card-subtitle>
     <v-card-text>
-      <v-switch label="Dark Mode" v-model="darkMode" @change="themeChanged">
-      </v-switch>
+      <!-- <v-switch label="Dark Mode" v-model="darkMode" @change="themeChanged">
+      </v-switch> -->
+      <h3>Available styles</h3>
+      <div class="d-flex justify-center my-4">
+        <div class="text-center">
+          <LightTheme />
+          <v-btn @click="changeTheme('light')" outlined class="mt-4" color="primary">Apply</v-btn>
+        </div>
+        <div class="text-center">
+          <DarkTheme />
+          <v-btn @click="changeTheme('dark')" class="mt-4" outlined color="primary">Apply</v-btn>
+        </div>
+      </div>
       <div class="text-center">
         <v-img
           width="350"
           alt=""
           contain
-          :src="require('../../static/user-settings/personalization.svg')">
+          :src="require('../../static/user-settings/personalization.svg')"
+        >
         </v-img>
       </div>
     </v-card-text>
@@ -18,32 +30,29 @@
 </template>
 
 <script>
+import LightTheme from "~/components/user-settings/Light-Theme.vue";
+import DarkTheme from "~/components/user-settings/Dark-Theme.vue";
 export default {
+  components: { LightTheme, DarkTheme },
   name: "personalization",
-  data(){
+  data() {
     return {
       darkMode: null,
-    }
+    };
   },
   methods: {
-    themeChanged: function (event) {
-      console.log(event);
-      let value;
-      if (event) {
-        value = '1';
-      } else {
-        value = '0';
+    changeTheme: function (theme) {
+      if (theme === 'light') {
+        this.$vuetify.theme.dark = false;
+        localStorage.setItem("theme", 0);
+      } else if (theme === 'dark') {
+        this.$vuetify.theme.dark = true;
+        localStorage.setItem("theme", 1);
       }
-      localStorage.setItem('dark', value);
-      this.$vuetify.theme.dark = event;
-    }
+    },
   },
-  mounted() {
-    this.darkMode = this.$vuetify.theme.dark
-  }
-}
+};
 </script>
 
 <style scoped>
-
 </style>

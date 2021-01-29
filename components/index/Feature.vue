@@ -1,8 +1,8 @@
 <template>
-    <carousel class="slider mt-4" :perPageCustom="[[480,3]]">
+    <carousel class="slider mt-4 " :perPageCustom="[[480,3]]">
       <Slide :key="i" v-for="(item, i) in data">
         <v-card class="item">
-          <v-card-text>
+          <v-card-text class="white--text">
             {{item}}
           </v-card-text>
         </v-card>

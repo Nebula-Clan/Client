@@ -1,10 +1,10 @@
 <template>
-  <v-card class="card" elevation="4">
+  <v-card class="card theme--dark white--text" elevation="4">
     <v-card-title>
       My story of living here, for a week!
     </v-card-title>
     <v-card-subtitle class="d-flex align-center">
-      <v-icon small>
+      <v-icon small color="white">
         mdi-clock
       </v-icon>
       <span class="mx-2">3h</span>

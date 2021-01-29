@@ -1,5 +1,5 @@
 <template>
-  <v-container class="row4 pa-0" fluid>
+  <v-container class="row4 pa-0 white--text" fluid>
     <v-container class="secondary darken-2 pa-10 title text-center" cols="12" fluid>
       <h2>Chat with your friends</h2>
     </v-container>

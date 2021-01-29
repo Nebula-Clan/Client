@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="py-2">
         <v-row ref="VCardParent">
-            <v-card elevation="24" :min-width="postWidth" :id="commentID">
+            <v-card elevation="2" :min-width="postWidth" :id="commentID">
                 <v-card-title>
                     <v-menu>
                         <template v-slot:activator="{ on, attrs }">

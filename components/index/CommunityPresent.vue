@@ -1,6 +1,6 @@
 <template>
-  <v-container class="row3 pa-0" fluid>
-    <v-container class="accent darken-3 pa-10 title text-center" cols="12" fluid>
+  <v-container class="row3 pa-0 white--text" fluid>
+    <v-container class=" accent darken-3 pa-10 title text-center" cols="12" fluid>
       <h2>Communities are like a new universe</h2>
     </v-container>
     <v-row class="px-4 pt-4 community" fluid>
