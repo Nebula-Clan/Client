@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-7"
+    class="pa-7 my-10"
     elevation="20"
     outlined>
     <div class="text-h4 text-center">Signup now!</div>

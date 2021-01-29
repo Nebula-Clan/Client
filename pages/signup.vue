@@ -35,9 +35,9 @@
           case 'sm':
             return 10;
           case 'md':
-            return 8;
+            return 4;
           case 'lg':
-            return 5;
+            return 4;
           case 'xl':
             return 4;
         }
