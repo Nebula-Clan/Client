@@ -20,6 +20,15 @@ export default {
   components: {Navbar, UserAvatar, Avatar, GoUpFAB, Snackbar},
   created() {
   },
+  mounted(){
+    const theme = localStorage.getItem('theme');
+    if (theme == '0') {
+      this.$vuetify.theme.dark = false;
+    } else {
+      this.$vuetify.theme.dark = true;
+    }
+
+  },
   data() {
     return {
       clipped: false,

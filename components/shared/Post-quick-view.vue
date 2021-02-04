@@ -152,12 +152,12 @@
         </v-tooltip>
       </v-col>
 
-      <!-- <v-overlay
+      <v-overlay
       :z-index="99"
       :value="reportOverlay"
       opacity="0.8"
       >
-          <Report @cancel="reportOverlay = !reportOverlay" :postID="post.id"/>
+          <LazyReport @cancel="reportOverlay = !reportOverlay" :postID="post.id"/>
       </v-overlay>
 
       <v-overlay
@@ -165,8 +165,8 @@
       :value="likesOverlay"
       opacity="0.8"
       >
-          <OverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
-      </v-overlay> -->
+          <LazyOverlayListOfProfile @cancel="likesOverlay = !likesOverlay" :profiles="listOfProfileLikedPost" />
+      </v-overlay>
     </v-row>
 
     <v-expand-transition>

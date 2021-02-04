@@ -60,7 +60,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://172.245.10.238:8000'
+    baseURL: 'http://185.239.106.16:8000'
   },
 
   // Auth module configuration
@@ -113,10 +113,10 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false,
+      dark: true,
       themes: {
         dark: {
-          primary: '#BB86FC',
+          primary: colors.purple.darken3,
           accent: '#4aff80',
           secondary: '#03dac6',
           info: colors.teal.lighten1,

@@ -152,7 +152,7 @@ export default {
           `api/community/community_posts?name=${this.name}&offset=${this.pageNumber}`
         )
         .then((response) => {
-          if (response.data.posts.lenght === 0) {
+          if (response.data.posts.length===0) {
             this.pageNumber = -1;
             this.isLoadingOlderContent = false;
           }
@@ -196,7 +196,7 @@ export default {
           return;
         }
 
-        if (bottomOfWindow && !this.loading.olderContent) {
+        if (bottomOfWindow && !this.isLoadingOlderContent) {
           this.pageNumber += 1;
           this.isLoadingOlderContent = true;
           this.getPosts();

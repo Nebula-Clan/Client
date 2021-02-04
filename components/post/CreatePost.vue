@@ -225,7 +225,8 @@ export default {
       this.createPost(this.post).then((response) => {
         this.$auth.redirect('home')
       }).catch((e) => {
-        console.error(e)
+        console.error(e);
+        this.isPostPublishing = false;
       })
     },
     // Hashtag
@@ -283,12 +284,18 @@ export default {
               content: draftItem['post_content']['content_text'],
               hashtags: draftItem['hashtags'].map(h => h['text']),
               contentType: draftItem['post_content']['content_type'],
-              category: draftItem['category']
+              category: draftItem['category'],
+              communityName: ''
             };
             this.draft = true;
             this.showCurrentHeaderImage = true;
           }).catch(
-          error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+          error => {
+          this["$notifier"].showMessage({content: error.response.data['error']['message'],
+          color: 'error'});
+
+
+          }
         );
       }
     },

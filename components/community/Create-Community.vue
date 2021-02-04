@@ -108,7 +108,15 @@ export default {
             }).catch(
             error => this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'}))
             .finally(
-            () => this.$emit('close'));
+            () => {
+              this.$emit('close');
+              this.body =  {
+                    name: '',
+                    about: '',
+                    picture: null,
+                    banner_picture: null
+                  };
+              });
         }).catch(
         error => {
           this.$notifier.showMessage({content: error.response.data.error.message, color: 'error'})

@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="primary darken-4" dark elevate-on-scroll >
+  <v-app-bar app color="primary" dark elevate-on-scroll >
     <v-row v-if="$auth.user" class="align-center toolbar px-4">
       <v-col cols="2" md="4" class="search-col">
         <v-menu
@@ -102,7 +102,7 @@
               icon
               v-bind="attrs"
               v-on="on">
-              <UserAvatar size="35px" :avatar-src="$auth.user.profile_picture"/>
+              <UserAvatar size="35px" color="cyan" :avatar-string="$auth.user.username" :avatar-src="$auth.user.profile_picture"/>
             </v-btn>
           </template>
           <v-list dense>
