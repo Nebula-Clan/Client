@@ -224,9 +224,6 @@ export default {
     border-radius: 5px;
 }
 
-.card-back {
-    background-color: #35363a;
-}
 
 .unseen-icon {
     filter: contrast(50%);
@@ -246,33 +243,11 @@ export default {
   
 }
 
-.right::after {
-  content: '';
-  position: absolute;
-  visibility: visible;
-  top: 37px;
-  right: -8px;
-  margin-right: -10px;
-  border: 10px solid transparent;
-  border-left: 10px solid #35363a;
-  clear: both;
-  /* 35363a */
-}
+
 
 .left {
   
 }
 
-.left::after {
-  content: '';
-  position: absolute;
-  visibility: visible;
-  top: 30px;
-  left: -8px;
-  margin-left: -10px;
-  border: 10px solid transparent;
-  border-right: 10px solid #35363a;
-  clear: both;
-  /* 35363a */
-}
+
 </style>

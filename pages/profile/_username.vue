@@ -185,7 +185,7 @@
           if (val === true) {
             this.errorTime = setTimeout(() => {
               this.hasError = true
-            }, 20000)
+            }, 2000)
             this.isCompleted = true
           }
         }

@@ -49,7 +49,8 @@ export default {
     SignUpRow,
     ChatRoomPresent,
     CategoryPresent
-  }
+  },
+  auth: false
 }
 </script>
 

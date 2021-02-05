@@ -19,15 +19,14 @@ import Navbar from "~/components/navbar/Navbar";
 export default {
   components: {Navbar, UserAvatar, Avatar, GoUpFAB, Snackbar},
   created() {
-  },
-  mounted(){
     const theme = localStorage.getItem('theme');
-    if (theme == '0') {
+    if (theme === '0') {
       this.$vuetify.theme.dark = false;
     } else {
       this.$vuetify.theme.dark = true;
     }
-
+  },
+  mounted(){
   },
   data() {
     return {

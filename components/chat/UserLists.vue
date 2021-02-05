@@ -209,7 +209,9 @@ export default {
 
 <style scoped>
 .user-list-color {
-  background-color: #2f3136;
+  /* background-color: #2f3136;
+   */
+   border-right: 1px solid #797979;
 }
 
 .scroll {

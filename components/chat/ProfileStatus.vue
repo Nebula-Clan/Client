@@ -105,6 +105,7 @@ export default {
 
 .back-status {
     	/* #2d383c */
-    background-color: 	#2f3136;
+    /* background-color: 	#d1d1d1; */
+    border-bottom: 1px solid #424242;
 }
 </style>
