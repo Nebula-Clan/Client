@@ -34,7 +34,9 @@
           v-else
           style="width: max-content"
           v-model="searchKey"
-          outlined
+          filled
+          rounded
+          color="white"
           placeholder="Search..."
           dense
           @click:append="search"

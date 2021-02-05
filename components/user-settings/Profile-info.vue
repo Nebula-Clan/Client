@@ -32,8 +32,12 @@
                 v-if="profileImage !== null"
                 :src="profileImage"
               />
-              <UserAvatar size="150px" color="purple" :avatar-string="$auth.user.username"/>
-
+              <UserAvatar
+                size="150px"
+                v-if="profileImage === null"
+                color="purple"
+                :avatar-string="$auth.user.username"
+              />
             </v-avatar>
             <div class="overlay-profile d-flex justify-center align-center">
               <v-btn color="primary" icon @click="changeImage('profile-img')">
@@ -164,15 +168,13 @@ export default {
         })
         .then((response) => {
           this.profile = response.data;
-          if (response.data["profile_picture"])
-          {
-                      this.profileImage =
-            this.$axios.defaults.baseURL + response.data["profile_picture"];
+          if (response.data["profile_picture"]) {
+            this.profileImage =
+              this.$axios.defaults.baseURL + response.data["profile_picture"];
           }
-          if (response.data["banner_picture"])
-          {
-                      this.bannerImage =
-            this.$axios.defaults.baseURL + response.data["banner_picture"];
+          if (response.data["banner_picture"]) {
+            this.bannerImage =
+              this.$axios.defaults.baseURL + response.data["banner_picture"];
           }
           this.changedFields = [];
           this.pageLoaded = true;
