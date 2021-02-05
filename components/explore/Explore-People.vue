@@ -22,7 +22,8 @@
           v-for="(person, i) in people"
           :key="i">
           <v-list-item-avatar>
-            <UserAvatar color="primary" :avatar-src="person.profile_picture" :avatar-string="person.username"/>
+            <Avatar :avatarUrl="$axios.defaults.baseURL + person.profile_picture" :substituteChar="person.username[0]"
+                    :avatarSize="40"/>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title class="text-body-1" v-text="person.username"/>
@@ -39,10 +40,11 @@
   import UserAvatar from "../shared/UserAvatar";
   import NoResult from "../shared/No-Result";
   import MenuIconLoader from "../homepage/Menu-Icon-Loader";
+  import Avatar from "../shared/Avatar";
 
   export default {
     name: "Explore-People",
-    components: { MenuIconLoader, NoResult, UserAvatar },
+    components: { Avatar, MenuIconLoader, NoResult, UserAvatar },
     props: ['people', 'isLoading'],
   }
 </script>

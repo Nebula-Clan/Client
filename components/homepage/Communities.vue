@@ -29,10 +29,8 @@
             :to="'/community/'+item.name">
             <v-list-item>
               <v-list-item-avatar>
-                <UserAvatar
-                  color="primary"
-                  :avatar-string="item.name"
-                  :avatar-src="item.picture"/>
+                <Avatar :avatarUrl="$axios.defaults.baseURL +item.picture" :substituteChar="item.name[0]"
+                        :avatarSize="40"/>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
