@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="container-editor">
     <client-only>
       <quill-editor
         style="min-height: 300px"
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.container-editor {
   color: white;
   margin: 0 auto;
 
