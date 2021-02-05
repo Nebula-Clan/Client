@@ -1,0 +1,17 @@
+.theme--dark {
+    .link {
+        color: whitesmoke;
+    }
+    .icons-colored-back {
+        color: black;
+    }
+}
+
+.theme--light {
+    .link {
+        color: black;
+    }
+    .icons-colored-back {
+        color: whitesmoke!important;
+    }
+}

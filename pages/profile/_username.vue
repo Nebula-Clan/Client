@@ -14,7 +14,7 @@
   <div v-else>
     <v-row>
       <v-img :src="getProfileBanner" lazy-src="/images/login-background.jpg"
-             :eager="true" @load="imageLoaded" max-height="450">
+             :eager="true" @load="imageLoaded" max-height="300">
         <template v-slot:placeholder>
           <v-row
             class="fill-height ma-0"
@@ -27,7 +27,7 @@
         </template>
       </v-img>
     </v-row>
-    <v-row class="primary darken-4" justify="center" align="center">
+    <v-row class="primary" justify="center" align="center">
       <div>
         <v-btn
           color="rgb(255, 0, 0, 0)"

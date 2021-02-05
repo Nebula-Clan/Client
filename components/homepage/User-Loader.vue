@@ -3,9 +3,8 @@
     <v-skeleton-loader
       height="80"
       v-show="true"
-      tile=false
       type="image"/>
-    <v-card tile=false>
+    <v-card :tile=false>
       <v-skeleton-loader
         class="mx-auto avatar"
         height="80"

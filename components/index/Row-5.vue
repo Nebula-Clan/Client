@@ -1,5 +1,5 @@
 <template>
-  <v-container class="row5 pa-0" fluid>
+  <v-container class="row5 pa-0 white--text" fluid>
     <v-container class="pa-10 title text-center" cols="12" fluid>
       <h2>Wanna see more ?!</h2>
     </v-container>

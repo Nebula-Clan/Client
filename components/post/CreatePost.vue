@@ -52,12 +52,13 @@
                         v-model="post.headerImage"
                         accept="image/png, image/jpeg, image/bmp"
                         label="Select post cover"
+                        @change="newImageAdded()"
                         outlined
                         show-size
                         prepend-icon="mdi-camera"
                         truncate-length="30"/>
                       <div
-                        v-if="draft"
+                        v-if="draft && showCurrentHeaderImage"
                         class="d-flex align-center">
                         <span class="mr-4">Current: </span>
                         <img
@@ -173,6 +174,7 @@ export default {
     dialog: false,
     formValid: false,
     hashtag: '',
+    showCurrentHeaderImage: false,
     suggestions: [],
     post: {
       id: '',
@@ -223,7 +225,8 @@ export default {
       this.createPost(this.post).then((response) => {
         this.$auth.redirect('home')
       }).catch((e) => {
-        console.error(e)
+        console.error(e);
+        this.isPostPublishing = false;
       })
     },
     // Hashtag
@@ -281,11 +284,18 @@ export default {
               content: draftItem['post_content']['content_text'],
               hashtags: draftItem['hashtags'].map(h => h['text']),
               contentType: draftItem['post_content']['content_type'],
-              category: draftItem['category']
+              category: draftItem['category'],
+              communityName: ''
             };
             this.draft = true;
+            this.showCurrentHeaderImage = true;
           }).catch(
-          error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
+          error => {
+          this["$notifier"].showMessage({content: error.response.data['error']['message'],
+          color: 'error'});
+
+
+          }
         );
       }
     },
@@ -314,6 +324,9 @@ export default {
       ).catch(
         error => this["$notifier"].showMessage({content: error.response.data['error']['message'], color: 'error'})
       );
+    },
+    newImageAdded: function () {
+      this.showCurrentHeaderImage = false;
     }
   }
 }

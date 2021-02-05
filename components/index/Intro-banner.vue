@@ -1,5 +1,5 @@
 <template>
-  <v-container class="banner pa-0" fluid>
+  <v-container class="banner pa-0 white--text" fluid>
     <v-container class="overlay pa-0" fluid>
       <v-container class="content" fluid>
         <h1

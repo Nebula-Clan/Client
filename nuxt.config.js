@@ -5,7 +5,7 @@ export default {
   ssr: false,
 
   // Target (https://go.nuxtjs.dev/config-target)
-  target: 'static',
+  target: 'server',
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
@@ -27,6 +27,7 @@ export default {
     '@/assets/quill/quill.core.css',
     '@/assets/quill/quill.snow.css',
     '@/assets/quill/quill.bubble.css',
+    '@/assets/styles/theme.scss'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
@@ -59,7 +60,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://172.245.10.238:8000'
+    baseURL: 'http://185.239.106.16:8000'
   },
 
   // Auth module configuration
@@ -115,13 +116,21 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: '#BB86FC',
+          primary: colors.purple.darken3,
           accent: '#4aff80',
           secondary: '#03dac6',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: '#B71C1C',
           success: colors.green.accent4
+        },
+        light: {
+          primary: colors.blue,
+          accent: colors.teal.darken3,
+          secondary: '#4caf50',
+          warning: colors.amber.base,
+          error: colors.red,
+          success: colors.green.success
         }
       }
     }

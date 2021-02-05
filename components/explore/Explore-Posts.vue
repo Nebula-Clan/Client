@@ -29,7 +29,7 @@
               <v-card
                 v-if="hover"
                 height="100%"
-                color="rounded-0 primary darken-4"
+                color="rounded-0 primary darken"
                 class="mx-auto">
                 <v-list-item>
                   <v-list-item-content>

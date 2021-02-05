@@ -34,13 +34,7 @@
       </v-btn>
     </v-form>
     <v-divider class="my-6"/>
-    <div>
-      <SocialButton :uiData="socialAccounts.github" :on-click="loginGithub"/>
-      <SocialButton :uiData="socialAccounts.google" :on-click="loginGoogle"/>
-      <SocialButton :uiData="socialAccounts.facebook" :on-click="loginFacebook"/>
-      <v-divider class="my-6"/>
-      <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
-    </div>
+    <nuxt-link class="white--text" to="/signup">Or sign up now!</nuxt-link>
     <v-snackbar
       v-model="errorHandling.hasError"
       color="red darken-4"
@@ -78,24 +72,6 @@
           u => !!u || 'This field is required'
         ],
 
-        socialAccounts: {
-          github: {
-            text: 'Sign in with Github',
-            icon: 'fab fa-github',
-            color: 'black'
-          },
-          google: {
-            text: 'Sign in with Google',
-            icon: 'fab fa-google',
-            color: 'red darken-1'
-          },
-          facebook: {
-            text: 'Sign in with Facebook',
-            icon: 'fab fa-facebook-f ',
-            color: 'blue darken-1'
-          }
-        },
-
         isLoggingIn: false,
         errorHandling: {
           hasError: false,
@@ -121,15 +97,6 @@
             this.errorHandling.msg = error.response.data.error.message;
           }
         })
-      },
-      loginGithub() {
-        this.$auth.loginWith('github');
-      },
-      loginGoogle() {
-
-      },
-      loginFacebook() {
-
       }
     }
   }

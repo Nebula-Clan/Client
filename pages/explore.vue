@@ -89,19 +89,19 @@
       <div class="explore-nav">
 
         <v-bottom-navigation
-          background-color="primary darken-4"
+          background-color="primary"
           v-model="pageIndex"
           class="pb-1"
-          color="accent">
+          color="white">
 
           <v-btn>
             <span class="pt-1">Explore</span>
             <v-icon>mdi-compass</v-icon>
           </v-btn>
 
-          <v-btn>
+          <v-btn >
             <span class="pt-1">People</span>
-            <v-icon>mdi-account-outline</v-icon>
+            <v-icon >mdi-account-outline</v-icon>
           </v-btn>
 
           <v-btn>

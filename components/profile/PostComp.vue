@@ -1,5 +1,5 @@
 <template>
-    <v-row>
+    <div>
       <v-row v-if="hasImage">
         <v-col class="mx-5 header-image">
           <img alt="image"
@@ -28,7 +28,7 @@
           </v-chip>
         </v-col>
       </v-row>
-    </v-row>
+    </div>
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
             return this.$axios.defaults.baseURL + '/media/' + this.post.postImageURL
         },
         hasHashtag() {
-          if (!this.post.postHashtags || this.post.postHashtags.length == 0) {
+          if (!this.post.postHashtags || this.post.postHashtags.length === 0) {
             return false
           }
           return true
@@ -74,7 +74,7 @@ export default {
 .header-image {
   text-align: center;
   img {
-    width: 90%;
+    max-width: 100%;
     max-height: 350px;
     border-radius: 5px;
   }
