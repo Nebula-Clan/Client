@@ -1,0 +1,59 @@
+.theme--dark {
+    .link {
+        color: whitesmoke;
+    }
+    .icons-colored-back {
+        color: black;
+    }
+}
+
+.theme--light {
+    .link {
+        color: black;
+    }
+    .icons-colored-back {
+        color: whitesmoke!important;
+    }
+    .back {
+        background-color:#cacaca;
+      }
+      .user-list-color {
+        background-color:#cacaca;
+
+      }
+      .card-back {
+        background-color:#cacaca;
+
+    }
+    .right::after {
+        content: '';
+        position: absolute;
+        visibility: visible;
+        top: 37px;
+        right: -8px;
+        margin-right: -10px;
+        border: 10px solid transparent;
+        // border-left: 10px solid #7a8ddb;
+        clear: both;
+        /* 35363a */
+      }
+      .left::after {
+        content: '';
+        position: absolute;
+        visibility: visible;
+        top: 30px;
+        left: -8px;
+        margin-left: -10px;
+        border: 10px solid transparent;
+        // border-right: 10px solid #7a8ddb;
+        clear: both;
+        /* 35363a */
+      }
+    .ql-snow.ql-toolbar {
+        background-color: cornflowerblue;
+        color: black;
+    }
+    .container-editor {
+        color: black;
+    }
+}
