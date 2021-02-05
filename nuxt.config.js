@@ -60,7 +60,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://185.239.106.16:8000'
+    baseURL: 'https://api.nebula-huddle.ir'
   },
 
   // Auth module configuration

@@ -52,7 +52,7 @@ export default {
     },
     created() {
         if (this.$auth.user !== null && this.$auth.user !== undefined && this.$auth.user.username !== '') {
-            let websocket = new HuddleChatWebSocket(`ws://185.239.106.16:8000/ws/chat/${this.$auth.user.username}`)
+            let websocket = new HuddleChatWebSocket(`wss://api.nebula-huddle.ir/ws/chat/${this.$auth.user.username}`)
 
             websocket.AddOnMessageHandler(new AuthenticationResponseHandler(this.onAuthenticate))
 
