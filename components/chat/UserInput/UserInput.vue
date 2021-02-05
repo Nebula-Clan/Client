@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="back">
     <v-col cols="12" class="px-0">
-      <v-textarea class="mx-0 chat-message-typer-textarea" background-color="#212226" v-model="text"
+      <v-textarea class="mx-0 chat-message-typer-textarea"  v-model="text"
        style="border-top: 1px solid gray;border-radius:0px" multi-line auto-grow rows="1"
        hide-details flat solo placeholder="Send message ..."
        @keydown="handleKey" :disabled="isInputDisable">
@@ -213,7 +213,7 @@ export default {
 <style scoped>
 
 .back {
-  background-color: #212226;
+  /* background-color: #cecece; */
 }
 
 .chat-message-typer-textarea {
@@ -227,7 +227,7 @@ export default {
   position: relative;
   bottom: 0;
   display: flex;
-  background-color: #f4f7f9;
+  /* background-color: #f4f7f9; */
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;

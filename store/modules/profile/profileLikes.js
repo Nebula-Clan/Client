@@ -5,7 +5,7 @@ import { Profile } from './classes/profile'
 import { Comment } from './classes/comment'
 
 const state = () => ({
-    isReqSended: false,
+    // isReqSended: false,
     likes: []
 })
 
@@ -17,6 +17,7 @@ const getters = {
 
 const mutations = {
     parseCommentReplyJsonReqAndAppend(state, commentJsonArray, username) {
+        state.likes = [];
         commentJsonArray.forEach(likeJson => {
             let like = new Like()
             like.likeOwnerUsername = username
@@ -45,9 +46,9 @@ const mutations = {
 
 const actions = {
     getProfileLikes({ commit, state }, username) {
-        if (state.isReqSended) {
-            return
-        }
+        // if (state.isReqSended) {
+        //     return
+        // }
         return this.$axios.get('api/likes/profile/get', {
             params: {
                 username: username

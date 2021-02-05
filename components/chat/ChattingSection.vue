@@ -432,9 +432,9 @@ export default {
 	min-height: 0;
 }
 
-.back {
+/* .back {
   background-color:#212226;
-}
+} */
 
 .scrollable {
     overflow-y: auto;

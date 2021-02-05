@@ -106,14 +106,15 @@ export default {
   },
 
   router: {
-    base: '/'
+    base: '/',
+    middleware: ['auth']
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      // dark: true,
       themes: {
         dark: {
           primary: colors.purple.darken3,

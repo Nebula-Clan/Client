@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Post } from './classes/post'
 
 const state = () => ({
-    isReqSended: false,
+    // isReqSended: false,
     posts: []
 })
   
@@ -15,6 +15,7 @@ const getters = {
 const mutations = {
     parsePostAndAppend(state, postJsonArray) {
         console.log(postJsonArray)
+        state.posts = [];
         postJsonArray.forEach(postJson => {
             let post = new Post()
             post.parsePostFromJson(postJson)
@@ -34,9 +35,9 @@ const mutations = {
   
 const actions = {
     getProfilePosts({ commit, state }, username) {
-        if (state.isReqSended) {
-            return
-        }
+        // if (state.isReqSended) {
+        //     return
+        // }
         return this.$axios.get('api/posts/get_user_posts?username=' + username)
         .then(function ({ data }) {
             commit('sendedReq')

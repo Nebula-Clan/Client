@@ -60,6 +60,7 @@
     name: "ListDialog",
     components: { UserAvatar },
     mounted() {
+      this.$forceUpdate();
       console.log("created");
       console.log(this.userList)
     },
@@ -98,6 +99,9 @@
           this.$notifier.showMessage({ content: error.message, color: 'error' })
         })
       },
+      // route: function(username) {
+      //   window.open(`http://localhost:3000/profile/${username}`, '_self');
+      // }
     },
     props: ['title', 'isDialogEnabled', 'userList', 'closeFunc']
   }

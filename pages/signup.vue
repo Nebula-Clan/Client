@@ -27,6 +27,7 @@
       Intro,
       SignUpForm
     },
+    auth: false,
     computed: {
       signupColumns() {
         switch (this.$vuetify.breakpoint.name) {
