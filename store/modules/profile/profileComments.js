@@ -3,7 +3,7 @@ import { Comment } from './classes/comment'
 import { Post } from './classes/post'
 
 const state = () => ({
-    isReqSended: false,
+    // isReqSended: false,
     comments: []
 })
 
@@ -26,6 +26,7 @@ const mutations = {
         })
     },
     parsePostReplyJsonReqAndAppend(state, commentJsonArray) {
+        state.comments = [];
         commentJsonArray.forEach(commentJson => {
             let comment = new Comment()
             comment.parseCommentFromJson(commentJson.user_comment)
@@ -48,9 +49,9 @@ const mutations = {
 
 const actions = {
     getProfileComments({ commit, state }, username) {
-        if (state.isReqSended) {
-            return
-        }
+        // if (state.isReqSended) {
+        //     return
+        // }
         return this.$axios.get('api/comments/profile/get?username=' + username)
         .then(function ({ data }) {
             commit('parseCommentReplyJsonReqAndAppend', data.comment_replies)
